@@ -1,0 +1,89 @@
+# =========================
+# Sistema operativo
+# =========================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# =========================
+# Editores / IDEs
+# =========================
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-workspace
+*.sublime-project
+
+# =========================
+# Archivos temporales
+# =========================
+*.log
+*.tmp
+*.temp
+*.bak
+*.old
+
+# =========================
+# Variables de entorno / secretos
+# =========================
+.env
+.env.*
+!.env.example
+
+# =========================
+# Dependencias
+# =========================
+node_modules/
+vendor/
+bower_components/
+
+# =========================
+# Builds / dist
+# =========================
+dist/
+build/
+out/
+target/
+
+# =========================
+# Cachés
+# =========================
+.cache/
+.npm/
+.yarn/
+.pnpm-store/
+
+# =========================
+# Testing / coverage
+# =========================
+coverage/
+.nyc_output/
+*.lcov
+
+# =========================
+# Python
+# =========================
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# =========================
+# Java
+# =========================
+*.class
+*.jar
+*.war
+*.ear
+
+# =========================
+# Logs de errores
+# =========================
+error.log
+debug.log
+
+# =========================
+# Archivos generados automáticamente
+# =========================
+*.generated.*
