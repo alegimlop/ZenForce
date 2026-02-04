@@ -1,0 +1,204 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+//////////////////////////////////////////////////////
+// ENUMS
+//////////////////////////////////////////////////////
+
+enum RolAdmin {
+  GERENTE
+  ENTRENADOR
+  RECEPCION
+}
+
+enum CategoriaProducto {
+  SUPLEMENTO
+  ROPA
+  ACCESORIO
+  OTRO
+}
+
+//////////////////////////////////////////////////////
+// GIMNASIO
+//////////////////////////////////////////////////////
+
+model Gimnasio {
+  id        Int      @id @default(autoincrement())
+  nombre    String
+  direccion String
+  telefono  String
+  email     String   @unique
+  tarifa    Float
+
+  clientes  Cliente[]
+  admins    Admin[]
+  clases    Clase[]
+  invitados Invitado[]
+}
+
+//////////////////////////////////////////////////////
+// CLIENTE
+//////////////////////////////////////////////////////
+
+model Cliente {
+  dni        String  @id
+  nombre     String
+  email      String  @unique
+  password   String
+  tarifa     Float
+
+  qrToken    String  @unique @default(uuid())
+
+  gimnasioId Int
+  gimnasio   Gimnasio @relation(fields: [gimnasioId], references: [id])
+
+  inscripciones Inscripcion[]
+  pedidos       Pedido[]
+}
+
+//////////////////////////////////////////////////////
+// ADMIN
+//////////////////////////////////////////////////////
+
+model Admin {
+  id         Int     @id @default(autoincrement())
+  nombre     String
+  correo     String  @unique
+  password   String
+  cargo      RolAdmin
+
+  gimnasioId Int
+  gimnasio   Gimnasio @relation(fields: [gimnasioId], references: [id])
+}
+
+//////////////////////////////////////////////////////
+// CLASES
+//////////////////////////////////////////////////////
+
+model Clase {
+  id         Int     @id @default(autoincrement())
+  nombre     String
+  duracion   Int     // minutos
+
+  gimnasioId Int
+  gimnasio   Gimnasio @relation(fields: [gimnasioId], references: [id])
+
+  inscripciones Inscripcion[]
+}
+
+//////////////////////////////////////////////////////
+// RELACION N-M CLIENTE - CLASE
+//////////////////////////////////////////////////////
+
+model Inscripcion {
+  id        Int     @id @default(autoincrement())
+
+  clienteId String
+  claseId   Int
+
+  cliente Cliente @relation(fields: [clienteId], references: [dni])
+  clase   Clase   @relation(fields: [claseId], references: [id])
+
+  fecha DateTime @default(now())
+
+  @@unique([clienteId, claseId])
+}
+
+//////////////////////////////////////////////////////
+// TIENDA
+//////////////////////////////////////////////////////
+
+model Tienda {
+  id        Int    @id @default(autoincrement())
+  nombre    String
+  direccion String
+  telefono  String
+
+  productos TiendaProducto[]
+  invitados Invitado[]
+}
+
+//////////////////////////////////////////////////////
+// PRODUCTOS
+//////////////////////////////////////////////////////
+
+model Producto {
+  id        Int    @id @default(autoincrement())
+  nombre    String
+  stock     Int
+  precio    Float
+  categoria CategoriaProducto
+
+  tiendas   TiendaProducto[]
+  detalles  DetallePedido[]
+}
+
+//////////////////////////////////////////////////////
+// RELACION N-M TIENDA - PRODUCTO
+//////////////////////////////////////////////////////
+
+model TiendaProducto {
+  id         Int @id @default(autoincrement())
+
+  tiendaId   Int
+  productoId Int
+
+  tienda   Tienda   @relation(fields: [tiendaId], references: [id])
+  producto Producto @relation(fields: [productoId], references: [id])
+
+  @@unique([tiendaId, productoId])
+}
+
+//////////////////////////////////////////////////////
+// PEDIDOS (compras clientes)
+//////////////////////////////////////////////////////
+
+model Pedido {
+  id        Int      @id @default(autoincrement())
+  fecha     DateTime @default(now())
+  total     Float
+
+  clienteId String
+  cliente   Cliente @relation(fields: [clienteId], references: [dni])
+
+  detalles DetallePedido[]
+}
+
+model DetallePedido {
+  id         Int @id @default(autoincrement())
+
+  pedidoId   Int
+  productoId Int
+  cantidad   Int
+  precio     Float
+
+  pedido   Pedido   @relation(fields: [pedidoId], references: [id])
+  producto Producto @relation(fields: [productoId], references: [id])
+}
+
+//////////////////////////////////////////////////////
+// INVITADOS
+//////////////////////////////////////////////////////
+
+model Invitado {
+  id Int @id @default(autoincrement())
+
+  nombre String
+
+  gimnasioId Int?
+  tiendaId   Int?
+
+  gimnasio Gimnasio? @relation(fields: [gimnasioId], references: [id])
+  tienda   Tienda?   @relation(fields: [tiendaId], references: [id])
+}
