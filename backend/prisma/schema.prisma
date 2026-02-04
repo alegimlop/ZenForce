@@ -72,7 +72,7 @@ model Cliente {
 //////////////////////////////////////////////////////
 
 model Admin {
-  id         Int     @id @default(autoincrement())
+  id         Innot     @id @default(autoincrement())
   nombre     String
   correo     String  @unique
   password   String
