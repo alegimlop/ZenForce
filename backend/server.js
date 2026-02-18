@@ -1,17 +1,16 @@
-import { userRoutes } from './core/users/users.routes';
+import express from "express";
+import authRoutes from "./core/routes/auth.routes.js";
+// import { router } from "./core/users/users.routes.js";
 
-const authRoutes = require("./core/routes/auth.routes");
+const app = express();
+const port = 3000;
+
+app.use(express.json());
+
+// Rutas
 app.use("/api/auth", authRoutes);
-
-const express = require('express')
-const app = express()
-const port = 3000
-
-app.use(userRoutes);
+// app.use("/api/users", userRoutes);
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-})
-
-return [{ id: 1 ,}] 
-
+  console.log(`Server running on http://localhost:${port}`);
+});

@@ -1,8 +1,11 @@
-const prisma = require("../prisma");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
+// import prisma from "../prisma.js";
+import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
-exports.loginCliente = async ({ email, password }) => {
+const prisma = new PrismaClient()
+
+export const loginCliente = async ({ email, password }) => {
   const cliente = await prisma.cliente.findUnique({
     where: { email }
   });
@@ -24,7 +27,7 @@ exports.loginCliente = async ({ email, password }) => {
   );
 };
 
-exports.loginAdmin = async ({ email, password }) => {
+export const loginAdmin = async ({ email, password }) => {
   const admin = await prisma.admin.findUnique({
     where: { correo: email }
   });

@@ -6,4 +6,5 @@ router.get('/', (req, res) => {
   res.send('Birds home page')
 })
 
-module.exports = router
+// module.exports = router
+export default router
