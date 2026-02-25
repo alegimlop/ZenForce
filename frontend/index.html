@@ -1,13 +1,155 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>frontend</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZenForce — Gym</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  
+</head>
+<body>
+
+  <nav>
+    <a href="#" class="logo">Zen<span>Force</span></a>
+    <ul class="nav-links">
+      <li><a href="#foro">Foro</a></li>
+      <li><a href="#tienda">Tienda</a></li>
+      <li><a href="#qr">Mi QR</a></li>
+      <li><a href="#">Clases</a></li>
+      <li><a href="#">Nosotros</a></li>
+    </ul>
+    <button class="nav-cta">Únete Ahora</button>
+  </nav>
+
+  <div class="ticker">
+    <div class="ticker-inner">
+      <span>FUERZA</span><span class="ticker-sep">✦</span>
+      <span>DISCIPLINA</span><span class="ticker-sep">✦</span>
+      <span>RENDIMIENTO</span><span class="ticker-sep">✦</span>
+      <span>COMUNIDAD</span><span class="ticker-sep">✦</span>
+      <span>RESULTADOS</span><span class="ticker-sep">✦</span>
+      <span>FUERZA</span><span class="ticker-sep">✦</span>
+      <span>DISCIPLINA</span><span class="ticker-sep">✦</span>
+      <span>RENDIMIENTO</span><span class="ticker-sep">✦</span>
+      <span>COMUNIDAD</span><span class="ticker-sep">✦</span>
+      <span>RESULTADOS</span><span class="ticker-sep">✦</span>
+    </div>
+  </div>
+
+  <section class="hero">
+    <div class="hero-left">
+      <div class="hero-tag">Alicante · Est. 2026</div>
+      <h1>FORJA TU<em>MEJOR</em>VERSIÓN</h1>
+      <p class="hero-desc">Entrena con los mejores. Accede al foro de comunidad, nuestra tienda de suplementos y tu pase QR desde un solo lugar.</p>
+      <div class="hero-btns">
+        <button class="btn-primary">Empezar Ahora →</button>
+        <button class="btn-secondary">Ver Clases</button>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="stat-num">1.2K+</div>
+          <div class="stat-label">Miembros</div>
+        </div>
+        <div>
+          <div class="stat-num">40+</div>
+          <div class="stat-label">Clases / sem.</div>
+        </div>
+        <div>
+          <div class="stat-num">12</div>
+          <div class="stat-label">Entrenadores</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-img-placeholder">
+        <div class="hero-shape"></div>
+        <div class="hero-bg-text">IF</div>
+        <span class="hero-icon">🏋️</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="schedule-strip">
+    <h2 class="section-title">CLASES<br>HOY</h2>
+    <div class="classes-scroll">
+      <div class="class-pill active">Crossfit 7:00</div>
+      <div class="class-pill">Spinning 8:30</div>
+      <div class="class-pill">Yoga 10:00</div>
+      <div class="class-pill">Box 11:30</div>
+      <div class="class-pill">Pilates 13:00</div>
+      <div class="class-pill">HIIT 17:00</div>
+      <div class="class-pill">Power 18:30</div>
+      <div class="class-pill">Funcional 20:00</div>
+      <div class="class-pill">Stretching 21:00</div>
+    </div>
+  </div>
+
+  <section class="features" id="foro">
+    <div class="features-header">
+      <h2 class="section-title">TODO LO QUE<br>NECESITAS</h2>
+      <p>Comunidad, producto y acceso. Todo integrado para que solo te preocupes de entrenar.</p>
+    </div>
+    <div class="cards-grid">
+      <a href="#foro" class="card">
+        <span class="card-num">01</span>
+        <span class="card-icon">💬</span>
+        <h3>Foro</h3>
+        <p>Conecta con otros miembros. Comparte rutinas, resultados, dudas y motivación con la comunidad IronForge.</p>
+        <div class="card-arrow">Ver Foro →</div>
+      </a>
+      <a href="#tienda" class="card" id="tienda">
+        <span class="card-num">02</span>
+        <span class="card-icon">🛒</span>
+        <h3>Tienda</h3>
+        <p>Suplementos, ropa y equipamiento seleccionado por nuestros entrenadores. Descuentos exclusivos para socios.</p>
+        <div class="card-arrow">Ir a Tienda →</div>
+      </a>
+      <a href="#qr" class="card" id="qr">
+        <span class="card-num">03</span>
+        <span class="card-icon">📲</span>
+        <h3>Acceso QR</h3>
+        <p>Tu pase digital siempre contigo. Escanea en la entrada sin filas, sin tarjetas físicas, sin complicaciones.</p>
+        <div class="card-arrow">Ver mi QR →</div>
+      </a>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <div>
+      <h2 class="section-title">TU PASE<br>DIGITAL</h2>
+      <p>Accede al gimnasio con un solo escaneo. Tu código QR personal está siempre disponible en la app y desde aquí.</p>
+      <button class="btn-primary">Generar mi QR →</button>
+    </div>
+    <div class="qr-box">
+      <div style="text-align:center;">
+        <div style="width:140px; height:140px; background:#fff; margin: 0 auto; display:flex; align-items:center; justify-content:center; border: 4px solid #000; position: relative;">
+          <div style="position:absolute; top:6px; left:6px; width:30px; height:30px; border:4px solid #000; background:#fff;">
+            <div style="width:16px; height:16px; background:#000; margin:3px;"></div>
+          </div>
+          <div style="position:absolute; top:6px; right:6px; width:30px; height:30px; border:4px solid #000; background:#fff;">
+            <div style="width:16px; height:16px; background:#000; margin:3px;"></div>
+          </div>
+          <div style="position:absolute; bottom:6px; left:6px; width:30px; height:30px; border:4px solid #000; background:#fff;">
+            <div style="width:16px; height:16px; background:#000; margin:3px;"></div>
+          </div>
+          <div style="font-family:'Bebas Neue',sans-serif; font-size:1.1rem; color:#000; letter-spacing:0.1em;">QR<br>CODE</div>
+        </div>
+      </div>
+      <div class="qr-label">Muestra este código<br>en la entrada del gimnasio</div>
+      <button class="qr-btn">↓ Descargar QR</button>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2026 ZenForce · Alicante</p>
+    <ul class="footer-links">
+      <li><a href="#">Privacidad</a></li>
+      <li><a href="#">Términos</a></li>
+      <li><a href="#">Contacto</a></li>
+      <li><a href="#">Instagram</a></li>
+    </ul>
+  </footer>
+
+  <!-- <script src="main.js"></script> -->
+</body>
 </html>
