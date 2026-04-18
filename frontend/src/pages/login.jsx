@@ -7,15 +7,16 @@ function Login() {
     const [error, setError] = useState('')
 
     const handleSubmit = async (e) => {
-        e.preventDefault()
-        try {
-            const data = await loginService(email, password)
-            localStorage.setItem('token', data.token)
-            alert('Login correcto')
-        } catch (err) {
-            setError('Email o contraseña incorrectos')
-        }
+    e.preventDefault()
+    try {
+        const data = await loginService(email, password)
+        localStorage.setItem('token', data.token)
+        localStorage.setItem('usuario', JSON.stringify(data.usuario))
+        alert('Login correcto')
+    } catch (err) {
+        setError('Email o contraseña incorrectos')
     }
+}
 
     return (
         <div>
