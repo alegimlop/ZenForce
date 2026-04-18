@@ -1,18 +1,26 @@
 import { useState } from 'react'
+import { registroService } from '../services/auth'
 
 function Registro() {
     const [nombre, setNombre] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [error, setError] = useState('')
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        console.log('Registro con:', nombre, email, password)
+        try {
+            await registroService(nombre, email, password)
+            alert('Usuario registrado correctamente')
+        } catch (err) {
+            setError('Error al registrar usuario')
+        }
     }
 
     return (
         <div>
             <h2>Registro</h2>
+            {error && <p>{error}</p>}
             <form onSubmit={handleSubmit}>
                 <input
                     type="text"
@@ -28,7 +36,7 @@ function Registro() {
                 />
                 <input
                     type="password"
-                    placeholder="Contraseña"
+                    placeholder="Contrasena"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                 />

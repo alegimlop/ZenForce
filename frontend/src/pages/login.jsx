@@ -1,17 +1,26 @@
 import { useState } from 'react'
+import { loginService } from '../services/auth'
 
 function Login() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [error, setError] = useState('')
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        console.log('Login con:', email, password)
+        try {
+            const data = await loginService(email, password)
+            localStorage.setItem('token', data.token)
+            alert('Login correcto')
+        } catch (err) {
+            setError('Email o contraseña incorrectos')
+        }
     }
 
     return (
         <div>
-            <h2>Iniciar sesión</h2>
+            <h2>Iniciar sesion</h2>
+            {error && <p>{error}</p>}
             <form onSubmit={handleSubmit}>
                 <input
                     type="email"
@@ -21,7 +30,7 @@ function Login() {
                 />
                 <input
                     type="password"
-                    placeholder="Contraseña"
+                    placeholder="Contrasena"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                 />
