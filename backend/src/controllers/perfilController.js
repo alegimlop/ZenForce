@@ -32,5 +32,16 @@ const updatePerfil = (req, res) => {
         }
     );
 };
+const deletePerfil = (req, res) => {
+    const id = req.params.id;
 
-module.exports = { getPerfil, updatePerfil };
+    db.query(
+        'DELETE FROM usuarios WHERE id = ?',
+        [id],
+        (err) => {
+            if (err) return res.status(500).json({ error: 'Error al eliminar usuario' });
+            res.json({ mensaje: 'Usuario eliminado correctamente' });
+        }
+    );
+};
+module.exports = { getPerfil, updatePerfil, deletePerfil };

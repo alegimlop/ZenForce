@@ -30,6 +30,20 @@ function Perfil() {
         }
     }
 
+    const handleDelete = async () => {
+        const usuario = JSON.parse(localStorage.getItem('usuario'))
+        if (confirm('Seguro que quieres eliminar tu cuenta?')) {
+            try {
+                await axios.delete(`http://localhost:3000/api/perfil/${usuario.id}`)
+                localStorage.clear()
+                alert('Cuenta eliminada')
+                window.location.href = '/registro'
+            } catch (err) {
+                setMensaje('Error al eliminar cuenta')
+            }
+        }
+    }
+
     if (!perfil) return <p>Cargando perfil...</p>
 
     return (
@@ -51,6 +65,7 @@ function Perfil() {
                 />
                 <button type="submit">Actualizar</button>
             </form>
+            <button onClick={handleDelete}>Eliminar cuenta</button>
             {mensaje && <p>{mensaje}</p>}
         </div>
     )
