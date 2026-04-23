@@ -6,6 +6,8 @@ function Perfil() {
     const [nombre, setNombre] = useState('')
     const [email, setEmail] = useState('')
     const [mensaje, setMensaje] = useState('')
+    const [passwordActual, setPasswordActual] = useState('')
+    const [passwordNueva, setPasswordNueva] = useState('')
 
     useEffect(() => {
         const usuario = JSON.parse(localStorage.getItem('usuario'))
@@ -44,6 +46,22 @@ function Perfil() {
         }
     }
 
+    const handlePassword = async (e) => {
+        e.preventDefault()
+        const usuario = JSON.parse(localStorage.getItem('usuario'))
+        try {
+            await axios.put(`http://localhost:3000/api/perfil/password/${usuario.id}`, {
+                passwordActual,
+                passwordNueva
+            })
+            setMensaje('Contraseña cambiada correctamente')
+            setPasswordActual('')
+            setPasswordNueva('')
+        } catch (err) {
+            setMensaje('La contraseña actual es incorrecta')
+        }
+    }
+
     if (!perfil) return <p>Cargando perfil...</p>
 
     return (
@@ -66,6 +84,22 @@ function Perfil() {
                 <button type="submit">Actualizar</button>
             </form>
             <button onClick={handleDelete}>Eliminar cuenta</button>
+            <h3>Cambiar contraseña</h3>
+            <form onSubmit={handlePassword}>
+                <input
+                    type="password"
+                    placeholder="Contraseña actual"
+                    value={passwordActual}
+                    onChange={(e) => setPasswordActual(e.target.value)}
+                />
+                <input
+                    type="password"
+                    placeholder="Contraseña nueva"
+                    value={passwordNueva}
+                    onChange={(e) => setPasswordNueva(e.target.value)}
+                />
+                <button type="submit">Cambiar contraseña</button>
+            </form>
             {mensaje && <p>{mensaje}</p>}
         </div>
     )
