@@ -4,7 +4,8 @@ import Registro from '../pages/registro'
 import Perfil from '../pages/Perfil'
 import Navbar from '../components/navbar'
 import RutaProtegida from '../components/RutaProtegida'
-
+import Inicio from '../pages/Inicio'
+import SobreNosotros from '../pages/SobreNosotros'
 
 
 function AppRoutes() {
@@ -15,6 +16,8 @@ function AppRoutes() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/registro" element={<Registro />} />
                 <Route path="/perfil" element={<RutaProtegida><Perfil /></RutaProtegida>} />
+                <Route path="/" element={<Inicio />} />
+                <Route path="/sobre-nosotros" element={<SobreNosotros />} />
             </Routes>
         </BrowserRouter>
     )
