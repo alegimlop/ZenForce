@@ -6,18 +6,19 @@ import Navbar from '../components/navbar'
 import RutaProtegida from '../components/RutaProtegida'
 import Inicio from '../pages/Inicio'
 import SobreNosotros from '../pages/SobreNosotros'
-
+import RestablecerPassword from '../pages/RestablecerPassword'
 
 function AppRoutes() {
     return (
         <BrowserRouter>
-        <Navbar/>
+            <Navbar />
             <Routes>
+                <Route path="/" element={<Inicio />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/registro" element={<Registro />} />
-                <Route path="/perfil" element={<RutaProtegida><Perfil /></RutaProtegida>} />
-                <Route path="/" element={<Inicio />} />
                 <Route path="/sobre-nosotros" element={<SobreNosotros />} />
+                <Route path="/restablecer-password" element={<RestablecerPassword />} />
+                <Route path="/perfil" element={<RutaProtegida><Perfil /></RutaProtegida>} />
             </Routes>
         </BrowserRouter>
     )
