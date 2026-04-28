@@ -3,6 +3,11 @@ import Login from '../pages/login'
 import Registro from '../pages/registro'
 import Perfil from '../pages/Perfil'
 import Navbar from '../components/navbar'
+import Admin from '../pages/Admin'
+import Inicio from '../pages/Inicio'
+import SobreNosotros from '../pages/SobreNosotros'
+import RestablecerPassword from '../pages/RestablecerPassword'
+import RutaProtegida from '../components/RutaProtegida'
 
 
 
@@ -17,6 +22,7 @@ function AppRoutes() {
                 <Route path="/sobre-nosotros" element={<SobreNosotros />} />
                 <Route path="/restablecer-password" element={<RestablecerPassword />} />
                 <Route path="/perfil" element={<RutaProtegida><Perfil /></RutaProtegida>} />
+                <Route path="/admin" element={<RutaProtegida><Admin /></RutaProtegida>} />
             </Routes>
         </BrowserRouter>
     )
