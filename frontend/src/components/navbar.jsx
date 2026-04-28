@@ -8,7 +8,8 @@ function Navbar() {
         localStorage.clear()
         navigate('/login')
     }
-
+//Componente de navegación
+//  que muestra diferentes enlaces según si el usuario está autenticado
     return (
         <nav>
             <Link to="/">ZenForce</Link>

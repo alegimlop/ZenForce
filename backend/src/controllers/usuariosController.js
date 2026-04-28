@@ -3,6 +3,8 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 // REGISTRO
+//Crea un nuevo usuario en la base de datos, 
+// encriptando previamente la contraseña. Controla errores como emails duplicados
 const registro = async (req, res) => {
     const { nombre, email, password } = req.body;
 
@@ -27,7 +29,7 @@ const registro = async (req, res) => {
     }
 };
 
-// LOGIN
+
 const login = (req, res) => {
     const { email, password } = req.body;
 

@@ -4,7 +4,7 @@ import Registro from '../pages/registro'
 import Perfil from '../pages/Perfil'
 import Navbar from '../components/navbar'
 
-
+//configura navegacion delk frontend
 
 function AppRoutes() {
     return (

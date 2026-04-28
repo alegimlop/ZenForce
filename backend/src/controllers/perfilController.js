@@ -1,6 +1,5 @@
 const db = require('../db');
 const bcrypt = require('bcrypt');
-
 const getPerfil = (req, res) => {
     const id = req.params.id;
 
