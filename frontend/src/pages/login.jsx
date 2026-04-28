@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { loginService } from '../services/auth'
+import { Link } from 'react-router-dom'
 
 function Login() {
     const [email, setEmail] = useState('')
@@ -37,6 +38,8 @@ function Login() {
                 />
                 <button type="submit">Entrar</button>
             </form>
+            <p><b>¿No tienes cuenta aún? </b><Link to="/registro">Registrate</Link></p>
+            <p><b>¿Olvidaste tu contraseña? </b><Link to="/restablecer-password">Restablecela aqui</Link></p>
         </div>
     )
 }

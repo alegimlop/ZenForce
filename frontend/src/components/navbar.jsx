@@ -1,4 +1,5 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
+import './Navbar.css'
 
 function Navbar() {
     const navigate = useNavigate()
@@ -12,19 +13,20 @@ function Navbar() {
 //  que muestra diferentes enlaces según si el usuario está autenticado
     return (
         <nav>
-            <Link to="/">ZenForce</Link>
+            <NavLink to="/">ZenForce</NavLink>
+            <NavLink to="/sobre-nosotros">Sobre Nosotros</NavLink>
             {usuario ? (
                 <>
-                    <Link to="/clases">Clases</Link>
-                    <Link to="/foro">Foro</Link>
-                    <Link to="/perfil">Mi Perfil</Link>
-                    {usuario.rol === 'admin' && <Link to="/admin">Admin</Link>}
+                    <NavLink to="/clases">Clases</NavLink>
+                    <NavLink to="/foro">Foro</NavLink>
+                    <NavLink to="/perfil">Mi Perfil</NavLink>
+                    {usuario.rol === 'admin' && <NavLink to="/admin">Admin</NavLink>}
                     <button onClick={handleLogout}>Cerrar sesion</button>
                 </>
             ) : (
                 <>
-                    <Link to="/login">Login</Link>
-                    <Link to="/registro">Registro</Link>
+                    <NavLink to="/login">Login</NavLink>
+                    <NavLink to="/registro">Registro</NavLink>
                 </>
             )}
         </nav>

@@ -71,4 +71,27 @@ const cambiarPassword = async (req, res) => {
         }
     )
 }
-module.exports = { getPerfil, updatePerfil, deletePerfil, cambiarPassword }
+const restablecerPassword = async (req, res) => {
+    const { email, passwordNueva } = req.body;
+
+    db.query(
+        'SELECT id FROM usuarios WHERE email = ?',
+        [email],
+        async (err, results) => {
+            if (err) return res.status(500).json({ error: 'Error en el servidor' })
+            if (results.length === 0) return res.status(404).json({ error: 'Email no encontrado' })
+
+            const passwordHash = await bcrypt.hash(passwordNueva, 10);
+
+            db.query(
+                'UPDATE usuarios SET password = ? WHERE email = ?',
+                [passwordHash, email],
+                (err) => {
+                    if (err) return res.status(500).json({ error: 'Error al restablecer la contraseña' })
+                    res.json({ mensaje: 'Contraseña restablecida correctamente' })
+                }
+            )
+        }
+    )
+}
+module.exports = { getPerfil, updatePerfil, deletePerfil, cambiarPassword, restablecerPassword }
