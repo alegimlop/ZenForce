@@ -1,0 +1,68 @@
+.qr-container {
+    text-align: center;
+}
+
+.qr-subtitulo {
+    color: var(--text-light);
+    margin-bottom: 30px;
+}
+
+.qr-card {
+    max-width: 360px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 32px;
+}
+
+.qr-logo {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--primary);
+    letter-spacing: 2px;
+}
+
+.qr-code {
+    padding: 16px;
+    background: white;
+    border-radius: var(--radius);
+    border: 2px solid var(--border);
+}
+
+.qr-info {
+    text-align: center;
+    width: 100%;
+    border-top: 1px solid var(--border);
+    padding-top: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.qr-nombre {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.qr-email {
+    color: var(--text-light);
+    font-size: 14px;
+}
+
+.qr-rol {
+    background: #ede9fe;
+    color: var(--primary);
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-top: 4px;
+}
+
+.qr-rol.admin {
+    background: #fef3c7;
+    color: #92400e;
+}
