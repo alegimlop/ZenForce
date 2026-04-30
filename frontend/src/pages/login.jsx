@@ -1,23 +1,25 @@
 import { useState } from 'react'
 import { loginService } from '../services/auth'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+
 
 function Login() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
+    const navigate = useNavigate()
 
     const handleSubmit = async (e) => {
-    e.preventDefault()
-    try {
-        const data = await loginService(email, password)
-        localStorage.setItem('token', data.token)
-        localStorage.setItem('usuario', JSON.stringify(data.usuario))
-        alert('Login correcto')
-    } catch (err) {
-        setError('Email o contraseña incorrectos')
+        e.preventDefault()
+        try {
+            const data = await loginService(email, password)
+            localStorage.setItem('token', data.token)
+            localStorage.setItem('usuario', JSON.stringify(data.usuario))
+            navigate('/')
+        } catch (err) {
+            setError('Email o contraseña incorrectos')
+        }
     }
-}
 
     return (
         <div>
