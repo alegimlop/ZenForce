@@ -13,5 +13,19 @@ const getPosts = (req, res) => {
         }
     );
 };
+const crearPost = (req, res) => {
+    const { titulo, contenido, usuario_id } = req.body;
+    if (!titulo || !contenido || !usuario_id)
+        return res.status(400).json({ error: 'Faltan campos obligatorios' });
 
-module.exports = { getPosts };
+    db.query(
+        'INSERT INTO posts (titulo, contenido, usuario_id) VALUES (?, ?, ?)',
+        [titulo, contenido, usuario_id],
+        (err, result) => {
+            if (err) return res.status(500).json({ error: 'Error al crear post' });
+            res.status(201).json({ id: result.insertId, mensaje: 'Post creado correctamente' });
+        }
+    );
+};
+
+module.exports = { getPosts, crearPost };
