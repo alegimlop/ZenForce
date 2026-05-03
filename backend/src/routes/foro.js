@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const { getPosts, crearPost, getPost, eliminarPost, añadirComentario, eliminarComentario, toggleLike, comprobarLike } = require('../controllers/foroController')
+const { getPosts, crearPost, getPost, eliminarPost, editarPost, añadirComentario, eliminarComentario, editarComentario, toggleLike, comprobarLike } = require('../controllers/foroController')
+router.put('/comentarios/:id', editarComentario)
+router.put('/posts/:id', editarPost)
 router.post('/posts/:id/like', toggleLike)
 router.get('/posts/:id/like/:userId', comprobarLike)
 router.delete('/comentarios/:id', eliminarComentario)

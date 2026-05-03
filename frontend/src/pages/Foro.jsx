@@ -14,6 +14,11 @@ function Foro() {
     const [comentario, setComentario] = useState('')
     const [liked, setLiked] = useState(false)
     const [totalLikes, setTotalLikes] = useState(0)
+    const [editando, setEditando] = useState(false)
+    const [tituloEdit, setTituloEdit] = useState('')
+    const [contenidoEdit, setContenidoEdit] = useState('')
+    const [comentarioEditandoId, setComentarioEditandoId] = useState(null)
+    const [contenidoEditComentario, setContenidoEditComentario] = useState('')
 
     useEffect(() => {
         cargarPosts()
@@ -60,6 +65,29 @@ function Foro() {
         }
     }
 
+    const guardarEdicionPost = async (e) => {
+        e.preventDefault()
+        try {
+            await axios.put(`${API}/posts/${postDetalle.id}`, {
+                titulo: tituloEdit,
+                contenido: contenidoEdit,
+                usuario_id: usuario.id
+            })
+            const res = await axios.get(`${API}/posts/${postDetalle.id}`)
+            setPostDetalle(res.data)
+            setEditando(false)
+        } catch {
+            setMensaje('Error al editar el post')
+        }
+    }
+
+    const darLike = async () => {
+        if (!usuario) return
+        const res = await axios.post(`${API}/posts/${postDetalle.id}/like`, { usuario_id: usuario.id })
+        setLiked(res.data.liked)
+        setTotalLikes(prev => res.data.liked ? prev + 1 : prev - 1)
+    }
+
     const enviarComentario = async (e) => {
         e.preventDefault()
         try {
@@ -74,6 +102,7 @@ function Foro() {
             setMensaje('Error al añadir comentario')
         }
     }
+
     const eliminarComentario = async (comentarioId) => {
         if (!confirm('¿Eliminar este comentario?')) return
         try {
@@ -84,11 +113,19 @@ function Foro() {
             setMensaje('No puedes eliminar este comentario')
         }
     }
-    const darLike = async () => {
-        if (!usuario) return
-        const res = await axios.post(`${API}/posts/${postDetalle.id}/like`, { usuario_id: usuario.id })
-        setLiked(res.data.liked)
-        setTotalLikes(prev => res.data.liked ? prev + 1 : prev - 1)
+    const guardarEdicionComentario = async (e, comentarioId) => {
+        e.preventDefault()
+        try {
+            await axios.put(`${API}/comentarios/${comentarioId}`, {
+                contenido: contenidoEditComentario,
+                usuario_id: usuario.id
+            })
+            setComentarioEditandoId(null)
+            const res = await axios.get(`${API}/posts/${postDetalle.id}`)
+            setPostDetalle(res.data)
+        } catch {
+            setMensaje('Error al editar el comentario')
+        }
     }
 
     const formatFecha = (fecha) => new Date(fecha).toLocaleDateString('es-ES', {
@@ -122,46 +159,90 @@ function Foro() {
         </div>
     )
 
-    if (vista === 'detalle' && postDetalle) return (
-        <div className="contenedor-pagina">
-            <button onClick={() => setVista('lista')}>Volver</button>
-            <div className="tarjeta">
-                <h2>{postDetalle.titulo}</h2>
-                <p>Por <strong>{postDetalle.autor}</strong> · {formatFecha(postDetalle.fecha_creacion)}</p>
-                <p>{postDetalle.contenido}</p>
-                <button onClick={darLike} disabled={!usuario}>
-                    {liked ? 'Quitar like' : 'Me gusta'} ({totalLikes})
-                </button>
-                {usuario && usuario.id === postDetalle.usuario_id && (
-                    <button onClick={() => eliminarPost(postDetalle.id)}>Eliminar post</button>
-                )}
+if (vista === 'detalle' && postDetalle) return (
+    <div className="contenedor-pagina">
+        <button onClick={() => setVista('lista')}>Volver</button>
+        <div className="tarjeta">
+            <h2>{postDetalle.titulo}</h2>
+            <p>Por <strong>{postDetalle.autor}</strong> · {formatFecha(postDetalle.fecha_creacion)}</p>
+            <p>{postDetalle.contenido}</p>
+            <button onClick={darLike} disabled={!usuario}>
+                {liked ? 'Quitar like' : 'Me gusta'} ({totalLikes})
+            </button>
+            {usuario && usuario.id === postDetalle.usuario_id && (
                 <div>
-                    <h3>Comentarios ({postDetalle.comentarios?.length || 0})</h3>
-                    {postDetalle.comentarios?.map(c => (
-                        <div key={c.id} className="tarjeta">
-                            <strong>{c.autor}</strong>
-                            <p>{c.contenido}</p>
-                            {usuario && usuario.id === c.usuario_id && (
-                                <button onClick={() => eliminarComentario(c.id)}>Eliminar</button>
-                            )}
-                        </div>
-                    ))}
-                    {usuario && (
-                        <form onSubmit={enviarComentario}>
-                            <textarea
-                                placeholder="Escribe un comentario..."
-                                value={comentario}
-                                onChange={e => setComentario(e.target.value)}
-                                rows={3}
-                                required
-                            />
-                            <button type="submit">Comentar</button>
-                        </form>
-                    )}
+                    <button onClick={() => {
+                        setEditando(true)
+                        setTituloEdit(postDetalle.titulo)
+                        setContenidoEdit(postDetalle.contenido)
+                    }}>Editar post</button>
+                    <button onClick={() => eliminarPost(postDetalle.id)}>Eliminar post</button>
                 </div>
+            )}
+            {editando && (
+                <form onSubmit={guardarEdicionPost}>
+                    <input
+                        type="text"
+                        value={tituloEdit}
+                        onChange={e => setTituloEdit(e.target.value)}
+                        required
+                    />
+                    <textarea
+                        value={contenidoEdit}
+                        onChange={e => setContenidoEdit(e.target.value)}
+                        rows={4}
+                        required
+                    />
+                    <button type="submit">Guardar</button>
+                    <button type="button" onClick={() => setEditando(false)}>Cancelar</button>
+                </form>
+            )}
+            <div>
+                <h3>Comentarios ({postDetalle.comentarios?.length || 0})</h3>
+                {postDetalle.comentarios?.map(c => (
+                    <div key={c.id} className="tarjeta">
+                        <strong>{c.autor}</strong>
+                        {comentarioEditandoId === c.id ? (
+                            <form onSubmit={e => guardarEdicionComentario(e, c.id)}>
+                                <textarea
+                                    value={contenidoEditComentario}
+                                    onChange={e => setContenidoEditComentario(e.target.value)}
+                                    rows={2}
+                                    required
+                                />
+                                <button type="submit">Guardar</button>
+                                <button type="button" onClick={() => setComentarioEditandoId(null)}>Cancelar</button>
+                            </form>
+                        ) : (
+                            <p>{c.contenido}</p>
+                        )}
+                        {usuario && usuario.id === c.usuario_id && comentarioEditandoId !== c.id && (
+                            <div>
+                                <button onClick={() => {
+                                    setComentarioEditandoId(c.id)
+                                    setContenidoEditComentario(c.contenido)
+                                }}>Editar</button>
+                                <button onClick={() => eliminarComentario(c.id)}>Eliminar</button>
+                            </div>
+                        )}
+                    </div>
+                ))}
+                {usuario && (
+                    <form onSubmit={enviarComentario}>
+                        <textarea
+                            placeholder="Escribe un comentario..."
+                            value={comentario}
+                            onChange={e => setComentario(e.target.value)}
+                            rows={3}
+                            required
+                        />
+                        <button type="submit">Comentar</button>
+                    </form>
+                )}
             </div>
         </div>
-    )
+    </div>
+)
 
     return (
         <div className="contenedor-pagina">

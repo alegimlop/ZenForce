@@ -143,5 +143,42 @@ const comprobarLike = (req, res) => {
         }
     )
 }
+const editarPost = (req, res) => {
+    const { id } = req.params
+    const { titulo, contenido, usuario_id } = req.body
 
-module.exports = { getPosts, crearPost, getPost, eliminarPost, añadirComentario, eliminarComentario, toggleLike, comprobarLike }
+    db.query('SELECT usuario_id FROM posts WHERE id = ?', [id], (err, results) => {
+        if (err || results.length === 0) return res.status(404).json({ error: 'Post no encontrado' })
+        if (results[0].usuario_id !== parseInt(usuario_id))
+            return res.status(403).json({ error: 'No puedes editar este post' })
+
+        db.query(
+            'UPDATE posts SET titulo = ?, contenido = ? WHERE id = ?',
+            [titulo, contenido, id],
+            (err2) => {
+                if (err2) return res.status(500).json({ error: 'Error al editar post' })
+                res.json({ mensaje: 'Post editado correctamente' })
+            }
+        )
+    })
+}
+const editarComentario = (req, res) => {
+    const { id } = req.params
+    const { contenido, usuario_id } = req.body
+
+    db.query('SELECT usuario_id FROM comentarios WHERE id = ?', [id], (err, results) => {
+        if (err || results.length === 0) return res.status(404).json({ error: 'Comentario no encontrado' })
+        if (results[0].usuario_id !== parseInt(usuario_id))
+            return res.status(403).json({ error: 'No puedes editar este comentario' })
+
+        db.query(
+            'UPDATE comentarios SET contenido = ? WHERE id = ?',
+            [contenido, id],
+            (err2) => {
+                if (err2) return res.status(500).json({ error: 'Error al editar comentario' })
+                res.json({ mensaje: 'Comentario editado correctamente' })
+            }
+        )
+    })
+}
+module.exports = { getPosts, crearPost, getPost, eliminarPost, editarPost, añadirComentario, eliminarComentario, editarComentario, toggleLike, comprobarLike }
