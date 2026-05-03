@@ -12,6 +12,8 @@ function Foro() {
     const [mensaje, setMensaje] = useState('')
     const [postDetalle, setPostDetalle] = useState(null)
     const [comentario, setComentario] = useState('')
+    const [liked, setLiked] = useState(false)
+    const [totalLikes, setTotalLikes] = useState(0)
 
     useEffect(() => {
         cargarPosts()
@@ -25,6 +27,11 @@ function Foro() {
     const abrirPost = async (id) => {
         const res = await axios.get(`${API}/posts/${id}`)
         setPostDetalle(res.data)
+        setTotalLikes(res.data.total_likes || 0)
+        if (usuario) {
+            const likeRes = await axios.get(`${API}/posts/${id}/like/${usuario.id}`)
+            setLiked(likeRes.data.liked)
+        }
         setVista('detalle')
     }
 
@@ -77,6 +84,13 @@ function Foro() {
             setMensaje('No puedes eliminar este comentario')
         }
     }
+    const darLike = async () => {
+        if (!usuario) return
+        const res = await axios.post(`${API}/posts/${postDetalle.id}/like`, { usuario_id: usuario.id })
+        setLiked(res.data.liked)
+        setTotalLikes(prev => res.data.liked ? prev + 1 : prev - 1)
+    }
+
     const formatFecha = (fecha) => new Date(fecha).toLocaleDateString('es-ES', {
         day: '2-digit', month: 'short', year: 'numeric'
     })
@@ -108,43 +122,46 @@ function Foro() {
         </div>
     )
 
-if (vista === 'detalle' && postDetalle) return (
-    <div className="contenedor-pagina">
-        <button onClick={() => setVista('lista')}>Volver</button>
-        <div className="tarjeta">
-            <h2>{postDetalle.titulo}</h2>
-            <p>Por <strong>{postDetalle.autor}</strong> · {formatFecha(postDetalle.fecha_creacion)}</p>
-            <p>{postDetalle.contenido}</p>
-            {usuario && usuario.id === postDetalle.usuario_id && (
-                <button onClick={() => eliminarPost(postDetalle.id)}>Eliminar post</button>
-            )}
-            <div>
-                <h3>Comentarios ({postDetalle.comentarios?.length || 0})</h3>
-                {postDetalle.comentarios?.map(c => (
-                    <div key={c.id} className="tarjeta">
-                        <strong>{c.autor}</strong>
-                        <p>{c.contenido}</p>
-                        {usuario && usuario.id === c.usuario_id && (
-                            <button onClick={() => eliminarComentario(c.id)}>Eliminar</button>
-                        )}
-                    </div>
-                ))}
-                {usuario && (
-                    <form onSubmit={enviarComentario}>
-                        <textarea
-                            placeholder="Escribe un comentario..."
-                            value={comentario}
-                            onChange={e => setComentario(e.target.value)}
-                            rows={3}
-                            required
-                        />
-                        <button type="submit">Comentar</button>
-                    </form>
+    if (vista === 'detalle' && postDetalle) return (
+        <div className="contenedor-pagina">
+            <button onClick={() => setVista('lista')}>Volver</button>
+            <div className="tarjeta">
+                <h2>{postDetalle.titulo}</h2>
+                <p>Por <strong>{postDetalle.autor}</strong> · {formatFecha(postDetalle.fecha_creacion)}</p>
+                <p>{postDetalle.contenido}</p>
+                <button onClick={darLike} disabled={!usuario}>
+                    {liked ? 'Quitar like' : 'Me gusta'} ({totalLikes})
+                </button>
+                {usuario && usuario.id === postDetalle.usuario_id && (
+                    <button onClick={() => eliminarPost(postDetalle.id)}>Eliminar post</button>
                 )}
+                <div>
+                    <h3>Comentarios ({postDetalle.comentarios?.length || 0})</h3>
+                    {postDetalle.comentarios?.map(c => (
+                        <div key={c.id} className="tarjeta">
+                            <strong>{c.autor}</strong>
+                            <p>{c.contenido}</p>
+                            {usuario && usuario.id === c.usuario_id && (
+                                <button onClick={() => eliminarComentario(c.id)}>Eliminar</button>
+                            )}
+                        </div>
+                    ))}
+                    {usuario && (
+                        <form onSubmit={enviarComentario}>
+                            <textarea
+                                placeholder="Escribe un comentario..."
+                                value={comentario}
+                                onChange={e => setComentario(e.target.value)}
+                                rows={3}
+                                required
+                            />
+                            <button type="submit">Comentar</button>
+                        </form>
+                    )}
+                </div>
             </div>
         </div>
-    </div>
-)
+    )
 
     return (
         <div className="contenedor-pagina">

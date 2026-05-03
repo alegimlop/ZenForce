@@ -1,4 +1,4 @@
-const db = require('../db');
+const db = require('../db')
 
 const getPosts = (req, res) => {
     db.query(
@@ -8,16 +8,18 @@ const getPosts = (req, res) => {
          JOIN usuarios u ON p.usuario_id = u.id
          ORDER BY p.fecha_creacion DESC`,
         (err, results) => {
-            if (err) return res.status(500).json({ error: 'Error al obtener posts' });
-            res.json(results);
+            if (err) return res.status(500).json({ error: 'Error al obtener posts' })
+            res.json(results)
         }
     )
 }
+
 const getPost = (req, res) => {
     const { id } = req.params
     db.query(
         `SELECT p.id, p.titulo, p.contenido, p.fecha_creacion, p.usuario_id,
-                u.nombre AS autor
+                u.nombre AS autor,
+                (SELECT COUNT(*) FROM likes WHERE post_id = p.id) AS total_likes
          FROM posts p
          JOIN usuarios u ON p.usuario_id = u.id
          WHERE p.id = ?`,
@@ -41,8 +43,9 @@ const getPost = (req, res) => {
         }
     )
 }
+
 const crearPost = (req, res) => {
-    const { titulo, contenido, usuario_id } = req.body;
+    const { titulo, contenido, usuario_id } = req.body
     if (!titulo || !contenido || !usuario_id)
         return res.status(400).json({ error: 'Faltan campos obligatorios' })
 
@@ -55,6 +58,7 @@ const crearPost = (req, res) => {
         }
     )
 }
+
 const eliminarPost = (req, res) => {
     const { id } = req.params
     const { usuario_id } = req.body
@@ -70,6 +74,7 @@ const eliminarPost = (req, res) => {
         })
     })
 }
+
 const añadirComentario = (req, res) => {
     const { id } = req.params
     const { contenido, usuario_id } = req.body
@@ -85,6 +90,7 @@ const añadirComentario = (req, res) => {
         }
     )
 }
+
 const eliminarComentario = (req, res) => {
     const { id } = req.params
     const { usuario_id } = req.body
@@ -100,4 +106,42 @@ const eliminarComentario = (req, res) => {
         })
     })
 }
-module.exports = { getPosts, crearPost, getPost, eliminarPost, añadirComentario, eliminarComentario }
+
+const toggleLike = (req, res) => {
+    const { id } = req.params
+    const { usuario_id } = req.body
+
+    db.query(
+        'SELECT id FROM likes WHERE post_id = ? AND usuario_id = ?',
+        [id, usuario_id],
+        (err, results) => {
+            if (err) return res.status(500).json({ error: 'Error al procesar like' })
+
+            if (results.length > 0) {
+                db.query('DELETE FROM likes WHERE post_id = ? AND usuario_id = ?', [id, usuario_id], (err2) => {
+                    if (err2) return res.status(500).json({ error: 'Error al quitar like' })
+                    res.json({ liked: false })
+                })
+            } else {
+                db.query('INSERT INTO likes (post_id, usuario_id) VALUES (?, ?)', [id, usuario_id], (err2) => {
+                    if (err2) return res.status(500).json({ error: 'Error al dar like' })
+                    res.json({ liked: true })
+                })
+            }
+        }
+    )
+}
+
+const comprobarLike = (req, res) => {
+    const { postId, userId } = req.params
+    db.query(
+        'SELECT id FROM likes WHERE post_id = ? AND usuario_id = ?',
+        [postId, userId],
+        (err, results) => {
+            if (err) return res.status(500).json({ error: 'Error' })
+            res.json({ liked: results.length > 0 })
+        }
+    )
+}
+
+module.exports = { getPosts, crearPost, getPost, eliminarPost, añadirComentario, eliminarComentario, toggleLike, comprobarLike }
