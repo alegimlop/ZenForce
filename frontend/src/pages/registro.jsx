@@ -1,17 +1,19 @@
 import { useState } from 'react'
 import { registroService } from '../services/auth'
+import { useNavigate } from 'react-router-dom'
 
 function Registro() {
     const [nombre, setNombre] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
+    const navigate = useNavigate()
 
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
             await registroService(nombre, email, password)
-            alert('Usuario registrado correctamente')
+            navigate('/login')
         } catch (err) {
             setError('Error al registrar usuario')
         }
@@ -36,7 +38,7 @@ function Registro() {
                 />
                 <input
                     type="password"
-                    placeholder="Contrasena"
+                    placeholder="Contraseña"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                 />
