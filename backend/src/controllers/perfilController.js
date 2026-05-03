@@ -5,7 +5,7 @@ const getPerfil = (req, res) => {
 
     db.query(
         `SELECT u.id, u.nombre, u.email, u.rol, u.fecha_registro, 
-        m.n ombre AS membresia, um.fecha_inicio, um.fecha_fin
+        m.nombre AS membresia, um.fecha_inicio, um.fecha_fin
         FROM usuarios u
         LEFT JOIN usuario_membresia um ON u.id = um.id_usuario AND um.activa = 1
         LEFT JOIN membresias m ON um.id_membresia = m.id
