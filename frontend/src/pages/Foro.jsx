@@ -11,11 +11,6 @@ function Foro() {
     const [contenido, setContenido] = useState('')
     const [mensaje, setMensaje] = useState('')
     const [postDetalle, setPostDetalle] = useState(null)
-    const abrirPost = async (id) => {
-        const res = await axios.get(`${API}/posts/${id}`)
-        setPostDetalle(res.data)
-        setVista('detalle')
-    }
 
     useEffect(() => {
         cargarPosts()
@@ -24,6 +19,12 @@ function Foro() {
     const cargarPosts = async () => {
         const res = await axios.get(`${API}/posts`)
         setPosts(res.data)
+    }
+
+    const abrirPost = async (id) => {
+        const res = await axios.get(`${API}/posts/${id}`)
+        setPostDetalle(res.data)
+        setVista('detalle')
     }
 
     const crearPost = async (e) => {
@@ -37,6 +38,17 @@ function Foro() {
             setVista('lista')
         } catch {
             setMensaje('Error al publicar el post')
+        }
+    }
+
+    const eliminarPost = async (id) => {
+        if (!confirm('¿Eliminar este post?')) return
+        try {
+            await axios.delete(`${API}/posts/${id}`, { data: { usuario_id: usuario.id } })
+            await cargarPosts()
+            setVista('lista')
+        } catch {
+            setMensaje('Error al eliminar el post')
         }
     }
 
@@ -70,6 +82,7 @@ function Foro() {
             </div>
         </div>
     )
+
     if (vista === 'detalle' && postDetalle) return (
         <div className="contenedor-pagina">
             <button onClick={() => setVista('lista')}>Volver</button>
@@ -77,9 +90,13 @@ function Foro() {
                 <h2>{postDetalle.titulo}</h2>
                 <p>Por <strong>{postDetalle.autor}</strong> · {formatFecha(postDetalle.fecha_creacion)}</p>
                 <p>{postDetalle.contenido}</p>
+                {usuario && usuario.id === postDetalle.usuario_id && (
+                    <button onClick={() => eliminarPost(postDetalle.id)}>Eliminar post</button>
+                )}
             </div>
         </div>
     )
+
     return (
         <div className="contenedor-pagina">
             <h1>Foro</h1>

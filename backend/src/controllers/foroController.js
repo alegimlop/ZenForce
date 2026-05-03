@@ -43,5 +43,20 @@ const crearPost = (req, res) => {
         }
     )
 }
+const eliminarPost = (req, res) => {
+    const { id } = req.params
+    const { usuario_id } = req.body
 
-module.exports = { getPosts, crearPost, getPost }
+    db.query('SELECT usuario_id FROM posts WHERE id = ?', [id], (err, results) => {
+        if (err || results.length === 0) return res.status(404).json({ error: 'Post no encontrado' })
+        if (results[0].usuario_id !== parseInt(usuario_id))
+            return res.status(403).json({ error: 'No puedes eliminar este post' })
+
+        db.query('DELETE FROM posts WHERE id = ?', [id], (err2) => {
+            if (err2) return res.status(500).json({ error: 'Error al eliminar post' })
+            res.json({ mensaje: 'Post eliminado correctamente' })
+        })
+    })
+}
+
+module.exports = { getPosts, crearPost, getPost, eliminarPost }
