@@ -18,6 +18,9 @@ app.use('/api/admin', adminRoutes)
 
 const PORT = process.env.PORT || 3000;
 
+const foroRoutes = require('./src/routes/foro');
+app.use('/api/foro', foroRoutes);
+
 app.get('/', (req, res) => {
     res.json({ mensaje: ' API ZenForce funcionando' });
 });

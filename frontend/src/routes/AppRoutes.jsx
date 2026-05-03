@@ -9,6 +9,7 @@ import SobreNosotros from '../pages/SobreNosotros'
 import RestablecerPassword from '../pages/RestablecerPassword'
 import Admin from '../pages/Admin'
 import QR from '../pages/QR'
+import Foro from '../pages/Foro'
 
 function AppRoutes() {
     return (
@@ -21,6 +22,7 @@ function AppRoutes() {
                 <Route path="/sobre-nosotros" element={<SobreNosotros />} />
                 <Route path="/restablecer-password" element={<RestablecerPassword />} />
                 <Route path="/perfil" element={<RutaProtegida><Perfil /></RutaProtegida>} />
+                <Route path="/foro" element={<Foro />} />
                 <Route path="/qr" element={<RutaProtegida><QR /></RutaProtegida>} />
                 <Route path="/admin" element={<RutaProtegida><Admin /></RutaProtegida>} />
             </Routes>
