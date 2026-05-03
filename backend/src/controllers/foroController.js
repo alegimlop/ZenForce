@@ -11,21 +11,37 @@ const getPosts = (req, res) => {
             if (err) return res.status(500).json({ error: 'Error al obtener posts' });
             res.json(results);
         }
-    );
-};
+    )
+}
+const getPost = (req, res) => {
+    const { id } = req.params;
+    db.query(
+        `SELECT p.id, p.titulo, p.contenido, p.fecha_creacion, p.usuario_id,
+                u.nombre AS autor
+         FROM posts p
+         JOIN usuarios u ON p.usuario_id = u.id
+         WHERE p.id = ?`,
+        [id],
+        (err, posts) => {
+            if (err) return res.status(500).json({ error: 'Error al obtener post' })
+            if (posts.length === 0) return res.status(404).json({ error: 'Post no encontrado' })
+            res.json(posts[0]);
+        }
+    )
+}
 const crearPost = (req, res) => {
     const { titulo, contenido, usuario_id } = req.body;
     if (!titulo || !contenido || !usuario_id)
-        return res.status(400).json({ error: 'Faltan campos obligatorios' });
+        return res.status(400).json({ error: 'Faltan campos obligatorios' })
 
     db.query(
         'INSERT INTO posts (titulo, contenido, usuario_id) VALUES (?, ?, ?)',
         [titulo, contenido, usuario_id],
         (err, result) => {
-            if (err) return res.status(500).json({ error: 'Error al crear post' });
-            res.status(201).json({ id: result.insertId, mensaje: 'Post creado correctamente' });
+            if (err) return res.status(500).json({ error: 'Error al crear post' })
+            res.status(201).json({ id: result.insertId, mensaje: 'Post creado correctamente' })
         }
-    );
-};
+    )
+}
 
-module.exports = { getPosts, crearPost };
+module.exports = { getPosts, crearPost, getPost }

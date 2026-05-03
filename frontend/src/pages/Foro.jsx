@@ -10,6 +10,12 @@ function Foro() {
     const [titulo, setTitulo] = useState('')
     const [contenido, setContenido] = useState('')
     const [mensaje, setMensaje] = useState('')
+    const [postDetalle, setPostDetalle] = useState(null)
+    const abrirPost = async (id) => {
+        const res = await axios.get(`${API}/posts/${id}`)
+        setPostDetalle(res.data)
+        setVista('detalle')
+    }
 
     useEffect(() => {
         cargarPosts()
@@ -64,7 +70,16 @@ function Foro() {
             </div>
         </div>
     )
-
+    if (vista === 'detalle' && postDetalle) return (
+        <div className="contenedor-pagina">
+            <button onClick={() => setVista('lista')}>Volver</button>
+            <div className="tarjeta">
+                <h2>{postDetalle.titulo}</h2>
+                <p>Por <strong>{postDetalle.autor}</strong> · {formatFecha(postDetalle.fecha_creacion)}</p>
+                <p>{postDetalle.contenido}</p>
+            </div>
+        </div>
+    )
     return (
         <div className="contenedor-pagina">
             <h1>Foro</h1>
@@ -79,7 +94,7 @@ function Foro() {
             ) : (
                 <div className="lista-posts">
                     {posts.map(post => (
-                        <div key={post.id} className="tarjeta">
+                        <div key={post.id} className="tarjeta" onClick={() => abrirPost(post.id)}>
                             <h2>{post.titulo}</h2>
                             <p>Por <strong>{post.autor}</strong> · {formatFecha(post.fecha_creacion)}</p>
                             <p>{post.contenido.substring(0, 120)}{post.contenido.length > 120 ? '...' : ''}</p>

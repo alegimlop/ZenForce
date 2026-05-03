@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const { getPosts, crearPost } = require('../controllers/foroController');
+const { getPosts, crearPost, getPost } = require('../controllers/foroController');
 
+router.get('/posts/:id', getPost);
 router.get('/posts', getPosts);
 router.post('/posts', crearPost);
 
