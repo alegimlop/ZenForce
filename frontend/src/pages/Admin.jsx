@@ -7,17 +7,21 @@ function Admin() {
     const [stats, setStats] = useState(null)
     const [usuarios, setUsuarios] = useState([])
     const [clases, setClases] = useState([])
+    const [membresias, setMembresias] = useState([])
     const [vista, setVista] = useState('dashboard')
     const [formulario, setFormulario] = useState({ nombre: '', email: '', password: '', rol: 'usuario' })
     const [formClase, setFormClase] = useState({ nombre: '', descripcion: '', instructor: '', horario: '', capacidad: 20, fecha: '' })
+    const [formMembresia, setFormMembresia] = useState({ nombre: '', precio: '', duracion_dias: '', descripcion: '' })
     const [editando, setEditando] = useState(null)
     const [editandoClase, setEditandoClase] = useState(null)
+    const [editandoMembresia, setEditandoMembresia] = useState(null)
     const [mensaje, setMensaje] = useState('')
 
     useEffect(() => {
         cargarStats()
         cargarUsuarios()
         cargarClases()
+        cargarMembresias()
     }, [])
 
     const cargarStats = async () => {
@@ -33,6 +37,11 @@ function Admin() {
     const cargarClases = async () => {
         const res = await axios.get(`${API}/clases`)
         setClases(res.data)
+    }
+
+    const cargarMembresias = async () => {
+        const res = await axios.get(`${API}/suscripciones`)
+        setMembresias(res.data)
     }
 
     const mostrarMensaje = (texto) => {
@@ -119,15 +128,51 @@ function Admin() {
         }
     }
 
+    const handleCrearMembresia = async (e) => {
+        e.preventDefault()
+        try {
+            await axios.post(`${API}/suscripciones`, formMembresia)
+            mostrarMensaje('Membresía creada correctamente')
+            setFormMembresia({ nombre: '', precio: '', duracion_dias: '', descripcion: '' })
+            cargarMembresias()
+            setVista('membresias')
+        } catch {
+            mostrarMensaje('Error al crear membresía')
+        }
+    }
+
+    const handleUpdateMembresia = async (e) => {
+        e.preventDefault()
+        try {
+            await axios.put(`${API}/suscripciones/${editandoMembresia.id}`, editandoMembresia)
+            mostrarMensaje('Membresía actualizada correctamente')
+            setEditandoMembresia(null)
+            setVista('membresias')
+            cargarMembresias()
+        } catch {
+            mostrarMensaje('Error al actualizar membresía')
+        }
+    }
+
+    const handleEliminarMembresia = async (id) => {
+        if (!confirm('¿Eliminar esta membresía?')) return
+        try {
+            await axios.delete(`${API}/suscripciones/${id}`)
+            mostrarMensaje('Membresía eliminada correctamente')
+            cargarMembresias()
+        } catch {
+            mostrarMensaje('Error al eliminar membresía')
+        }
+    }
+
     return (
         <div>
             <h1>Panel de Administración</h1>
             <nav>
                 <button onClick={() => setVista('dashboard')}>Dashboard</button>
                 <button onClick={() => setVista('usuarios')}>Usuarios</button>
-                <button onClick={() => setVista('crear')}>Crear Usuario</button>
                 <button onClick={() => setVista('clases')}>Clases</button>
-                <button onClick={() => setVista('crear-clase')}>Crear Clase</button>
+                <button onClick={() => setVista('membresias')}>Membresías</button>
             </nav>
 
             {mensaje && <p>{mensaje}</p>}
@@ -139,12 +184,14 @@ function Admin() {
                     <p>Total admins: {stats.total_admins}</p>
                     <p>Registros hoy: {stats.registros_hoy}</p>
                     <p>Clases activas: {clases.length}</p>
+                    <p>Membresías disponibles: {membresias.length}</p>
                 </div>
             )}
 
             {vista === 'usuarios' && (
                 <div>
                     <h2>Gestión de Usuarios</h2>
+                    <button onClick={() => setVista('crear')}>Crear Usuario</button>
                     <table>
                         <thead>
                             <tr>
@@ -212,6 +259,7 @@ function Admin() {
             {vista === 'clases' && (
                 <div>
                     <h2>Gestión de Clases</h2>
+                    <button onClick={() => setVista('crear-clase')}>Crear Clase</button>
                     <table>
                         <thead>
                             <tr>
@@ -269,6 +317,67 @@ function Admin() {
                         <div>
                             <button type="submit">Guardar</button>
                             <button type="button" onClick={() => setVista('clases')}>Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+            )}
+
+            {vista === 'membresias' && (
+                <div>
+                    <h2>Gestión de Membresías</h2>
+                    <button onClick={() => setVista('crear-membresia')}>Crear Membresía</button>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Precio</th>
+                                <th>Duración</th>
+                                <th>Descripción</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {membresias.map(m => (
+                                <tr key={m.id}>
+                                    <td>{m.nombre}</td>
+                                    <td>{m.precio}€</td>
+                                    <td>{m.duracion_dias} días</td>
+                                    <td>{m.descripcion || '—'}</td>
+                                    <td>
+                                        <button onClick={() => { setEditandoMembresia(m); setVista('editar-membresia') }}>Editar</button>
+                                        <button onClick={() => handleEliminarMembresia(m.id)}>Eliminar</button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            )}
+
+            {vista === 'crear-membresia' && (
+                <div>
+                    <h2>Crear Membresía</h2>
+                    <form onSubmit={handleCrearMembresia}>
+                        <input type="text" placeholder="Nombre" value={formMembresia.nombre} onChange={e => setFormMembresia({ ...formMembresia, nombre: e.target.value })} required />
+                        <input type="number" placeholder="Precio (€)" value={formMembresia.precio} onChange={e => setFormMembresia({ ...formMembresia, precio: e.target.value })} required />
+                        <input type="number" placeholder="Duración en días" value={formMembresia.duracion_dias} onChange={e => setFormMembresia({ ...formMembresia, duracion_dias: e.target.value })} required />
+                        <textarea placeholder="Descripción" value={formMembresia.descripcion} onChange={e => setFormMembresia({ ...formMembresia, descripcion: e.target.value })} rows={3} />
+                        <button type="submit">Crear membresía</button>
+                    </form>
+                </div>
+            )}
+
+            {vista === 'editar-membresia' && editandoMembresia && (
+                <div>
+                    <h2>Editar Membresía</h2>
+                    <form onSubmit={handleUpdateMembresia}>
+                        <input type="text" value={editandoMembresia.nombre} onChange={e => setEditandoMembresia({ ...editandoMembresia, nombre: e.target.value })} required />
+                        <input type="number" value={editandoMembresia.precio} onChange={e => setEditandoMembresia({ ...editandoMembresia, precio: e.target.value })} required />
+                        <input type="number" value={editandoMembresia.duracion_dias} onChange={e => setEditandoMembresia({ ...editandoMembresia, duracion_dias: e.target.value })} required />
+                        <textarea value={editandoMembresia.descripcion || ''} onChange={e => setEditandoMembresia({ ...editandoMembresia, descripcion: e.target.value })} rows={3} />
+                        <div>
+                            <button type="submit">Guardar</button>
+                            <button type="button" onClick={() => setVista('membresias')}>Cancelar</button>
                         </div>
                     </form>
                 </div>

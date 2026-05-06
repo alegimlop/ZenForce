@@ -24,6 +24,9 @@ app.use('/api/foro', foroRoutes);
 const clasesRoutes = require('./src/routes/clases');
 app.use('/api/clases', clasesRoutes);
 
+const suscripcionesRoutes = require('./src/routes/suscripciones')
+app.use('/api/suscripciones', suscripcionesRoutes)
+
 app.get('/', (req, res) => {
     res.json({ mensaje: ' API ZenForce funcionando' });
 });
