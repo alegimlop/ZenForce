@@ -39,5 +39,40 @@ const eliminarMembresia = (req, res) => {
         res.json({ mensaje: 'Membresía eliminada correctamente' })
     })
 }
+const getUsuariosMembresia = (req, res) => {
+    db.query(
+        `SELECT u.id, u.nombre, u.email, m.nombre AS membresia, 
+         um.fecha_inicio, um.fecha_fin, um.activa
+         FROM usuario_membresia um
+         JOIN usuarios u ON um.id_usuario = u.id
+         JOIN membresias m ON um.id_membresia = m.id
+         ORDER BY um.fecha_fin DESC`,
+        (err, results) => {
+            if (err) return res.status(500).json({ error: 'Error al obtener suscripciones' })
+            res.json(results)
+        }
+    )
+}
 
-module.exports = { getMembresias, crearMembresia, editarMembresia, eliminarMembresia }
+const asignarMembresia = (req, res) => {
+    const { usuario_id, membresia_id, fecha_inicio, fecha_fin } = req.body
+
+    db.query(
+        'UPDATE usuario_membresia SET activa = 0 WHERE id_usuario = ?',
+        [usuario_id],
+        (err) => {
+            if (err) return res.status(500).json({ error: 'Error al desactivar membresía anterior' })
+
+            db.query(
+                'INSERT INTO usuario_membresia (id_usuario, id_membresia, fecha_inicio, fecha_fin, activa) VALUES (?, ?, ?, ?, 1)',
+                [usuario_id, membresia_id, fecha_inicio, fecha_fin],
+                (err2) => {
+                    if (err2) return res.status(500).json({ error: 'Error al asignar membresía' })
+                    res.status(201).json({ mensaje: 'Membresía asignada correctamente' })
+                }
+            )
+        }
+    )
+}
+
+module.exports = { getMembresias, crearMembresia, editarMembresia, eliminarMembresia, getUsuariosMembresia, asignarMembresia }

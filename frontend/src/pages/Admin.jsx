@@ -16,12 +16,14 @@ function Admin() {
     const [editandoClase, setEditandoClase] = useState(null)
     const [editandoMembresia, setEditandoMembresia] = useState(null)
     const [mensaje, setMensaje] = useState('')
-
+    const [suscripciones, setSuscripciones] = useState([])
+    const [formAsignar, setFormAsignar] = useState({ usuario_id: '', membresia_id: '', fecha_inicio: '', fecha_fin: '' })
     useEffect(() => {
         cargarStats()
         cargarUsuarios()
         cargarClases()
         cargarMembresias()
+        cargarSuscripciones()
     }, [])
 
     const cargarStats = async () => {
@@ -164,7 +166,22 @@ function Admin() {
             mostrarMensaje('Error al eliminar membresía')
         }
     }
-
+    const cargarSuscripciones = async () => {
+        const res = await axios.get(`${API}/suscripciones/usuarios`)
+        setSuscripciones(res.data)
+    }
+    const handleAsignarMembresia = async (e) => {
+        e.preventDefault()
+        try {
+            await axios.post(`${API}/suscripciones/asignar`, formAsignar)
+            mostrarMensaje('Membresía asignada correctamente')
+            setFormAsignar({ usuario_id: '', membresia_id: '', fecha_inicio: '', fecha_fin: '' })
+            cargarSuscripciones()
+            setVista('suscripciones')
+        } catch {
+            mostrarMensaje('Error al asignar membresía')
+        }
+    }
     return (
         <div>
             <h1>Panel de Administración</h1>
@@ -173,6 +190,7 @@ function Admin() {
                 <button onClick={() => setVista('usuarios')}>Usuarios</button>
                 <button onClick={() => setVista('clases')}>Clases</button>
                 <button onClick={() => setVista('membresias')}>Membresías</button>
+                <button onClick={() => setVista('suscripciones')}>Suscripciones</button>
             </nav>
 
             {mensaje && <p>{mensaje}</p>}
@@ -382,7 +400,64 @@ function Admin() {
                     </form>
                 </div>
             )}
+            {vista === 'suscripciones' && (
+                <div>
+                    <h2>Suscripciones</h2>
+                    <button onClick={() => setVista('asignar-membresia')}>Asignar Membresía</button>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Usuario</th>
+                                <th>Email</th>
+                                <th>Membresía</th>
+                                <th>Inicio</th>
+                                <th>Fin</th>
+                                <th>Activa</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {suscripciones.map((s, i) => (
+                                <tr key={i}>
+                                    <td>{s.nombre}</td>
+                                    <td>{s.email}</td>
+                                    <td>{s.membresia}</td>
+                                    <td>{new Date(s.fecha_inicio).toLocaleDateString()}</td>
+                                    <td>{new Date(s.fecha_fin).toLocaleDateString()}</td>
+                                    <td>{s.activa ? 'Si' : 'No'}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            )}
+
+            {vista === 'asignar-membresia' && (
+                <div>
+                    <h2>Asignar Membresía</h2>
+                    <form onSubmit={handleAsignarMembresia}>
+                        <select value={formAsignar.usuario_id} onChange={e => setFormAsignar({ ...formAsignar, usuario_id: e.target.value })} required>
+                            <option value="">Selecciona un usuario</option>
+                            {usuarios.map(u => (
+                                <option key={u.id} value={u.id}>{u.nombre} ({u.email})</option>
+                            ))}
+                        </select>
+                        <select value={formAsignar.membresia_id} onChange={e => setFormAsignar({ ...formAsignar, membresia_id: e.target.value })} required>
+                            <option value="">Selecciona una membresía</option>
+                            {membresias.map(m => (
+                                <option key={m.id} value={m.id}>{m.nombre} - {m.precio}€</option>
+                            ))}
+                        </select>
+                        <input type="date" value={formAsignar.fecha_inicio} onChange={e => setFormAsignar({ ...formAsignar, fecha_inicio: e.target.value })} required />
+                        <input type="date" value={formAsignar.fecha_fin} onChange={e => setFormAsignar({ ...formAsignar, fecha_fin: e.target.value })} required />
+                        <div>
+                            <button type="submit">Asignar</button>
+                            <button type="button" onClick={() => setVista('suscripciones')}>Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+            )}
         </div>
+
     )
 }
 
