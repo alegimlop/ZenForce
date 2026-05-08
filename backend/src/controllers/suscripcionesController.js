@@ -41,7 +41,7 @@ const eliminarMembresia = (req, res) => {
 }
 const getUsuariosMembresia = (req, res) => {
     db.query(
-        `SELECT u.id, u.nombre, u.email, m.nombre AS membresia, 
+        `SELECT um.id, u.id AS usuario_id, u.nombre, u.email, m.id AS membresia_id, m.nombre AS membresia, 
          um.fecha_inicio, um.fecha_fin, um.activa
          FROM usuario_membresia um
          JOIN usuarios u ON um.id_usuario = u.id
@@ -74,5 +74,30 @@ const asignarMembresia = (req, res) => {
         }
     )
 }
+const actualizarSuscripcion = (req, res) => {
+    const { id } = req.params
+    const { membresia_id, fecha_inicio, fecha_fin } = req.body
 
-module.exports = { getMembresias, crearMembresia, editarMembresia, eliminarMembresia, getUsuariosMembresia, asignarMembresia }
+    db.query(
+        'UPDATE usuario_membresia SET id_membresia = ?, fecha_inicio = ?, fecha_fin = ? WHERE id = ?',
+        [membresia_id, fecha_inicio, fecha_fin, id],
+        (err) => {
+            if (err) return res.status(500).json({ error: 'Error al actualizar suscripción' })
+            res.json({ mensaje: 'Suscripción actualizada correctamente' })
+        }
+    )
+}
+
+const quitarSuscripcion = (req, res) => {
+    const { id } = req.params
+    db.query(
+        'DELETE FROM usuario_membresia WHERE id = ?',
+        [id],
+        (err) => {
+            if (err) return res.status(500).json({ error: 'Error al quitar suscripción' })
+            res.json({ mensaje: 'Suscripción eliminada correctamente' })
+        }
+    )
+}
+
+module.exports = { getMembresias, crearMembresia, editarMembresia, eliminarMembresia, getUsuariosMembresia, asignarMembresia, actualizarSuscripcion, quitarSuscripcion }

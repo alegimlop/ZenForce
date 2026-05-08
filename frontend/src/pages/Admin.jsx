@@ -18,6 +18,8 @@ function Admin() {
     const [mensaje, setMensaje] = useState('')
     const [suscripciones, setSuscripciones] = useState([])
     const [formAsignar, setFormAsignar] = useState({ usuario_id: '', membresia_id: '', fecha_inicio: '', fecha_fin: '' })
+    const [editandoSuscripcion, setEditandoSuscripcion] = useState(null)
+
     useEffect(() => {
         cargarStats()
         cargarUsuarios()
@@ -180,6 +182,33 @@ function Admin() {
             setVista('suscripciones')
         } catch {
             mostrarMensaje('Error al asignar membresía')
+        }
+    }
+    const handleQuitarSuscripcion = async (id) => {
+        if (!confirm('¿Quitar esta membresía al usuario?')) return
+        try {
+            await axios.delete(`${API}/suscripciones/usuarios/${id}`)
+            mostrarMensaje('Membresía quitada correctamente')
+            cargarSuscripciones()
+        } catch {
+            mostrarMensaje('Error al quitar membresía')
+        }
+    }
+
+    const handleUpdateSuscripcion = async (e) => {
+        e.preventDefault()
+        try {
+            await axios.put(`${API}/suscripciones/usuarios/${editandoSuscripcion.id}`, {
+                membresia_id: editandoSuscripcion.membresia_id,
+                fecha_inicio: editandoSuscripcion.fecha_inicio,
+                fecha_fin: editandoSuscripcion.fecha_fin
+            })
+            mostrarMensaje('Suscripción actualizada correctamente')
+            setEditandoSuscripcion(null)
+            setVista('suscripciones')
+            cargarSuscripciones()
+        } catch {
+            mostrarMensaje('Error al actualizar suscripción')
         }
     }
     return (
@@ -413,6 +442,7 @@ function Admin() {
                                 <th>Inicio</th>
                                 <th>Fin</th>
                                 <th>Activa</th>
+                                <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -424,6 +454,10 @@ function Admin() {
                                     <td>{new Date(s.fecha_inicio).toLocaleDateString()}</td>
                                     <td>{new Date(s.fecha_fin).toLocaleDateString()}</td>
                                     <td>{s.activa ? 'Si' : 'No'}</td>
+                                    <td>
+                                        <button onClick={() => { setEditandoSuscripcion(s); setVista('editar-suscripcion') }}>Editar</button>
+                                        <button onClick={() => handleQuitarSuscripcion(s.id)}>Quitar</button>
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>
@@ -451,6 +485,24 @@ function Admin() {
                         <input type="date" value={formAsignar.fecha_fin} onChange={e => setFormAsignar({ ...formAsignar, fecha_fin: e.target.value })} required />
                         <div>
                             <button type="submit">Asignar</button>
+                            <button type="button" onClick={() => setVista('suscripciones')}>Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+            )}
+            {vista === 'editar-suscripcion' && editandoSuscripcion && (
+                <div>
+                    <h2>Editar Suscripción de {editandoSuscripcion.nombre}</h2>
+                    <form onSubmit={handleUpdateSuscripcion}>
+                        <select value={editandoSuscripcion.membresia_id} onChange={e => setEditandoSuscripcion({ ...editandoSuscripcion, membresia_id: e.target.value })} required>
+                            {membresias.map(m => (
+                                <option key={m.id} value={m.id}>{m.nombre} - {m.precio}€</option>
+                            ))}
+                        </select>
+                        <input type="date" value={editandoSuscripcion.fecha_inicio?.split('T')[0]} onChange={e => setEditandoSuscripcion({ ...editandoSuscripcion, fecha_inicio: e.target.value })} required />
+                        <input type="date" value={editandoSuscripcion.fecha_fin?.split('T')[0]} onChange={e => setEditandoSuscripcion({ ...editandoSuscripcion, fecha_fin: e.target.value })} required />
+                        <div>
+                            <button type="submit">Guardar</button>
                             <button type="button" onClick={() => setVista('suscripciones')}>Cancelar</button>
                         </div>
                     </form>
