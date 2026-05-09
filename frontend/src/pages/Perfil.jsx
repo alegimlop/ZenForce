@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import './Perfil.css'
 
 function Perfil() {
     const [perfil, setPerfil] = useState(null)
@@ -62,45 +63,61 @@ function Perfil() {
         }
     }
 
-    if (!perfil) return <p>Cargando perfil...</p>
+    if (!perfil) return <p className="cargando">Cargando perfil...</p>
 
     return (
-        <div>
-            <h2>Mi Perfil</h2>
-            <p>Membresia: {perfil.membresia || 'Sin membresia'}</p>
-            <p>Miembro desde: {new Date(perfil.fecha_registro).toLocaleDateString()}</p>
-            {perfil.fecha_fin && <p>Membresia hasta: {new Date(perfil.fecha_fin).toLocaleDateString()}</p>}
-            <form onSubmit={handleUpdate}>
-                <input
-                    type="text"
-                    value={nombre}
-                    onChange={(e) => setNombre(e.target.value)}
-                />
-                <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                />
-                <button type="submit">Actualizar</button>
-            </form>
-            <button onClick={handleDelete}>Eliminar cuenta</button>
-            <h3>Cambiar contraseña</h3>
-            <form onSubmit={handlePassword}>
-                <input
-                    type="password"
-                    placeholder="Contraseña actual"
-                    value={passwordActual}
-                    onChange={(e) => setPasswordActual(e.target.value)}
-                />
-                <input
-                    type="password"
-                    placeholder="Contraseña nueva"
-                    value={passwordNueva}
-                    onChange={(e) => setPasswordNueva(e.target.value)}
-                />
-                <button type="submit">Cambiar contraseña</button>
-            </form>
-            {mensaje && <p>{mensaje}</p>}
+        <div className="contenedor-pagina contenedor-perfil">
+            <div className="cabecera-perfil">
+                <h1>Mi Perfil</h1>
+                <div className="info-membresia">
+                    <span className="etiqueta-membresia">{perfil.membresia || 'Sin membresía'}</span>
+                    <p>Miembro desde: {new Date(perfil.fecha_registro).toLocaleDateString()}</p>
+                    {perfil.fecha_fin && <p>Membresía hasta: {new Date(perfil.fecha_fin).toLocaleDateString()}</p>}
+                </div>
+            </div>
+
+            <div className="cuadricula-perfil">
+                <div className="tarjeta-perfil">
+                    <h2>Datos personales</h2>
+                    <form className="formulario-perfil" onSubmit={handleUpdate}>
+                        <input
+                            type="text"
+                            placeholder="Nombre"
+                            value={nombre}
+                            onChange={(e) => setNombre(e.target.value)}
+                        />
+                        <input
+                            type="email"
+                            placeholder="Email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
+                        <button type="submit" className="boton-guardar">Actualizar</button>
+                    </form>
+                    <button className="boton-eliminar" onClick={handleDelete}>Eliminar cuenta</button>
+                </div>
+
+                <div className="tarjeta-perfil">
+                    <h2>Cambiar contraseña</h2>
+                    <form className="formulario-perfil" onSubmit={handlePassword}>
+                        <input
+                            type="password"
+                            placeholder="Contraseña actual"
+                            value={passwordActual}
+                            onChange={(e) => setPasswordActual(e.target.value)}
+                        />
+                        <input
+                            type="password"
+                            placeholder="Contraseña nueva"
+                            value={passwordNueva}
+                            onChange={(e) => setPasswordNueva(e.target.value)}
+                        />
+                        <button type="submit" className="boton-guardar">Cambiar contraseña</button>
+                    </form>
+                </div>
+            </div>
+
+            {mensaje && <p className="mensaje-perfil">{mensaje}</p>}
         </div>
     )
 }
