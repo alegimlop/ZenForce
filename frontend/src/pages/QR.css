@@ -1,13 +1,14 @@
 :root {
-    --color-principal: #2c3e50;
-    --color-acento: #e67e22;
-    --color-fondo: #f4f4f4;
+    --color-principal: #1a1a1a;
+    --color-acento: #f97316;
+    --color-acento-hover: #fb923c;
+    --color-fondo: #f5f5f5;
     --color-tarjeta: #ffffff;
-    --color-texto: #333333;
+    --color-texto: #1a1a1a;
     --color-texto-suave: #777777;
-    --color-admin: #c0392b;
+    --color-admin: #c2410c;
     --radio-borde: 1.5vh;
-    --sombra: 0 0.5vh 2vh rgba(0, 0, 0, 0.1);
+    --sombra: 0 0.5vh 2vh rgba(0, 0, 0, 0.15);
 }
 
 .contenedor-pagina {
@@ -72,7 +73,7 @@
     gap: 1vh;
     text-align: center;
     width: 100%;
-    border-top: 1px solid #eeeeee;
+    border-top: 2px solid var(--color-acento);
     padding-top: 2vh;
 }
 
@@ -104,7 +105,7 @@
 }
 
 .rol-socio.administrador {
-    background-color: var(--color-admin);
+    background-color: var(--color-acento);
 }
 
 .aviso-sesion {

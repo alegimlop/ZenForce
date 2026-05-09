@@ -1,57 +1,88 @@
 nav {
-  background: var(--navbar-bg);
-  padding: 0 32px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  height: 60px;
-  position: sticky;
-  top: 0;
-  z-index: 100;
+    background-color: #1a1a1a;
+    padding: 0 3vw;
+    display: flex;
+    align-items: center;
+    gap: 1vw;
+    height: 7vh;
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
 nav a {
-  color: #ccc;
-  text-decoration: none;
-  padding: 8px 14px;
-  border-radius: 6px;
-  font-size: 15px;
-  transition: background 0.2s, color 0.2s;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 1vh 1.5vw;
+    border-radius: 0.8vh;
+    font-size: 1.9vh;
+    transition: background 0.2s, color 0.2s;
 }
 
 nav a:hover,
 nav a.active {
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
-  text-decoration: none;
+    background-color: #f97316;
+    color: #ffffff;
+    text-decoration: none;
 }
 
 nav a:first-child {
-  font-weight: 700;
-  font-size: 18px;
-  color: var(--primary);
-  margin-right: 16px;
+    font-weight: 900;
+    font-size: 2.8vh;
+    color: #f97316;
+    margin-right: 2vw;
+    letter-spacing: 0.2vw;
+    text-transform: uppercase;
+    text-shadow: 0 0 0.8vh rgba(249, 115, 22, 0.3);
+    transition: text-shadow 0.3s, color 0.3s;
 }
 
-nav a:first-child:hover {
-  background: transparent;
-  color: var(--primary-hover);
+nav a:first-child:hover,
+nav a:first-child.active {
+    background-color: transparent;
+    color: #fb923c;
+    text-shadow: 0 0 1.5vh rgba(249, 115, 22, 0.8), 0 0 3vh rgba(249, 115, 22, 0.4);
 }
 
-.nav-spacer {
-  flex: 1;
+.separador-nav {
+    flex: 1;
 }
 
 nav button {
-  background: transparent;
-  color: #ccc;
-  border: 1px solid #444;
-  padding: 7px 16px;
-  font-size: 14px;
-  border-radius: 6px;
+    background-color: transparent;
+    color: #ffffff;
+    border: 1px solid #f97316;
+    padding: 1vh 2vw;
+    font-size: 1.8vh;
+    border-radius: 0.8vh;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
 }
 
 nav button:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
+    background-color: #f97316;
+    color: #ffffff;
+}
+
+@media (max-width: 768px) {
+    nav {
+        flex-wrap: wrap;
+        height: auto;
+        padding: 2vh 4vw;
+        gap: 1vh;
+    }
+
+    nav a {
+        font-size: 1.7vh;
+        padding: 1vh 2vw;
+    }
+
+    .separador-nav {
+        display: none;
+    }
+
+    nav button {
+        width: 100%;
+        text-align: center;
+    }
 }
