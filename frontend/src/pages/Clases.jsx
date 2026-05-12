@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import './Clases.css'
 
 const API = 'http://localhost:3000/api/clases'
 
@@ -61,51 +62,51 @@ function Clases() {
     }
 
     return (
-        <div className="page-container">
-            <div className="clases-header">
+        <div className="contenedor-pagina contenedor-clases">
+            <div className="cabecera-clases">
                 <h1>Clases de Fitness</h1>
                 <p>Apúntate a nuestras clases y empieza a entrenar</p>
             </div>
 
             {mensaje.texto && (
-                <p className={mensaje.tipo === 'ok' ? 'mensaje-ok' : 'mensaje-error'}>
+                <p className={mensaje.tipo === 'ok' ? 'mensaje-correcto' : 'mensaje-error'}>
                     {mensaje.texto}
                 </p>
             )}
 
             {clases.length === 0 ? (
-                <div className="card sin-clases">
+                <div className="tarjeta-vacia">
                     <p>No hay clases disponibles en este momento.</p>
                 </div>
             ) : (
-                <div className="clases-grid">
+                <div className="cuadricula-clases">
                     {clases.map(clase => {
                         const llena = clase.inscritos >= clase.capacidad
                         const inscrito = estaInscrito(clase.id)
 
                         return (
-                            <div key={clase.id} className="card clase-card">
-                                <div className="clase-header">
+                            <div key={clase.id} className="tarjeta-clase">
+                                <div className="cabecera-tarjeta">
                                     <h2>{clase.nombre}</h2>
-                                    <span className={`clase-badge ${llena ? 'llena' : ''}`}>
+                                    <span className={`etiqueta-plazas ${llena ? 'completa' : ''}`}>
                                         {llena ? 'Completa' : `${clase.capacidad - clase.inscritos} plazas`}
                                     </span>
                                 </div>
-                                {clase.descripcion && <p className="clase-descripcion">{clase.descripcion}</p>}
-                                <div className="clase-info">
-                                    {clase.instructor && <p>Instructor: {clase.instructor}</p>}
-                                    {clase.horario && <p>Horario: {clase.horario}</p>}
-                                    {clase.fecha && <p>fecha: {formatFecha(clase.fecha)}</p>}
-                                    <p>plazas: {clase.inscritos} / {clase.capacidad} inscritos</p>
+                                {clase.descripcion && <p className="descripcion-clase">{clase.descripcion}</p>}
+                                <div className="info-clase">
+                                    {clase.instructor && <p><span className="etiqueta-info">Instructor</span> {clase.instructor}</p>}
+                                    {clase.horario && <p><span className="etiqueta-info">Horario</span> {clase.horario}</p>}
+                                    {clase.fecha && <p><span className="etiqueta-info">Fecha</span> {formatFecha(clase.fecha)}</p>}
+                                    <p><span className="etiqueta-info">Plazas</span> {clase.inscritos} / {clase.capacidad}</p>
                                 </div>
                                 {usuario ? (
                                     inscrito ? (
-                                        <button className="btn-danger" onClick={() => cancelar(clase.id)}>
+                                        <button className="boton-cancelar" onClick={() => cancelar(clase.id)}>
                                             Cancelar inscripción
                                         </button>
                                     ) : (
                                         <button
-                                            className="btn-success"
+                                            className="boton-inscribir"
                                             onClick={() => inscribirse(clase.id)}
                                             disabled={llena}
                                         >
@@ -113,7 +114,7 @@ function Clases() {
                                         </button>
                                     )
                                 ) : (
-                                    <p className="aviso-login">Inicia sesión para inscribirte</p>
+                                    <p className="aviso-sesion">Inicia sesión para inscribirte</p>
                                 )}
                             </div>
                         )

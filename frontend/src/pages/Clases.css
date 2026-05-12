@@ -1,0 +1,195 @@
+.contenedor-clases {
+    display: grid;
+    gap: 3vh;
+    padding: 4vh 5vw;
+    min-height: 100vh;
+    background-color: #f5f5f5;
+    align-content: start;
+}
+
+.cabecera-clases {
+    display: grid;
+    gap: 1vh;
+}
+
+.cabecera-clases h1 {
+    font-size: 3.5vh;
+    font-weight: 900;
+    color: #1a1a1a;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.2vw;
+}
+
+.cabecera-clases p {
+    font-size: 1.8vh;
+    color: #777777;
+    margin: 0;
+}
+
+.cuadricula-clases {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3vh 2vw;
+}
+
+.tarjeta-clase {
+    background-color: #ffffff;
+    border-radius: 1.5vh;
+    box-shadow: 0 0.5vh 2vh rgba(0, 0, 0, 0.1);
+    padding: 3vh 2vw;
+    display: grid;
+    gap: 1.5vh;
+    align-content: start;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.tarjeta-clase:hover {
+    transform: translateY(-0.5vh);
+    box-shadow: 0 1vh 3vh rgba(0, 0, 0, 0.15);
+}
+
+.cabecera-tarjeta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1vw;
+    padding-bottom: 1.5vh;
+    border-bottom: 2px solid #f97316;
+}
+
+.cabecera-tarjeta h2 {
+    font-size: 2vh;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0;
+}
+
+.etiqueta-plazas {
+    background-color: #f97316;
+    color: #ffffff;
+    padding: 0.5vh 1vw;
+    border-radius: 5vh;
+    font-size: 1.4vh;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.etiqueta-plazas.completa {
+    background-color: #1a1a1a;
+}
+
+.descripcion-clase {
+    font-size: 1.7vh;
+    color: #555555;
+    margin: 0;
+}
+
+.info-clase {
+    display: grid;
+    gap: 0.6vh;
+}
+
+.info-clase p {
+    font-size: 1.6vh;
+    color: #777777;
+    margin: 0;
+}
+
+.etiqueta-info {
+    font-weight: 700;
+    color: #1a1a1a;
+    text-transform: uppercase;
+    font-size: 1.3vh;
+    letter-spacing: 0.1vw;
+    margin-right: 0.5vw;
+}
+
+.boton-inscribir {
+    background-color: #f97316;
+    color: #ffffff;
+    border: none;
+    padding: 1.2vh 2vw;
+    border-radius: 0.8vh;
+    font-size: 1.7vh;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: auto;
+}
+
+.boton-inscribir:hover {
+    background-color: #fb923c;
+}
+
+.boton-inscribir:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.boton-cancelar {
+    background-color: transparent;
+    color: #cc0000;
+    border: 1px solid #cc0000;
+    padding: 1.2vh 2vw;
+    border-radius: 0.8vh;
+    font-size: 1.7vh;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+    margin-top: auto;
+}
+
+.boton-cancelar:hover {
+    background-color: #cc0000;
+    color: #ffffff;
+}
+
+.tarjeta-vacia {
+    background-color: #ffffff;
+    border-radius: 1.5vh;
+    padding: 4vh;
+    text-align: center;
+    color: #777777;
+    font-size: 1.8vh;
+    box-shadow: 0 0.5vh 2vh rgba(0, 0, 0, 0.1);
+}
+
+.mensaje-correcto {
+    text-align: center;
+    font-size: 1.8vh;
+    font-weight: 600;
+    color: #f97316;
+    margin: 0;
+}
+
+.mensaje-error {
+    text-align: center;
+    font-size: 1.8vh;
+    font-weight: 600;
+    color: #cc0000;
+    margin: 0;
+}
+
+.aviso-sesion {
+    font-size: 1.6vh;
+    color: #777777;
+    text-align: center;
+    margin: 0;
+}
+
+@media (max-width: 1024px) {
+    .cuadricula-clases {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .cuadricula-clases {
+        grid-template-columns: 1fr;
+    }
+
+    .contenedor-clases {
+        padding: 3vh 5vw;
+    }
+}
