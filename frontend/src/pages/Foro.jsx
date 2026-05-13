@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import './Foro.css'
 
 const API = 'http://localhost:3000/api/foro'
 
@@ -113,6 +114,7 @@ function Foro() {
             setMensaje('No puedes eliminar este comentario')
         }
     }
+
     const guardarEdicionComentario = async (e, comentarioId) => {
         e.preventDefault()
         try {
@@ -133,135 +135,145 @@ function Foro() {
     })
 
     if (vista === 'crear') return (
-        <div className="contenedor-pagina">
-            <h1>Nuevo Post</h1>
-            <button onClick={() => setVista('lista')}>Volver</button>
-            {mensaje && <p>{mensaje}</p>}
-            <div className="tarjeta">
-                <form onSubmit={crearPost}>
+        <div className="contenedor-pagina contenedor-foro">
+            <div className="cabecera-foro">
+                <h1>Nuevo Post</h1>
+                <button className="boton-volver" onClick={() => setVista('lista')}>Volver</button>
+            </div>
+            {mensaje && <p className="mensaje-foro">{mensaje}</p>}
+            <div className="tarjeta-foro">
+                <form className="formulario-post" onSubmit={crearPost}>
                     <input
                         type="text"
-                        placeholder="Titulo del post"
+                        placeholder="Título del post"
                         value={titulo}
                         onChange={e => setTitulo(e.target.value)}
                         required
                     />
                     <textarea
-                        placeholder="¿Que quieres compartir?"
+                        placeholder="¿Qué quieres compartir?"
                         value={contenido}
                         onChange={e => setContenido(e.target.value)}
                         rows={6}
                         required
                     />
-                    <button type="submit">Publicar</button>
+                    <button type="submit" className="boton-publicar">Publicar</button>
                 </form>
             </div>
         </div>
     )
 
-if (vista === 'detalle' && postDetalle) return (
-    <div className="contenedor-pagina">
-        <button onClick={() => setVista('lista')}>Volver</button>
-        <div className="tarjeta">
-            <h2>{postDetalle.titulo}</h2>
-            <p>Por <strong>{postDetalle.autor}</strong> · {formatFecha(postDetalle.fecha_creacion)}</p>
-            <p>{postDetalle.contenido}</p>
-            <button onClick={darLike} disabled={!usuario}>
-                {liked ? 'Quitar like' : 'Me gusta'} ({totalLikes})
-            </button>
-            {usuario && usuario.id === postDetalle.usuario_id && (
-                <div>
-                    <button onClick={() => {
-                        setEditando(true)
-                        setTituloEdit(postDetalle.titulo)
-                        setContenidoEdit(postDetalle.contenido)
-                    }}>Editar post</button>
-                    <button onClick={() => eliminarPost(postDetalle.id)}>Eliminar post</button>
+    if (vista === 'detalle' && postDetalle) return (
+        <div className="contenedor-pagina contenedor-foro">
+            <button className="boton-volver" onClick={() => setVista('lista')}>Volver</button>
+            <div className="tarjeta-foro tarjeta-detalle">
+                <h2>{postDetalle.titulo}</h2>
+                <p className="meta-post">Por <strong>{postDetalle.autor}</strong> · {formatFecha(postDetalle.fecha_creacion)}</p>
+                <p className="contenido-post">{postDetalle.contenido}</p>
+                <div className="acciones-post">
+                    <button className={`boton-like ${liked ? 'activo' : ''}`} onClick={darLike} disabled={!usuario}>
+                        {liked ? '❤️' : '🤍'} {totalLikes}
+                    </button>
+                    {usuario && usuario.id === postDetalle.usuario_id && (
+                        <div className="botones-edicion">
+                            <button className="boton-editar" onClick={() => {
+                                setEditando(true)
+                                setTituloEdit(postDetalle.titulo)
+                                setContenidoEdit(postDetalle.contenido)
+                            }}>Editar</button>
+                            <button className="boton-eliminar" onClick={() => eliminarPost(postDetalle.id)}>Eliminar</button>
+                        </div>
+                    )}
                 </div>
-            )}
-            {editando && (
-                <form onSubmit={guardarEdicionPost}>
-                    <input
-                        type="text"
-                        value={tituloEdit}
-                        onChange={e => setTituloEdit(e.target.value)}
-                        required
-                    />
-                    <textarea
-                        value={contenidoEdit}
-                        onChange={e => setContenidoEdit(e.target.value)}
-                        rows={4}
-                        required
-                    />
-                    <button type="submit">Guardar</button>
-                    <button type="button" onClick={() => setEditando(false)}>Cancelar</button>
-                </form>
-            )}
-            <div>
-                <h3>Comentarios ({postDetalle.comentarios?.length || 0})</h3>
-                {postDetalle.comentarios?.map(c => (
-                    <div key={c.id} className="tarjeta">
-                        <strong>{c.autor}</strong>
-                        {comentarioEditandoId === c.id ? (
-                            <form onSubmit={e => guardarEdicionComentario(e, c.id)}>
-                                <textarea
-                                    value={contenidoEditComentario}
-                                    onChange={e => setContenidoEditComentario(e.target.value)}
-                                    rows={2}
-                                    required
-                                />
-                                <button type="submit">Guardar</button>
-                                <button type="button" onClick={() => setComentarioEditandoId(null)}>Cancelar</button>
-                            </form>
-                        ) : (
-                            <p>{c.contenido}</p>
-                        )}
-                        {usuario && usuario.id === c.usuario_id && comentarioEditandoId !== c.id && (
-                            <div>
-                                <button onClick={() => {
-                                    setComentarioEditandoId(c.id)
-                                    setContenidoEditComentario(c.contenido)
-                                }}>Editar</button>
-                                <button onClick={() => eliminarComentario(c.id)}>Eliminar</button>
-                            </div>
-                        )}
-                    </div>
-                ))}
-                {usuario && (
-                    <form onSubmit={enviarComentario}>
-                        <textarea
-                            placeholder="Escribe un comentario..."
-                            value={comentario}
-                            onChange={e => setComentario(e.target.value)}
-                            rows={3}
+                {editando && (
+                    <form className="formulario-post" onSubmit={guardarEdicionPost}>
+                        <input
+                            type="text"
+                            value={tituloEdit}
+                            onChange={e => setTituloEdit(e.target.value)}
                             required
                         />
-                        <button type="submit">Comentar</button>
+                        <textarea
+                            value={contenidoEdit}
+                            onChange={e => setContenidoEdit(e.target.value)}
+                            rows={4}
+                            required
+                        />
+                        <div className="botones-edicion">
+                            <button type="submit" className="boton-publicar">Guardar</button>
+                            <button type="button" className="boton-volver" onClick={() => setEditando(false)}>Cancelar</button>
+                        </div>
                     </form>
                 )}
+                <div className="seccion-comentarios">
+                    <h3>Comentarios ({postDetalle.comentarios?.length || 0})</h3>
+                    {postDetalle.comentarios?.map(c => (
+                        <div key={c.id} className="tarjeta-comentario">
+                            <strong className="autor-comentario">{c.autor}</strong>
+                            {comentarioEditandoId === c.id ? (
+                                <form className="formulario-post" onSubmit={e => guardarEdicionComentario(e, c.id)}>
+                                    <textarea
+                                        value={contenidoEditComentario}
+                                        onChange={e => setContenidoEditComentario(e.target.value)}
+                                        rows={2}
+                                        required
+                                    />
+                                    <div className="botones-edicion">
+                                        <button type="submit" className="boton-publicar">Guardar</button>
+                                        <button type="button" className="boton-volver" onClick={() => setComentarioEditandoId(null)}>Cancelar</button>
+                                    </div>
+                                </form>
+                            ) : (
+                                <p>{c.contenido}</p>
+                            )}
+                            {usuario && usuario.id === c.usuario_id && comentarioEditandoId !== c.id && (
+                                <div className="botones-edicion">
+                                    <button className="boton-editar" onClick={() => {
+                                        setComentarioEditandoId(c.id)
+                                        setContenidoEditComentario(c.contenido)
+                                    }}>Editar</button>
+                                    <button className="boton-eliminar" onClick={() => eliminarComentario(c.id)}>Eliminar</button>
+                                </div>
+                            )}
+                        </div>
+                    ))}
+                    {usuario && (
+                        <form className="formulario-comentario" onSubmit={enviarComentario}>
+                            <textarea
+                                placeholder="Escribe un comentario..."
+                                value={comentario}
+                                onChange={e => setComentario(e.target.value)}
+                                rows={3}
+                                required
+                            />
+                            <button type="submit" className="boton-publicar">Comentar</button>
+                        </form>
+                    )}
+                </div>
             </div>
         </div>
-    </div>
-)
+    )
 
     return (
-        <div className="contenedor-pagina">
-            <h1>Foro</h1>
-            {usuario && (
-                <button onClick={() => setVista('crear')}>Nuevo post</button>
-            )}
-            {mensaje && <p>{mensaje}</p>}
+        <div className="contenedor-pagina contenedor-foro">
+            <div className="cabecera-foro">
+                <h1>Foro</h1>
+                {usuario && (
+                    <button className="boton-nuevo" onClick={() => setVista('crear')}>+ Nuevo post</button>
+                )}
+            </div>
+            {mensaje && <p className="mensaje-foro">{mensaje}</p>}
             {posts.length === 0 ? (
-                <div className="tarjeta">
-                    <p>No hay posts aun. Se el primero en publicar.</p>
+                <div className="tarjeta-vacia">
+                    <p>No hay posts aún. Sé el primero en publicar.</p>
                 </div>
             ) : (
                 <div className="lista-posts">
                     {posts.map(post => (
-                        <div key={post.id} className="tarjeta" onClick={() => abrirPost(post.id)}>
+                        <div key={post.id} className="tarjeta-post" onClick={() => abrirPost(post.id)}>
                             <h2>{post.titulo}</h2>
-                            <p>Por <strong>{post.autor}</strong> · {formatFecha(post.fecha_creacion)}</p>
-                            <p>{post.contenido.substring(0, 120)}{post.contenido.length > 120 ? '...' : ''}</p>
+                            <p className="meta-post">Por <strong>{post.autor}</strong> · {formatFecha(post.fecha_creacion)}</p>
+                            <p className="resumen-post">{post.contenido.substring(0, 120)}{post.contenido.length > 120 ? '...' : ''}</p>
                         </div>
                     ))}
                 </div>

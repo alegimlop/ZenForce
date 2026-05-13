@@ -1,0 +1,307 @@
+.contenedor-foro {
+    display: grid;
+    gap: 3vh;
+    padding: 4vh 5vw;
+    min-height: 100vh;
+    background-color: #f5f5f5;
+    align-content: start;
+}
+
+.cabecera-foro {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cabecera-foro h1 {
+    font-size: 3.5vh;
+    font-weight: 900;
+    color: #1a1a1a;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.2vw;
+}
+
+.lista-posts {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2vh;
+}
+
+.tarjeta-post {
+    background-color: #ffffff;
+    border-radius: 1.5vh;
+    box-shadow: 0 0.5vh 2vh rgba(0, 0, 0, 0.08);
+    padding: 2.5vh 2.5vw;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    border-left: 4px solid #f97316;
+}
+
+.tarjeta-post:hover {
+    transform: translateX(0.5vw);
+    box-shadow: 0 1vh 3vh rgba(0, 0, 0, 0.15);
+}
+
+.tarjeta-post h2 {
+    font-size: 2.2vh;
+    font-weight: 900;
+    color: #f97316;
+    margin: 0 0 1vh 0;
+    text-transform: uppercase;
+    letter-spacing: 0.1vw;
+}
+
+.meta-post {
+    font-size: 1.5vh;
+    color: #777777;
+    margin: 0 0 1vh 0;
+}
+
+.resumen-post {
+    font-size: 1.7vh;
+    color: #555555;
+    margin: 0;
+}
+
+.tarjeta-foro {
+    background-color: #ffffff;
+    border-radius: 1.5vh;
+    box-shadow: 0 0.5vh 2vh rgba(0, 0, 0, 0.1);
+    padding: 3vh 3vw;
+    display: grid;
+    gap: 2vh;
+}
+
+.tarjeta-detalle h2 {
+    font-size: 2.8vh;
+    font-weight: 900;
+    color: #1a1a1a;
+    margin: 0;
+    padding-bottom: 1.5vh;
+    border-bottom: 2px solid #f97316;
+}
+
+.contenido-post {
+    font-size: 1.9vh;
+    color: #333333;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.acciones-post {
+    display: flex;
+    align-items: center;
+    gap: 2vw;
+    flex-wrap: wrap;
+}
+
+.boton-like {
+    background-color: #f5f5f5;
+    border: 1px solid #dddddd;
+    padding: 0.8vh 1.5vw;
+    border-radius: 5vh;
+    font-size: 1.7vh;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.boton-like.activo {
+    background-color: #fff0e8;
+    border-color: #f97316;
+}
+
+.boton-like:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.botones-edicion {
+    display: flex;
+    gap: 1vw;
+}
+
+.boton-editar {
+    background-color: transparent;
+    color: #f97316;
+    border: 1px solid #f97316;
+    padding: 0.7vh 1.5vw;
+    border-radius: 0.8vh;
+    font-size: 1.6vh;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.boton-editar:hover {
+    background-color: #f97316;
+    color: #ffffff;
+}
+
+.boton-eliminar {
+    background-color: transparent;
+    color: #cc0000;
+    border: 1px solid #cc0000;
+    padding: 0.7vh 1.5vw;
+    border-radius: 0.8vh;
+    font-size: 1.6vh;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.boton-eliminar:hover {
+    background-color: #cc0000;
+    color: #ffffff;
+}
+
+.seccion-comentarios {
+    display: grid;
+    gap: 1.5vh;
+    padding-top: 2vh;
+    border-top: 1px solid #eeeeee;
+}
+
+.seccion-comentarios h3 {
+    font-size: 2vh;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0;
+}
+
+.tarjeta-comentario {
+    background-color: #fafafa;
+    border-radius: 1vh;
+    padding: 1.5vh 2vw;
+    border-left: 3px solid #f97316;
+    display: grid;
+    gap: 0.8vh;
+}
+
+.autor-comentario {
+    font-size: 1.6vh;
+    color: #f97316;
+}
+
+.tarjeta-comentario p {
+    font-size: 1.7vh;
+    color: #444444;
+    margin: 0;
+}
+
+.formulario-post {
+    display: grid;
+    gap: 1.5vh;
+}
+
+.formulario-post input,
+.formulario-post textarea,
+.formulario-comentario textarea {
+    width: 100%;
+    padding: 1.2vh 1.5vw;
+    border: 1px solid #dddddd;
+    border-radius: 0.8vh;
+    font-size: 1.8vh;
+    color: #1a1a1a;
+    background-color: #fafafa;
+    outline: none;
+    resize: vertical;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+    font-family: inherit;
+}
+
+.formulario-post input:focus,
+.formulario-post textarea:focus,
+.formulario-comentario textarea:focus {
+    border-color: #f97316;
+    background-color: #ffffff;
+}
+
+.formulario-comentario {
+    display: grid;
+    gap: 1vh;
+}
+
+.boton-publicar {
+    background-color: #f97316;
+    color: #ffffff;
+    border: none;
+    padding: 1.2vh 2.5vw;
+    border-radius: 0.8vh;
+    font-size: 1.8vh;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    justify-self: start;
+}
+
+.boton-publicar:hover {
+    background-color: #fb923c;
+}
+
+.boton-nuevo {
+    background-color: #f97316;
+    color: #ffffff;
+    border: none;
+    padding: 1.2vh 2vw;
+    border-radius: 0.8vh;
+    font-size: 1.8vh;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.boton-nuevo:hover {
+    background-color: #fb923c;
+}
+
+.boton-volver {
+    background-color: transparent;
+    color: #1a1a1a;
+    border: 1px solid #cccccc;
+    padding: 0.8vh 1.5vw;
+    border-radius: 0.8vh;
+    font-size: 1.7vh;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    justify-self: start;
+}
+
+.boton-volver:hover {
+    background-color: #eeeeee;
+}
+
+.tarjeta-vacia {
+    background-color: #ffffff;
+    border-radius: 1.5vh;
+    padding: 4vh;
+    text-align: center;
+    color: #777777;
+    font-size: 1.8vh;
+    box-shadow: 0 0.5vh 2vh rgba(0, 0, 0, 0.1);
+}
+
+.mensaje-foro {
+    font-size: 1.8vh;
+    font-weight: 600;
+    color: #f97316;
+    margin: 0;
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    .contenedor-foro {
+        padding: 3vh 5vw;
+    }
+
+    .lista-posts {
+        grid-template-columns: 1fr;
+    }
+
+    .tarjeta-post:hover {
+        transform: none;
+    }
+
+    .acciones-post {
+        gap: 3vw;
+    }
+}
