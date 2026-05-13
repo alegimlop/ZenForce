@@ -1,0 +1,256 @@
+.contenedor-sobre-nosotros {
+    min-height: 100vh;
+    background-color: #f5f5f5;
+}
+
+.banner-principal {
+    width: 100%;
+    height: 45vh;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+.overlay-banner {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, rgba(0,0,0,0.85) 40%, rgba(0,0,0,0.2));
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 8vw;
+    gap: 2vh;
+}
+
+.overlay-banner h1 {
+    font-size: 6vh;
+    font-weight: 900;
+    color: #ffffff;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.3vw;
+    font-style: italic;
+}
+
+.overlay-banner p {
+    font-size: 2vh;
+    color: #cccccc;
+    margin: 0;
+    font-style: italic;
+}
+
+.resalte {
+    color: #f97316;
+}
+
+.contenido-pagina {
+    display: grid;
+    gap: 6vh;
+    padding: 6vh 8vw;
+}
+
+.seccion-fundadores h2,
+.seccion-valores h2,
+.seccion-horarios h2 {
+    font-size: 3.5vh;
+    font-weight: 900;
+    color: #1a1a1a;
+    margin: 0 0 3vh 0;
+    text-transform: uppercase;
+    font-style: italic;
+    letter-spacing: 0.2vw;
+}
+
+.cuadricula-fundadores {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3vw;
+    margin-bottom: 2vh;
+}
+
+.tarjeta-fundador {
+    background-color: #1a1a1a;
+    border-radius: 1vh;
+    padding: 3vh 2.5vw;
+    border-left: 4px solid #f97316;
+}
+
+.tarjeta-fundador h3 {
+    font-size: 2.4vh;
+    font-weight: 800;
+    color: #f97316;
+    margin: 0 0 1.5vh 0;
+    text-transform: uppercase;
+    font-style: italic;
+}
+
+.tarjeta-fundador p {
+    font-size: 1.8vh;
+    color: #cccccc;
+    line-height: 1.8;
+    margin: 0;
+}
+
+.nota-fundadores {
+    font-size: 1.7vh;
+    color: #999999;
+    font-style: italic;
+    text-align: center;
+    margin: 0;
+}
+
+.seccion-cifras {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2vw;
+}
+
+.cifra {
+    background-color: #ffffff;
+    border-radius: 1vh;
+    padding: 3vh 2vw;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 2vw;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    border-bottom: 3px solid #f97316;
+}
+
+.numero {
+    font-size: 4vh;
+    font-weight: 900;
+    color: #f97316;
+    white-space: nowrap;
+    font-style: italic;
+}
+
+.etiqueta-cifra {
+    font-size: 1.6vh;
+    color: #555555;
+    line-height: 1.4;
+}
+
+.cuadricula-valores {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5vw;
+}
+
+.tarjeta-valor {
+    border-radius: 1vh;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.2s;
+    height: 22vh;
+    position: relative;
+}
+
+.tarjeta-valor:hover {
+    transform: translateY(-0.4vh);
+}
+
+.tarjeta-valor.abierta {
+    background-color: #f97316;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2vh 1.5vw;
+    gap: 1.5vh;
+}
+
+.tarjeta-valor h3 {
+    font-size: 2.2vh;
+    font-weight: 800;
+    color: #ffffff;
+    margin: 0;
+    text-transform: uppercase;
+    font-style: italic;
+    letter-spacing: 0.1vw;
+    text-align: center;
+}
+
+.tarjeta-valor p {
+    font-size: 1.6vh;
+    color: #ffffff;
+    margin: 0;
+    line-height: 1.6;
+    text-align: center;
+}
+
+.imagen-valor {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 39%;
+    display: block;
+}
+
+.tabla-horarios {
+    border-radius: 1vh;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    max-width: 55vw;
+}
+
+.fila-horario {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    padding: 1.8vh 2.5vw;
+    background-color: #ffffff;
+    font-size: 1.8vh;
+    color: #444444;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.fila-horario:last-child {
+    border-bottom: none;
+}
+
+.cabecera-horario {
+    background-color: #1a1a1a;
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 1.5vh;
+    text-transform: uppercase;
+    letter-spacing: 0.1vw;
+}
+
+@media (max-width: 1024px) {
+    .cuadricula-valores {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .seccion-cifras {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .overlay-banner h1 {
+        font-size: 4vh;
+    }
+
+    .cuadricula-fundadores {
+        grid-template-columns: 1fr;
+    }
+
+    .tabla-horarios {
+        max-width: 100%;
+    }
+
+    .contenido-pagina {
+        padding: 4vh 5vw;
+    }
+}
+
+@media (max-width: 480px) {
+    .cuadricula-valores {
+        grid-template-columns: 1fr;
+    }
+
+    .seccion-cifras {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
