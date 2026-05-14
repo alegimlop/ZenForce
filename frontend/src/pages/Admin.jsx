@@ -10,7 +10,7 @@ function Admin() {
     const [membresias, setMembresias] = useState([])
     const [vista, setVista] = useState('dashboard')
     const [formulario, setFormulario] = useState({ nombre: '', email: '', password: '', rol: 'usuario' })
-    const [formClase, setFormClase] = useState({ nombre: '', descripcion: '', instructor: '', hora: '', capacidad: 20, fecha: '', duracion: '' })    
+    const [formClase, setFormClase] = useState({ nombre: '', descripcion: '', instructor: '', hora: '', capacidad: 20, fecha: '', duracion: '' })
     const [formMembresia, setFormMembresia] = useState({ nombre: '', precio: '', duracion_dias: '', descripcion: '' })
     const [editando, setEditando] = useState(null)
     const [editandoClase, setEditandoClase] = useState(null)
@@ -251,7 +251,7 @@ function Admin() {
         <div>
             <h1>Panel de Administración</h1>
             <nav>
-                <button onClick={() => setVista('dashboard')}>Dashboard</button>
+                <button onClick={() => setVista('dashboard')}>Vista General</button>
                 <button onClick={() => setVista('usuarios')}>Usuarios</button>
                 <button onClick={() => setVista('clases')}>Clases</button>
                 <button onClick={() => setVista('foro')}>Foro</button>
@@ -263,7 +263,7 @@ function Admin() {
 
             {vista === 'dashboard' && stats && (
                 <div>
-                    <h2>Dashboard</h2>
+                    <h2>Vista General</h2>
                     <p>Total usuarios: {stats.total_usuarios}</p>
                     <p>Total admins: {stats.total_admins}</p>
                     <p>Registros hoy: {stats.registros_hoy}</p>
@@ -310,14 +310,21 @@ function Admin() {
                 <div>
                     <h2>Crear Usuario</h2>
                     <form onSubmit={handleCrear}>
-                        <input type="text" placeholder="Nombre" value={formulario.nombre} onChange={e => setFormulario({ ...formulario, nombre: e.target.value })} />
-                        <input type="email" placeholder="Email" value={formulario.email} onChange={e => setFormulario({ ...formulario, email: e.target.value })} />
-                        <input type="password" placeholder="Contraseña" value={formulario.password} onChange={e => setFormulario({ ...formulario, password: e.target.value })} />
+                        <label>Nombre</label>
+                        <input type="text" value={formulario.nombre} onChange={e => setFormulario({ ...formulario, nombre: e.target.value })} required />
+                        <label>Email</label>
+                        <input type="email" value={formulario.email} onChange={e => setFormulario({ ...formulario, email: e.target.value })} required />
+                        <label>Contraseña</label>
+                        <input type="password" value={formulario.password} onChange={e => setFormulario({ ...formulario, password: e.target.value })} required />
+                        <label>Rol</label>
                         <select value={formulario.rol} onChange={e => setFormulario({ ...formulario, rol: e.target.value })}>
                             <option value="usuario">Usuario</option>
                             <option value="admin">Admin</option>
                         </select>
-                        <button type="submit">Crear</button>
+                        <div>
+                            <button type="submit">Crear</button>
+                            <button type="button" onClick={() => setVista('usuarios')}>Cancelar</button>
+                        </div>
                     </form>
                 </div>
             )}
@@ -326,8 +333,11 @@ function Admin() {
                 <div>
                     <h2>Editar Usuario</h2>
                     <form onSubmit={handleUpdate}>
-                        <input type="text" value={editando.nombre} onChange={e => setEditando({ ...editando, nombre: e.target.value })} />
-                        <input type="email" value={editando.email} onChange={e => setEditando({ ...editando, email: e.target.value })} />
+                        <label>Nombre</label>
+                        <input type="text" value={editando.nombre} onChange={e => setEditando({ ...editando, nombre: e.target.value })} required />
+                        <label>Email</label>
+                        <input type="email" value={editando.email} onChange={e => setEditando({ ...editando, email: e.target.value })} required />
+                        <label>Rol</label>
                         <select value={editando.rol} onChange={e => setEditando({ ...editando, rol: e.target.value })}>
                             <option value="usuario">Usuario</option>
                             <option value="admin">Admin</option>
@@ -382,19 +392,29 @@ function Admin() {
                 <div>
                     <h2>Crear Clase</h2>
                     <form onSubmit={handleCrearClase}>
-                        <input type="text" placeholder="Nombre" value={formClase.nombre} onChange={e => setFormClase({ ...formClase, nombre: e.target.value })} required />
-                        <textarea placeholder="Descripción" value={formClase.descripcion} onChange={e => setFormClase({ ...formClase, descripcion: e.target.value })} rows={3} />
+                        <label>Nombre</label>
+                        <input type="text" value={formClase.nombre} onChange={e => setFormClase({ ...formClase, nombre: e.target.value })} required />
+                        <label>Descripción</label>
+                        <textarea value={formClase.descripcion} onChange={e => setFormClase({ ...formClase, descripcion: e.target.value })} rows={3} />
+                        <label>Instructor</label>
                         <select value={formClase.instructor} onChange={e => setFormClase({ ...formClase, instructor: e.target.value })} required>
                             <option value="">Selecciona un instructor</option>
                             {usuarios.filter(u => u.rol === 'admin').map(u => (
                                 <option key={u.id} value={u.nombre}>{u.nombre}</option>
                             ))}
                         </select>
-                        <input type="time" placeholder="Hora" value={formClase.hora} onChange={e => setFormClase({ ...formClase, hora: e.target.value })} />
-                        <input type="number" placeholder="Capacidad" value={formClase.capacidad} onChange={e => setFormClase({ ...formClase, capacidad: e.target.value })} />
-                        <input type="number" placeholder="Duración (minutos)" value={formClase.duracion} onChange={e => setFormClase({ ...formClase, duracion: e.target.value })} required />
+                        <label>Hora</label>
+                        <input type="time" value={formClase.hora} onChange={e => setFormClase({ ...formClase, hora: e.target.value })} />
+                        <label>Capacidad</label>
+                        <input type="number" value={formClase.capacidad} onChange={e => setFormClase({ ...formClase, capacidad: e.target.value })} />
+                        <label>Duración (minutos)</label>
+                        <input type="number" value={formClase.duracion} onChange={e => setFormClase({ ...formClase, duracion: e.target.value })} required />
+                        <label>Fecha</label>
                         <input type="date" value={formClase.fecha} onChange={e => setFormClase({ ...formClase, fecha: e.target.value })} />
-                        <button type="submit">Crear clase</button>
+                        <div>
+                            <button type="submit">Crear clase</button>
+                            <button type="button" onClick={() => setVista('clases')}>Cancelar</button>
+                        </div>
                     </form>
                 </div>
             )}
@@ -403,17 +423,24 @@ function Admin() {
                 <div>
                     <h2>Editar Clase</h2>
                     <form onSubmit={handleUpdateClase}>
-                        <input type="text" placeholder="Nombre" value={editandoClase.nombre} onChange={e => setEditandoClase({ ...editandoClase, nombre: e.target.value })} required />
-                        <textarea placeholder="Descripción" value={editandoClase.descripcion || ''} onChange={e => setEditandoClase({ ...editandoClase, descripcion: e.target.value })} rows={3} />
-                        <select value={formClase.instructor} onChange={e => setFormClase({ ...formClase, instructor: e.target.value })} required>
+                        <label>Nombre</label>
+                        <input type="text" value={editandoClase.nombre} onChange={e => setEditandoClase({ ...editandoClase, nombre: e.target.value })} required />
+                        <label>Descripción</label>
+                        <textarea value={editandoClase.descripcion || ''} onChange={e => setEditandoClase({ ...editandoClase, descripcion: e.target.value })} rows={3} />
+                        <label>Instructor</label>
+                        <select value={editandoClase.instructor || ''} onChange={e => setEditandoClase({ ...editandoClase, instructor: e.target.value })}>
                             <option value="">Selecciona un instructor</option>
                             {usuarios.filter(u => u.rol === 'admin').map(u => (
                                 <option key={u.id} value={u.nombre}>{u.nombre}</option>
                             ))}
-                        </select>                        
-                        <input type="time" placeholder="Hora" value={editandoClase.hora || ''} onChange={e => setEditandoClase({ ...editandoClase, hora: e.target.value })} />
-                        <input type="number" placeholder="Capacidad" value={editandoClase.capacidad} onChange={e => setEditandoClase({ ...editandoClase, capacidad: e.target.value })} />
-                        <input type="number" placeholder="Duración (minutos)" value={editandoClase.duracion || ''} onChange={e => setEditandoClase({ ...editandoClase, duracion: e.target.value })} required />
+                        </select>
+                        <label>Hora</label>
+                        <input type="time" value={editandoClase.hora || ''} onChange={e => setEditandoClase({ ...editandoClase, hora: e.target.value })} />
+                        <label>Capacidad</label>
+                        <input type="number" value={editandoClase.capacidad} onChange={e => setEditandoClase({ ...editandoClase, capacidad: e.target.value })} />
+                        <label>Duración (minutos)</label>
+                        <input type="number" value={editandoClase.duracion || ''} onChange={e => setEditandoClase({ ...editandoClase, duracion: e.target.value })} required />
+                        <label>Fecha</label>
                         <input type="date" value={editandoClase.fecha ? new Date(editandoClase.fecha).toISOString().split('T')[0] : ''} onChange={e => setEditandoClase({ ...editandoClase, fecha: e.target.value })} />
                         <div>
                             <button type="submit">Guardar</button>
@@ -459,11 +486,18 @@ function Admin() {
                 <div>
                     <h2>Crear Membresía</h2>
                     <form onSubmit={handleCrearMembresia}>
-                        <input type="text" placeholder="Nombre" value={formMembresia.nombre} onChange={e => setFormMembresia({ ...formMembresia, nombre: e.target.value })} required />
-                        <input type="number" placeholder="Precio (€)" value={formMembresia.precio} onChange={e => setFormMembresia({ ...formMembresia, precio: e.target.value })} required />
-                        <input type="number" placeholder="Duración en días" value={formMembresia.duracion_dias} onChange={e => setFormMembresia({ ...formMembresia, duracion_dias: e.target.value })} required />
-                        <textarea placeholder="Descripción" value={formMembresia.descripcion} onChange={e => setFormMembresia({ ...formMembresia, descripcion: e.target.value })} rows={3} />
-                        <button type="submit">Crear membresía</button>
+                        <label>Nombre</label>
+                        <input type="text" value={formMembresia.nombre} onChange={e => setFormMembresia({ ...formMembresia, nombre: e.target.value })} required />
+                        <label>Precio (€)</label>
+                        <input type="number" value={formMembresia.precio} onChange={e => setFormMembresia({ ...formMembresia, precio: e.target.value })} required />
+                        <label>Duración en días</label>
+                        <input type="number" value={formMembresia.duracion_dias} onChange={e => setFormMembresia({ ...formMembresia, duracion_dias: e.target.value })} required />
+                        <label>Descripción</label>
+                        <textarea value={formMembresia.descripcion} onChange={e => setFormMembresia({ ...formMembresia, descripcion: e.target.value })} rows={3} />
+                        <div>
+                            <button type="submit">Crear membresía</button>
+                            <button type="button" onClick={() => setVista('membresias')}>Cancelar</button>
+                        </div>
                     </form>
                 </div>
             )}
@@ -472,9 +506,13 @@ function Admin() {
                 <div>
                     <h2>Editar Membresía</h2>
                     <form onSubmit={handleUpdateMembresia}>
+                        <label>Nombre</label>
                         <input type="text" value={editandoMembresia.nombre} onChange={e => setEditandoMembresia({ ...editandoMembresia, nombre: e.target.value })} required />
+                        <label>Precio (€)</label>
                         <input type="number" value={editandoMembresia.precio} onChange={e => setEditandoMembresia({ ...editandoMembresia, precio: e.target.value })} required />
+                        <label>Duración en días</label>
                         <input type="number" value={editandoMembresia.duracion_dias} onChange={e => setEditandoMembresia({ ...editandoMembresia, duracion_dias: e.target.value })} required />
+                        <label>Descripción</label>
                         <textarea value={editandoMembresia.descripcion || ''} onChange={e => setEditandoMembresia({ ...editandoMembresia, descripcion: e.target.value })} rows={3} />
                         <div>
                             <button type="submit">Guardar</button>
@@ -483,6 +521,7 @@ function Admin() {
                     </form>
                 </div>
             )}
+
             {vista === 'suscripciones' && (
                 <div>
                     <h2>Suscripciones</h2>
@@ -521,19 +560,23 @@ function Admin() {
                 <div>
                     <h2>Asignar Membresía</h2>
                     <form onSubmit={handleAsignarMembresia}>
+                        <label>Usuario</label>
                         <select value={formAsignar.usuario_id} onChange={e => setFormAsignar({ ...formAsignar, usuario_id: e.target.value })} required>
                             <option value="">Selecciona un usuario</option>
                             {usuarios.map(u => (
                                 <option key={u.id} value={u.id}>{u.nombre} ({u.email})</option>
                             ))}
                         </select>
+                        <label>Membresía</label>
                         <select value={formAsignar.membresia_id} onChange={e => setFormAsignar({ ...formAsignar, membresia_id: e.target.value })} required>
                             <option value="">Selecciona una membresía</option>
                             {membresias.map(m => (
                                 <option key={m.id} value={m.id}>{m.nombre} - {m.precio}€</option>
                             ))}
                         </select>
+                        <label>Fecha inicio</label>
                         <input type="date" value={formAsignar.fecha_inicio} onChange={e => setFormAsignar({ ...formAsignar, fecha_inicio: e.target.value })} required />
+                        <label>Fecha fin</label>
                         <input type="date" value={formAsignar.fecha_fin} onChange={e => setFormAsignar({ ...formAsignar, fecha_fin: e.target.value })} required />
                         <div>
                             <button type="submit">Asignar</button>
@@ -542,16 +585,20 @@ function Admin() {
                     </form>
                 </div>
             )}
+
             {vista === 'editar-suscripcion' && editandoSuscripcion && (
                 <div>
                     <h2>Editar Suscripción de {editandoSuscripcion.nombre}</h2>
                     <form onSubmit={handleUpdateSuscripcion}>
+                        <label>Membresía</label>
                         <select value={editandoSuscripcion.membresia_id} onChange={e => setEditandoSuscripcion({ ...editandoSuscripcion, membresia_id: e.target.value })} required>
                             {membresias.map(m => (
                                 <option key={m.id} value={m.id}>{m.nombre} - {m.precio}€</option>
                             ))}
                         </select>
+                        <label>Fecha inicio</label>
                         <input type="date" value={editandoSuscripcion.fecha_inicio?.split('T')[0]} onChange={e => setEditandoSuscripcion({ ...editandoSuscripcion, fecha_inicio: e.target.value })} required />
+                        <label>Fecha fin</label>
                         <input type="date" value={editandoSuscripcion.fecha_fin?.split('T')[0]} onChange={e => setEditandoSuscripcion({ ...editandoSuscripcion, fecha_fin: e.target.value })} required />
                         <div>
                             <button type="submit">Guardar</button>
