@@ -10,7 +10,7 @@ function Admin() {
     const [membresias, setMembresias] = useState([])
     const [vista, setVista] = useState('dashboard')
     const [formulario, setFormulario] = useState({ nombre: '', email: '', password: '', rol: 'usuario' })
-    const [formClase, setFormClase] = useState({ nombre: '', descripcion: '', instructor: '', horario: '', capacidad: 20, fecha: '' })
+    const [formClase, setFormClase] = useState({ nombre: '', descripcion: '', instructor: '', hora: '', capacidad: 20, fecha: '', duracion: '' })    
     const [formMembresia, setFormMembresia] = useState({ nombre: '', precio: '', duracion_dias: '', descripcion: '' })
     const [editando, setEditando] = useState(null)
     const [editandoClase, setEditandoClase] = useState(null)
@@ -348,8 +348,10 @@ function Admin() {
                         <thead>
                             <tr>
                                 <th>Nombre</th>
+                                <th>Descripcion</th>
                                 <th>Instructor</th>
-                                <th>Horario</th>
+                                <th>Hora</th>
+                                <th>Fecha</th>
                                 <th>Capacidad</th>
                                 <th>Inscritos</th>
                                 <th>Acciones</th>
@@ -359,8 +361,10 @@ function Admin() {
                             {clases.map(c => (
                                 <tr key={c.id}>
                                     <td>{c.nombre}</td>
+                                    <td>{c.descripcion || '—'}</td>
                                     <td>{c.instructor || '—'}</td>
-                                    <td>{c.horario || '—'}</td>
+                                    <td>{c.hora || '—'}</td>
+                                    <td>{c.fecha ? new Date(c.fecha).toLocaleDateString() : '—'}</td>
                                     <td>{c.capacidad}</td>
                                     <td>{c.inscritos}</td>
                                     <td>
@@ -380,10 +384,16 @@ function Admin() {
                     <form onSubmit={handleCrearClase}>
                         <input type="text" placeholder="Nombre" value={formClase.nombre} onChange={e => setFormClase({ ...formClase, nombre: e.target.value })} required />
                         <textarea placeholder="Descripción" value={formClase.descripcion} onChange={e => setFormClase({ ...formClase, descripcion: e.target.value })} rows={3} />
-                        <input type="text" placeholder="Instructor" value={formClase.instructor} onChange={e => setFormClase({ ...formClase, instructor: e.target.value })} />
-                        <input type="text" placeholder="Horario (ej: Lunes y Miércoles 18:00)" value={formClase.horario} onChange={e => setFormClase({ ...formClase, horario: e.target.value })} />
+                        <select value={formClase.instructor} onChange={e => setFormClase({ ...formClase, instructor: e.target.value })} required>
+                            <option value="">Selecciona un instructor</option>
+                            {usuarios.filter(u => u.rol === 'admin').map(u => (
+                                <option key={u.id} value={u.nombre}>{u.nombre}</option>
+                            ))}
+                        </select>
+                        <input type="time" placeholder="Hora" value={formClase.hora} onChange={e => setFormClase({ ...formClase, hora: e.target.value })} />
                         <input type="number" placeholder="Capacidad" value={formClase.capacidad} onChange={e => setFormClase({ ...formClase, capacidad: e.target.value })} />
-                        <input type="datetime-local" value={formClase.fecha} onChange={e => setFormClase({ ...formClase, fecha: e.target.value })} />
+                        <input type="number" placeholder="Duración (minutos)" value={formClase.duracion} onChange={e => setFormClase({ ...formClase, duracion: e.target.value })} required />
+                        <input type="date" value={formClase.fecha} onChange={e => setFormClase({ ...formClase, fecha: e.target.value })} />
                         <button type="submit">Crear clase</button>
                     </form>
                 </div>
@@ -395,10 +405,16 @@ function Admin() {
                     <form onSubmit={handleUpdateClase}>
                         <input type="text" placeholder="Nombre" value={editandoClase.nombre} onChange={e => setEditandoClase({ ...editandoClase, nombre: e.target.value })} required />
                         <textarea placeholder="Descripción" value={editandoClase.descripcion || ''} onChange={e => setEditandoClase({ ...editandoClase, descripcion: e.target.value })} rows={3} />
-                        <input type="text" placeholder="Instructor" value={editandoClase.instructor || ''} onChange={e => setEditandoClase({ ...editandoClase, instructor: e.target.value })} />
-                        <input type="text" placeholder="Horario (ej: Lunes y Miércoles 18:00)" value={editandoClase.horario || ''} onChange={e => setEditandoClase({ ...editandoClase, horario: e.target.value })} />
+                        <select value={formClase.instructor} onChange={e => setFormClase({ ...formClase, instructor: e.target.value })} required>
+                            <option value="">Selecciona un instructor</option>
+                            {usuarios.filter(u => u.rol === 'admin').map(u => (
+                                <option key={u.id} value={u.nombre}>{u.nombre}</option>
+                            ))}
+                        </select>                        
+                        <input type="time" placeholder="Hora" value={editandoClase.hora || ''} onChange={e => setEditandoClase({ ...editandoClase, hora: e.target.value })} />
                         <input type="number" placeholder="Capacidad" value={editandoClase.capacidad} onChange={e => setEditandoClase({ ...editandoClase, capacidad: e.target.value })} />
-                        <input type="datetime-local" value={editandoClase.fecha || ''} onChange={e => setEditandoClase({ ...editandoClase, fecha: e.target.value })} />
+                        <input type="number" placeholder="Duración (minutos)" value={editandoClase.duracion || ''} onChange={e => setEditandoClase({ ...editandoClase, duracion: e.target.value })} required />
+                        <input type="date" value={editandoClase.fecha ? new Date(editandoClase.fecha).toISOString().split('T')[0] : ''} onChange={e => setEditandoClase({ ...editandoClase, fecha: e.target.value })} />
                         <div>
                             <button type="submit">Guardar</button>
                             <button type="button" onClick={() => setVista('clases')}>Cancelar</button>

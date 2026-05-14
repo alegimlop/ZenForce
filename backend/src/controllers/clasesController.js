@@ -1,4 +1,4 @@
-const db = require('../db');
+const db = require('../db')
 
 const getClases = (req, res) => {
     db.query(
@@ -8,27 +8,27 @@ const getClases = (req, res) => {
          GROUP BY c.id
          ORDER BY c.fecha ASC`,
         (err, results) => {
-            if (err) return res.status(500).json({ error: 'Error al obtener clases' });
-            res.json(results);
+            if (err) return res.status(500).json({ error: 'Error al obtener clases' })
+            res.json(results)
         }
-    );
-};
+    )
+}
 
 const getMisClases = (req, res) => {
-    const { usuarioId } = req.params;
+    const { usuarioId } = req.params
     db.query(
         'SELECT clase_id AS id FROM inscripciones_clases WHERE usuario_id = ?',
         [usuarioId],
         (err, results) => {
-            if (err) return res.status(500).json({ error: 'Error al obtener tus clases' });
-            res.json(results);
+            if (err) return res.status(500).json({ error: 'Error al obtener tus clases' })
+            res.json(results)
         }
-    );
-};
+    )
+}
 
 const inscribirse = (req, res) => {
-    const { claseId } = req.params;
-    const { usuario_id } = req.body;
+    const { claseId } = req.params
+    const { usuario_id } = req.body
 
     db.query(
         `SELECT c.capacidad, COUNT(i.usuario_id) AS inscritos
@@ -38,11 +38,11 @@ const inscribirse = (req, res) => {
          GROUP BY c.id`,
         [claseId],
         (err, results) => {
-            if (err) return res.status(500).json({ error: 'Error al comprobar la clase' });
-            if (!results.length) return res.status(404).json({ error: 'Clase no encontrada' });
+            if (err) return res.status(500).json({ error: 'Error al comprobar la clase' })
+            if (!results.length) return res.status(404).json({ error: 'Clase no encontrada' })
 
-            const { capacidad, inscritos } = results[0];
-            if (inscritos >= capacidad) return res.status(400).json({ error: 'La clase está completa' });
+            const { capacidad, inscritos } = results[0]
+            if (inscritos >= capacidad) return res.status(400).json({ error: 'La clase está completa' })
 
             db.query(
                 'INSERT INTO inscripciones_clases (usuario_id, clase_id) VALUES (?, ?)',
@@ -50,66 +50,63 @@ const inscribirse = (req, res) => {
                 (err) => {
                     if (err) {
                         if (err.code === 'ER_DUP_ENTRY')
-                            return res.status(400).json({ error: 'Ya estás inscrito en esta clase' });
-                        return res.status(500).json({ error: 'Error al inscribirse' });
+                            return res.status(400).json({ error: 'Ya estás inscrito en esta clase' })
+                        return res.status(500).json({ error: 'Error al inscribirse' })
                     }
-                    res.status(201).json({ mensaje: 'Inscripción realizada correctamente' });
+                    res.status(201).json({ mensaje: 'Inscripción realizada correctamente' })
                 }
-            );
+            )
         }
-    );
-};
+    )
+}
 
 const cancelarInscripcion = (req, res) => {
-    const { claseId } = req.params;
-    const { usuario_id } = req.body;
+    const { claseId } = req.params
+    const { usuario_id } = req.body
     db.query(
         'DELETE FROM inscripciones_clases WHERE usuario_id = ? AND clase_id = ?',
         [usuario_id, claseId],
         (err) => {
-            if (err) return res.status(500).json({ error: 'Error al cancelar inscripción' });
-            res.json({ mensaje: 'Inscripción cancelada' });
+            if (err) return res.status(500).json({ error: 'Error al cancelar inscripción' })
+            res.json({ mensaje: 'Inscripción cancelada' })
         }
-    );
-};
+    )
+}
 
 const crearClase = (req, res) => {
-    const { nombre, descripcion, instructor, horario, fecha, capacidad } = req.body;
+    const { nombre, descripcion, instructor, hora, fecha, capacidad, duracion } = req.body
     db.query(
-        'INSERT INTO clases (nombre, descripcion, instructor, horario, fecha, capacidad) VALUES (?, ?, ?, ?, ?, ?)',
-        [nombre, descripcion, instructor, horario, fecha, capacidad],
+        'INSERT INTO clases (nombre, descripcion, instructor, hora, fecha, capacidad, duracion) VALUES (?, ?, ?, ?, ?, ?, ?)',
+        [nombre, descripcion, instructor, hora, fecha, capacidad, duracion],
         (err, result) => {
-            if (err) return res.status(500).json({ error: 'Error al crear la clase' });
-            res.status(201).json({ mensaje: 'Clase creada correctamente', id: result.insertId });
+            if (err) return res.status(500).json({ error: 'Error al crear la clase' })
+            res.status(201).json({ mensaje: 'Clase creada correctamente', id: result.insertId })
         }
-    );
-};
+    )
+}
 
 const editarClase = (req, res) => {
     const { id } = req.params
-    const { nombre, descripcion, instructor, horario, fecha, capacidad } = req.body
+    const { nombre, descripcion, instructor, hora, fecha, capacidad, duracion } = req.body
 
-    console.log('Datos recibidos:', { id, nombre, descripcion, instructor, horario, fecha, capacidad })
+    const fechaFormateada = fecha ? fecha.split('T')[0] : null
 
     db.query(
-        'UPDATE clases SET nombre=?, descripcion=?, instructor=?, horario=?, fecha=?, capacidad=? WHERE id=?',
-        [nombre, descripcion, instructor, horario, fecha, capacidad, id],
+        'UPDATE clases SET nombre=?, descripcion=?, instructor=?, hora=?, fecha=?, capacidad=?, duracion=? WHERE id=?',
+        [nombre, descripcion, instructor, hora, fechaFormateada, capacidad, duracion, id],
         (err) => {
-            if (err) {
-                console.log('Error SQL:', err)
-                return res.status(500).json({ error: 'Error al editar la clase' })
-            }
+            if (err) return res.status(500).json({ error: 'Error al editar la clase' })
             res.json({ mensaje: 'Clase actualizada correctamente' })
         }
     )
 }
 
 const eliminarClase = (req, res) => {
-    const { id } = req.params;
+    const { id } = req.params
     db.query('DELETE FROM clases WHERE id = ?', [id], (err) => {
-        if (err) return res.status(500).json({ error: 'Error al eliminar la clase' });
-        res.json({ mensaje: 'Clase eliminada correctamente' });
-    });
-};
+        if (err) return res.status(500).json({ error: 'Error al eliminar la clase' })
+        res.json({ mensaje: 'Clase eliminada correctamente' })
+    })
+}
 
-module.exports = { getClases, getMisClases, inscribirse, cancelarInscripcion, crearClase, editarClase, eliminarClase };
+module.exports = { getClases, getMisClases, inscribirse, cancelarInscripcion, crearClase, editarClase, eliminarClase }
