@@ -210,4 +210,27 @@ const eliminarPostAdmin = (req, res) => {
         })
     })
 }
-module.exports = { getPosts, crearPost, getPost, eliminarPost, editarPost, añadirComentario, eliminarComentario, editarComentario, toggleLike, comprobarLike, getPostsAdmin, eliminarPostAdmin }
+const getComentariosAdmin = (req, res) => {
+    const { id } = req.params
+    db.query(
+        `SELECT c.id, c.contenido, c.fecha_creacion, u.nombre AS autor
+         FROM comentarios c
+         JOIN usuarios u ON c.usuario_id = u.id
+         WHERE c.post_id = ?
+         ORDER BY c.fecha_creacion ASC`,
+        [id],
+        (err, results) => {
+            if (err) return res.status(500).json({ error: 'Error al obtener comentarios' })
+            res.json(results)
+        }
+    )
+}
+
+const eliminarComentarioAdmin = (req, res) => {
+    const { id } = req.params
+    db.query('DELETE FROM comentarios WHERE id = ?', [id], (err) => {
+        if (err) return res.status(500).json({ error: 'Error al eliminar comentario' })
+        res.json({ mensaje: 'Comentario eliminado correctamente' })
+    })
+}
+module.exports = { getPosts, crearPost, getPost, eliminarPost, editarPost, añadirComentario, eliminarComentario, editarComentario, toggleLike, comprobarLike, getPostsAdmin, eliminarPostAdmin, getComentariosAdmin, eliminarComentarioAdmin }

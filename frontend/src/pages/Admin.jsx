@@ -20,7 +20,8 @@ function Admin() {
     const [formAsignar, setFormAsignar] = useState({ usuario_id: '', membresia_id: '', fecha_inicio: '', fecha_fin: '' })
     const [editandoSuscripcion, setEditandoSuscripcion] = useState(null)
     const [posts, setPosts] = useState([])
-
+    const [postSeleccionado, setPostSeleccionado] = useState(null)
+    const [comentariosPost, setComentariosPost] = useState([])
     useEffect(() => {
         cargarStats()
         cargarUsuarios()
@@ -226,6 +227,24 @@ function Admin() {
             cargarPosts()
         } catch {
             mostrarMensaje('Error al eliminar post')
+        }
+    }
+    const verComentarios = async (post) => {
+        const res = await axios.get(`${API}/foro/admin/posts/${post.id}/comentarios`)
+        setComentariosPost(res.data)
+        setPostSeleccionado(post)
+        setVista('comentarios-post')
+    }
+
+    const handleEliminarComentarioAdmin = async (id) => {
+        if (!confirm('¿Eliminar este comentario?')) return
+        try {
+            await axios.delete(`${API}/foro/admin/comentarios/${id}`)
+            mostrarMensaje('Comentario eliminado correctamente')
+            const res = await axios.get(`${API}/foro/admin/posts/${postSeleccionado.id}/comentarios`)
+            setComentariosPost(res.data)
+        } catch {
+            mostrarMensaje('Error al eliminar comentario')
         }
     }
     return (
@@ -548,6 +567,7 @@ function Admin() {
                                     <td>{p.total_likes}</td>
                                     <td>{p.total_comentarios}</td>
                                     <td>
+                                        <button onClick={() => verComentarios(p)}>Comentarios</button>
                                         <button onClick={() => handleEliminarPost(p.id)}>Eliminar</button>
                                     </td>
                                 </tr>
@@ -556,8 +576,39 @@ function Admin() {
                     </table>
                 </div>
             )}
+            {vista === 'comentarios-post' && postSeleccionado && (
+                <div>
+                    <h2>Comentarios de: {postSeleccionado.titulo}</h2>
+                    <button onClick={() => setVista('foro')}>Volver</button>
+                    {comentariosPost.length === 0 ? (
+                        <p>No hay comentarios en este post.</p>
+                    ) : (
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Autor</th>
+                                    <th>Contenido</th>
+                                    <th>Fecha</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {comentariosPost.map(c => (
+                                    <tr key={c.id}>
+                                        <td>{c.autor}</td>
+                                        <td>{c.contenido}</td>
+                                        <td>{new Date(c.fecha_creacion).toLocaleDateString()}</td>
+                                        <td>
+                                            <button onClick={() => handleEliminarComentarioAdmin(c.id)}>Eliminar</button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    )}
+                </div>
+            )}
         </div>
-
     )
 }
 
