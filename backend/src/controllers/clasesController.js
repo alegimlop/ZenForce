@@ -86,17 +86,23 @@ const crearClase = (req, res) => {
 };
 
 const editarClase = (req, res) => {
-    const { id } = req.params;
-    const { nombre, descripcion, instructor, horario, fecha, capacidad } = req.body;
+    const { id } = req.params
+    const { nombre, descripcion, instructor, horario, fecha, capacidad } = req.body
+
+    console.log('Datos recibidos:', { id, nombre, descripcion, instructor, horario, fecha, capacidad })
+
     db.query(
         'UPDATE clases SET nombre=?, descripcion=?, instructor=?, horario=?, fecha=?, capacidad=? WHERE id=?',
         [nombre, descripcion, instructor, horario, fecha, capacidad, id],
         (err) => {
-            if (err) return res.status(500).json({ error: 'Error al editar la clase' });
-            res.json({ mensaje: 'Clase actualizada correctamente' });
+            if (err) {
+                console.log('Error SQL:', err)
+                return res.status(500).json({ error: 'Error al editar la clase' })
+            }
+            res.json({ mensaje: 'Clase actualizada correctamente' })
         }
-    );
-};
+    )
+}
 
 const eliminarClase = (req, res) => {
     const { id } = req.params;

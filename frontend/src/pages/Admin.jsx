@@ -19,6 +19,7 @@ function Admin() {
     const [suscripciones, setSuscripciones] = useState([])
     const [formAsignar, setFormAsignar] = useState({ usuario_id: '', membresia_id: '', fecha_inicio: '', fecha_fin: '' })
     const [editandoSuscripcion, setEditandoSuscripcion] = useState(null)
+    const [posts, setPosts] = useState([])
 
     useEffect(() => {
         cargarStats()
@@ -26,6 +27,7 @@ function Admin() {
         cargarClases()
         cargarMembresias()
         cargarSuscripciones()
+        cargarPosts()
     }, [])
 
     const cargarStats = async () => {
@@ -210,6 +212,21 @@ function Admin() {
         } catch {
             mostrarMensaje('Error al actualizar suscripción')
         }
+
+    }
+    const cargarPosts = async () => {
+        const res = await axios.get(`${API}/foro/admin/posts`)
+        setPosts(res.data)
+    }
+    const handleEliminarPost = async (id) => {
+        if (!confirm('¿Eliminar este post y sus comentarios?')) return
+        try {
+            await axios.delete(`${API}/foro/admin/posts/${id}`)
+            mostrarMensaje('Post eliminado correctamente')
+            cargarPosts()
+        } catch {
+            mostrarMensaje('Error al eliminar post')
+        }
     }
     return (
         <div>
@@ -218,6 +235,7 @@ function Admin() {
                 <button onClick={() => setVista('dashboard')}>Dashboard</button>
                 <button onClick={() => setVista('usuarios')}>Usuarios</button>
                 <button onClick={() => setVista('clases')}>Clases</button>
+                <button onClick={() => setVista('foro')}>Foro</button>
                 <button onClick={() => setVista('membresias')}>Membresías</button>
                 <button onClick={() => setVista('suscripciones')}>Suscripciones</button>
             </nav>
@@ -356,11 +374,12 @@ function Admin() {
                 <div>
                     <h2>Editar Clase</h2>
                     <form onSubmit={handleUpdateClase}>
-                        <input type="text" value={editandoClase.nombre} onChange={e => setEditandoClase({ ...editandoClase, nombre: e.target.value })} required />
-                        <textarea value={editandoClase.descripcion || ''} onChange={e => setEditandoClase({ ...editandoClase, descripcion: e.target.value })} rows={3} />
-                        <input type="text" value={editandoClase.instructor || ''} onChange={e => setEditandoClase({ ...editandoClase, instructor: e.target.value })} />
-                        <input type="text" value={editandoClase.horario || ''} onChange={e => setEditandoClase({ ...editandoClase, horario: e.target.value })} />
-                        <input type="number" value={editandoClase.capacidad} onChange={e => setEditandoClase({ ...editandoClase, capacidad: e.target.value })} />
+                        <input type="text" placeholder="Nombre" value={editandoClase.nombre} onChange={e => setEditandoClase({ ...editandoClase, nombre: e.target.value })} required />
+                        <textarea placeholder="Descripción" value={editandoClase.descripcion || ''} onChange={e => setEditandoClase({ ...editandoClase, descripcion: e.target.value })} rows={3} />
+                        <input type="text" placeholder="Instructor" value={editandoClase.instructor || ''} onChange={e => setEditandoClase({ ...editandoClase, instructor: e.target.value })} />
+                        <input type="text" placeholder="Horario (ej: Lunes y Miércoles 18:00)" value={editandoClase.horario || ''} onChange={e => setEditandoClase({ ...editandoClase, horario: e.target.value })} />
+                        <input type="number" placeholder="Capacidad" value={editandoClase.capacidad} onChange={e => setEditandoClase({ ...editandoClase, capacidad: e.target.value })} />
+                        <input type="datetime-local" value={editandoClase.fecha || ''} onChange={e => setEditandoClase({ ...editandoClase, fecha: e.target.value })} />
                         <div>
                             <button type="submit">Guardar</button>
                             <button type="button" onClick={() => setVista('clases')}>Cancelar</button>
@@ -441,7 +460,6 @@ function Admin() {
                                 <th>Membresía</th>
                                 <th>Inicio</th>
                                 <th>Fin</th>
-                                <th>Activa</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
@@ -453,7 +471,6 @@ function Admin() {
                                     <td>{s.membresia}</td>
                                     <td>{new Date(s.fecha_inicio).toLocaleDateString()}</td>
                                     <td>{new Date(s.fecha_fin).toLocaleDateString()}</td>
-                                    <td>{s.activa ? 'Si' : 'No'}</td>
                                     <td>
                                         <button onClick={() => { setEditandoSuscripcion(s); setVista('editar-suscripcion') }}>Editar</button>
                                         <button onClick={() => handleQuitarSuscripcion(s.id)}>Quitar</button>
@@ -506,6 +523,37 @@ function Admin() {
                             <button type="button" onClick={() => setVista('suscripciones')}>Cancelar</button>
                         </div>
                     </form>
+                </div>
+            )}
+            {vista === 'foro' && (
+                <div>
+                    <h2>Gestión del Foro</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Titulo</th>
+                                <th>Autor</th>
+                                <th>Fecha</th>
+                                <th>Likes</th>
+                                <th>Comentarios</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {posts.map(p => (
+                                <tr key={p.id}>
+                                    <td>{p.titulo}</td>
+                                    <td>{p.autor}</td>
+                                    <td>{new Date(p.fecha_creacion).toLocaleDateString()}</td>
+                                    <td>{p.total_likes}</td>
+                                    <td>{p.total_comentarios}</td>
+                                    <td>
+                                        <button onClick={() => handleEliminarPost(p.id)}>Eliminar</button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
                 </div>
             )}
         </div>

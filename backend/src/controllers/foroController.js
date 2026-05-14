@@ -181,4 +181,33 @@ const editarComentario = (req, res) => {
         )
     })
 }
-module.exports = { getPosts, crearPost, getPost, eliminarPost, editarPost, añadirComentario, eliminarComentario, editarComentario, toggleLike, comprobarLike }
+const getPostsAdmin = (req, res) => {
+    db.query(
+        `SELECT p.id, p.titulo, p.contenido, p.fecha_creacion,
+                u.nombre AS autor,
+                (SELECT COUNT(*) FROM likes WHERE post_id = p.id) AS total_likes,
+                (SELECT COUNT(*) FROM comentarios WHERE post_id = p.id) AS total_comentarios
+         FROM posts p
+         JOIN usuarios u ON p.usuario_id = u.id
+         ORDER BY p.fecha_creacion DESC`,
+        (err, results) => {
+            if (err) return res.status(500).json({ error: 'Error al obtener posts' })
+            res.json(results)
+        }
+    )
+}
+
+const eliminarPostAdmin = (req, res) => {
+    const { id } = req.params
+    db.query('DELETE FROM comentarios WHERE post_id = ?', [id], (err) => {
+        if (err) return res.status(500).json({ error: 'Error al eliminar comentarios' })
+        db.query('DELETE FROM likes WHERE post_id = ?', [id], (err2) => {
+            if (err2) return res.status(500).json({ error: 'Error al eliminar likes' })
+            db.query('DELETE FROM posts WHERE id = ?', [id], (err3) => {
+                if (err3) return res.status(500).json({ error: 'Error al eliminar post' })
+                res.json({ mensaje: 'Post eliminado correctamente' })
+            })
+        })
+    })
+}
+module.exports = { getPosts, crearPost, getPost, eliminarPost, editarPost, añadirComentario, eliminarComentario, editarComentario, toggleLike, comprobarLike, getPostsAdmin, eliminarPostAdmin }
