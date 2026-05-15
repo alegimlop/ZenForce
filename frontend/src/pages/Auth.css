@@ -112,6 +112,14 @@
     font-weight: 600;
 }
 
+.mensaje-ok-auth {
+    font-size: 1.6vh;
+    color: #f97316;
+    text-align: center;
+    margin: 0;
+    font-weight: 600;
+}
+
 @media (max-width: 768px) {
     .tarjeta-auth {
         max-width: 90vw;

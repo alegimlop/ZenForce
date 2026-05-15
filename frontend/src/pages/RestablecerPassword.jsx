@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
+import './Auth.css'
 
 function RestablecerPassword() {
     const [email, setEmail] = useState('')
@@ -18,25 +19,30 @@ function RestablecerPassword() {
     }
 
     return (
-        <div>
-            <h2>Restablecer contraseña</h2>
-            <form onSubmit={handleSubmit}>
-                <input
-                    type="email"
-                    placeholder="Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                />
-                <input
-                    type="password"
-                    placeholder="Nueva contraseña"
-                    value={passwordNueva}
-                    onChange={(e) => setPasswordNueva(e.target.value)}
-                />
-                <button type="submit">Restablecer</button>
-            </form>
-            {mensaje && <p>{mensaje}</p>}
-            <Link to="/login">Volver al login</Link>
+        <div className="contenedor-auth">
+            <div className="tarjeta-auth">
+                <h1 className="titulo-auth">ZENFORCE</h1>
+                <h2 className="subtitulo-auth">Restablecer contraseña</h2>
+                <form className="formulario-auth" onSubmit={handleSubmit}>
+                    <input
+                        type="email"
+                        placeholder="Email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
+                    <input
+                        type="password"
+                        placeholder="Nueva contraseña"
+                        value={passwordNueva}
+                        onChange={(e) => setPasswordNueva(e.target.value)}
+                    />
+                    <button type="submit" className="boton-auth">Restablecer</button>
+                </form>
+                {mensaje && <p className={mensaje.includes('correctamente') ? 'mensaje-ok-auth' : 'error-auth'}>{mensaje}</p>}
+                <div className="enlaces-auth">
+                    <p><Link to="/login">Volver al login</Link></p>
+                </div>
+            </div>
         </div>
     )
 }
