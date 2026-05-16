@@ -34,9 +34,12 @@ const editarMembresia = (req, res) => {
 
 const eliminarMembresia = (req, res) => {
     const { id } = req.params
-    db.query('DELETE FROM membresias WHERE id = ?', [id], (err) => {
-        if (err) return res.status(500).json({ error: 'Error al eliminar membresía' })
-        res.json({ mensaje: 'Membresía eliminada correctamente' })
+    db.query('DELETE FROM usuario_membresia WHERE id_membresia = ?', [id], (err) => {
+        if (err) return res.status(500).json({ error: 'Error al eliminar suscripciones asociadas' })
+        db.query('DELETE FROM membresias WHERE id = ?', [id], (err2) => {
+            if (err2) return res.status(500).json({ error: 'Error al eliminar membresía' })
+            res.json({ mensaje: 'Membresía eliminada correctamente' })
+        })
     })
 }
 const getUsuariosMembresia = (req, res) => {

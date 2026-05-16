@@ -167,6 +167,7 @@ function Admin() {
             await axios.delete(`${API}/suscripciones/${id}`)
             mostrarMensaje('Membresía eliminada correctamente')
             cargarMembresias()
+            cargarSuscripciones()
         } catch {
             mostrarMensaje('Error al eliminar membresía')
         }
