@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 import './Admin.css'
 
 const API = 'http://localhost:3000/api'
 
 function Admin() {
+    const navigate = useNavigate()
     const [stats, setStats] = useState(null)
     const [usuarios, setUsuarios] = useState([])
     const [clases, setClases] = useState([])
@@ -263,6 +265,9 @@ function Admin() {
             <aside className="sidebar-admin">
                 <h1 className="titulo-admin">ADMIN</h1>
                 <nav className="nav-admin">
+                    <button className="boton-salir-admin" onClick={() => navigate('/')}>
+                        ← Volver al sitio
+                    </button>
                     {seccionesNav.map(s => (
                         <button
                             key={s.id}

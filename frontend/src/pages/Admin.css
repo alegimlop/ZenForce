@@ -1,7 +1,7 @@
 .panel-admin {
     display: grid;
     grid-template-columns: 18vw 1fr;
-    min-height: 93vh;
+    min-height: 100vh;
     animation: deslizar-entrada 0.3s ease;
 }
 
@@ -37,6 +37,25 @@
     height: auto;
     position: static;
     padding: 0;
+}
+
+.boton-salir-admin {
+    background-color: transparent;
+    color: #93c5fd;
+    border: 1px solid #2563eb;
+    padding: 1.2vh 1.5vw;
+    border-radius: 0.8vh;
+    font-size: 1.6vh;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: left;
+    transition: background-color 0.2s, color 0.2s;
+    margin-bottom: 1vh;
+}
+
+.boton-salir-admin:hover {
+    background-color: #2563eb;
+    color: #ffffff;
 }
 
 .boton-nav-admin {

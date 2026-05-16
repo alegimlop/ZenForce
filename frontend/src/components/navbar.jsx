@@ -1,9 +1,12 @@
-import { NavLink, useNavigate } from 'react-router-dom'
+import { NavLink, useNavigate, useLocation } from 'react-router-dom'
 import './Navbar.css'
 
 function Navbar() {
     const navigate = useNavigate()
+    const location = useLocation()
     const usuario = JSON.parse(localStorage.getItem('usuario'))
+
+    if (location.pathname === '/admin') return null
 
     const handleLogout = () => {
         localStorage.clear()
