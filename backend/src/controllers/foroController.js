@@ -233,4 +233,53 @@ const eliminarComentarioAdmin = (req, res) => {
         res.json({ mensaje: 'Comentario eliminado correctamente' })
     })
 }
-module.exports = { getPosts, crearPost, getPost, eliminarPost, editarPost, añadirComentario, eliminarComentario, editarComentario, toggleLike, comprobarLike, getPostsAdmin, eliminarPostAdmin, getComentariosAdmin, eliminarComentarioAdmin }
+const getMisPosts = (req, res) => {
+    const { usuarioId } = req.params
+    db.query(
+        `SELECT p.id, p.titulo, p.contenido, p.fecha_creacion,
+                u.nombre AS autor
+         FROM posts p
+         JOIN usuarios u ON p.usuario_id = u.id
+         WHERE p.usuario_id = ?
+         ORDER BY p.fecha_creacion DESC`,
+        [usuarioId],
+        (err, results) => {
+            if (err) return res.status(500).json({ error: 'Error al obtener tus posts' })
+            res.json(results)
+        }
+    )
+}
+
+const getMisLikes = (req, res) => {
+    const { usuarioId } = req.params
+    db.query(
+        `SELECT p.id, p.titulo, p.contenido, p.fecha_creacion,
+                u.nombre AS autor
+         FROM likes l
+         JOIN posts p ON l.post_id = p.id
+         JOIN usuarios u ON p.usuario_id = u.id
+         WHERE l.usuario_id = ?
+         ORDER BY p.fecha_creacion DESC`,
+        [usuarioId],
+        (err, results) => {
+            if (err) return res.status(500).json({ error: 'Error al obtener tus likes' })
+            res.json(results)
+        }
+    )
+}
+const getMisComentarios = (req, res) => {
+    const { usuarioId } = req.params
+    db.query(
+        `SELECT c.id, c.contenido, c.fecha_creacion, p.id AS post_id, p.titulo AS post_titulo
+         FROM comentarios c
+         JOIN posts p ON c.post_id = p.id
+         WHERE c.usuario_id = ?
+         ORDER BY c.fecha_creacion DESC`,
+        [usuarioId],
+        (err, results) => {
+            if (err) return res.status(500).json({ error: 'Error al obtener tus comentarios' })
+            res.json(results)
+        }
+    )
+}
+module.exports = { getPosts, crearPost, getPost, eliminarPost, editarPost, añadirComentario, eliminarComentario, editarComentario, toggleLike, comprobarLike, getPostsAdmin, eliminarPostAdmin, getComentariosAdmin, eliminarComentarioAdmin, getMisPosts, getMisLikes, getMisComentarios }

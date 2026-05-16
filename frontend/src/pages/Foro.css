@@ -288,6 +288,33 @@
     text-align: center;
 }
 
+.botones-cabecera-foro {
+    display: flex;
+    gap: 1vw;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.boton-filtro {
+    background-color: transparent;
+    color: #f97316;
+    border: 1px solid #f97316;
+    padding: 0.8vh 1.5vw;
+    border-radius: 0.8vh;
+    font-size: 1.6vh;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.boton-filtro:hover {
+    background-color: #f97316;
+    color: #ffffff;
+}
+
+.boton-filtro.activo {
+    background-color: #f97316;
+    color: #ffffff;
+}
 @media (max-width: 768px) {
     .contenedor-foro {
         padding: 3vh 5vw;

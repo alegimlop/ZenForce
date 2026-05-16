@@ -20,7 +20,8 @@ function Foro() {
     const [contenidoEdit, setContenidoEdit] = useState('')
     const [comentarioEditandoId, setComentarioEditandoId] = useState(null)
     const [contenidoEditComentario, setContenidoEditComentario] = useState('')
-
+    const [filtro, setFiltro] = useState('todos')
+    const [misComentarios, setMisComentarios] = useState([])
     useEffect(() => {
         cargarPosts()
     }, [])
@@ -59,7 +60,13 @@ function Foro() {
         if (!confirm('¿Eliminar este post?')) return
         try {
             await axios.delete(`${API}/posts/${id}`, { data: { usuario_id: usuario.id } })
-            await cargarPosts()
+            if (filtro === 'misPosts') {
+                await filtrarMisPosts()
+            } else if (filtro === 'misLikes') {
+                await filtrarMisLikes()
+            } else {
+                await cargarPosts()
+            }
             setVista('lista')
         } catch {
             setMensaje('Error al eliminar el post')
@@ -82,12 +89,15 @@ function Foro() {
         }
     }
 
-    const darLike = async () => {
-        if (!usuario) return
-        const res = await axios.post(`${API}/posts/${postDetalle.id}/like`, { usuario_id: usuario.id })
-        setLiked(res.data.liked)
-        setTotalLikes(prev => res.data.liked ? prev + 1 : prev - 1)
+const darLike = async () => {
+    if (!usuario) return
+    const res = await axios.post(`${API}/posts/${postDetalle.id}/like`, { usuario_id: usuario.id })
+    setLiked(res.data.liked)
+    setTotalLikes(prev => res.data.liked ? prev + 1 : prev - 1)
+    if (filtro === 'misLikes') {
+        await filtrarMisLikes()
     }
+}
 
     const enviarComentario = async (e) => {
         e.preventDefault()
@@ -110,6 +120,9 @@ function Foro() {
             await axios.delete(`${API}/comentarios/${comentarioId}`, { data: { usuario_id: usuario.id } })
             const res = await axios.get(`${API}/posts/${postDetalle.id}`)
             setPostDetalle(res.data)
+            if (filtro === 'misComentarios') {
+                await filtrarMisComentarios()
+            }
         } catch {
             setMensaje('No puedes eliminar este comentario')
         }
@@ -133,7 +146,27 @@ function Foro() {
     const formatFecha = (fecha) => new Date(fecha).toLocaleDateString('es-ES', {
         day: '2-digit', month: 'short', year: 'numeric'
     })
+    const filtrarMisPosts = async () => {
+        const res = await axios.get(`${API}/misposts/${usuario.id}`)
+        setPosts(res.data)
+        setFiltro('misPosts')
+    }
 
+    const filtrarMisLikes = async () => {
+        const res = await axios.get(`${API}/misleaks/${usuario.id}`)
+        setPosts(res.data)
+        setFiltro('misLikes')
+    }
+
+    const verTodos = async () => {
+        await cargarPosts()
+        setFiltro('todos')
+    }
+    const filtrarMisComentarios = async () => {
+        const res = await axios.get(`${API}/miscomentarios/${usuario.id}`)
+        setMisComentarios(res.data)
+        setFiltro('misComentarios')
+    }
     if (vista === 'crear') return (
         <div className="contenedor-pagina contenedor-foro">
             <div className="cabecera-foro">
@@ -259,11 +292,34 @@ function Foro() {
             <div className="cabecera-foro">
                 <h1>Foro</h1>
                 {usuario && (
-                    <button className="boton-nuevo" onClick={() => setVista('crear')}>+ Nuevo post</button>
+                    <div className="botones-cabecera-foro">
+                        <button className="boton-nuevo" onClick={() => setVista('crear')}>+ Nuevo post</button>
+                        <button className={`boton-filtro ${filtro === 'todos' ? 'activo' : ''}`} onClick={verTodos}>Todos</button>
+                        <button className={`boton-filtro ${filtro === 'misPosts' ? 'activo' : ''}`} onClick={filtrarMisPosts}>Mis posts</button>
+                        <button className={`boton-filtro ${filtro === 'misLikes' ? 'activo' : ''}`} onClick={filtrarMisLikes}>Mis likes</button>
+                        <button className={`boton-filtro ${filtro === 'misComentarios' ? 'activo' : ''}`} onClick={filtrarMisComentarios}>Mis comentarios</button>
+                    </div>
                 )}
             </div>
             {mensaje && <p className="mensaje-foro">{mensaje}</p>}
-            {posts.length === 0 ? (
+
+            {filtro === 'misComentarios' ? (
+                <div className="lista-posts">
+                    {misComentarios.length === 0 ? (
+                        <div className="tarjeta-vacia">
+                            <p>No has comentado nada aún.</p>
+                        </div>
+                    ) : (
+                        misComentarios.map(c => (
+                            <div key={c.id} className="tarjeta-post" onClick={() => abrirPost(c.post_id)}>
+                                <h2>{c.post_titulo}</h2>
+                                <p className="meta-post">{formatFecha(c.fecha_creacion)}</p>
+                                <p className="resumen-post">{c.contenido}</p>
+                            </div>
+                        ))
+                    )}
+                </div>
+            ) : posts.length === 0 ? (
                 <div className="tarjeta-vacia">
                     <p>No hay posts aún. Sé el primero en publicar.</p>
                 </div>

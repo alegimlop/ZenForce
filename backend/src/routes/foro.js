@@ -1,7 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const { getPosts, crearPost, getPost, eliminarPost, editarPost, añadirComentario, eliminarComentario, editarComentario, toggleLike, comprobarLike, getPostsAdmin, eliminarPostAdmin, getComentariosAdmin, eliminarComentarioAdmin } = require('../controllers/foroController')
+const { getPosts, crearPost, getPost, eliminarPost, editarPost, añadirComentario, eliminarComentario, editarComentario, toggleLike, comprobarLike, getPostsAdmin, eliminarPostAdmin, getComentariosAdmin, eliminarComentarioAdmin, getMisPosts, getMisLikes, getMisComentarios } = require('../controllers/foroController')
 
+router.get('/misposts/:usuarioId', getMisPosts)
+router.get('/misleaks/:usuarioId', getMisLikes)
+router.get('/miscomentarios/:usuarioId', getMisComentarios)
 router.get('/admin/posts/:id/comentarios', getComentariosAdmin)
 router.delete('/admin/comentarios/:id', eliminarComentarioAdmin)
 router.get('/admin/posts', getPostsAdmin)
