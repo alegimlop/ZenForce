@@ -2,17 +2,12 @@
     display: grid;
     grid-template-columns: 18vw 1fr;
     min-height: 93vh;
-    position: fixed;
-    top: 7vh;
-    right: 0;
-    width: 100vw;
-    z-index: 50;
     animation: deslizar-entrada 0.3s ease;
 }
 
 @keyframes deslizar-entrada {
-    from { transform: translateX(100%); opacity: 0; }
-    to   { transform: translateX(0);    opacity: 1; }
+    from { transform: translateX(5%); opacity: 0; }
+    to   { transform: translateX(0);  opacity: 1; }
 }
 
 .sidebar-admin {
@@ -38,6 +33,10 @@
 .nav-admin {
     display: grid;
     gap: 0.8vh;
+    background-color: transparent;
+    height: auto;
+    position: static;
+    padding: 0;
 }
 
 .boton-nav-admin {
@@ -66,8 +65,6 @@
 .contenido-admin {
     background-color: #f0f4ff;
     padding: 3vh 3vw;
-    overflow-y: auto;
-    max-height: 93vh;
 }
 
 .contenido-admin h2 {

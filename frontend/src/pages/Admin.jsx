@@ -266,7 +266,7 @@ function Admin() {
                     {seccionesNav.map(s => (
                         <button
                             key={s.id}
-                            className={`boton-nav-admin ${vista === s.id || vista.startsWith(s.id.replace('dashboard','')) ? 'activo' : ''}`}
+                            className={`boton-nav-admin ${vista === s.id || vista.startsWith(s.id + '-') || (s.id === 'usuarios' && ['crear','editar'].includes(vista)) ? 'activo' : ''}`}
                             onClick={() => setVista(s.id)}
                         >
                             {s.label}
