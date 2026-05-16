@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import './Admin.css'
 
 const API = 'http://localhost:3000/api'
 
@@ -248,19 +249,34 @@ function Admin() {
             mostrarMensaje('Error al eliminar comentario')
         }
     }
-    return (
-        <div>
-            <h1>Panel de Administración</h1>
-            <nav>
-                <button onClick={() => setVista('dashboard')}>Vista General</button>
-                <button onClick={() => setVista('usuarios')}>Usuarios</button>
-                <button onClick={() => setVista('clases')}>Clases</button>
-                <button onClick={() => setVista('foro')}>Foro</button>
-                <button onClick={() => setVista('membresias')}>Membresías</button>
-                <button onClick={() => setVista('suscripciones')}>Suscripciones</button>
-            </nav>
+    const seccionesNav = [
+        { id: 'dashboard', label: 'Vista General' },
+        { id: 'usuarios', label: 'Usuarios' },
+        { id: 'clases', label: 'Clases' },
+        { id: 'foro', label: 'Foro' },
+        { id: 'membresias', label: 'Membresías' },
+        { id: 'suscripciones', label: 'Suscripciones' },
+    ]
 
-            {mensaje && <p>{mensaje}</p>}
+    return (
+        <div className="panel-admin">
+            <aside className="sidebar-admin">
+                <h1 className="titulo-admin">ADMIN</h1>
+                <nav className="nav-admin">
+                    {seccionesNav.map(s => (
+                        <button
+                            key={s.id}
+                            className={`boton-nav-admin ${vista === s.id || vista.startsWith(s.id.replace('dashboard','')) ? 'activo' : ''}`}
+                            onClick={() => setVista(s.id)}
+                        >
+                            {s.label}
+                        </button>
+                    ))}
+                </nav>
+            </aside>
+
+            <main className="contenido-admin">
+                {mensaje && <p className="mensaje-admin">{mensaje}</p>}
 
             {vista === 'dashboard' && stats && (
                 <div>
@@ -672,6 +688,7 @@ function Admin() {
                     )}
                 </div>
             )}
+            </main>
         </div>
     )
 }
