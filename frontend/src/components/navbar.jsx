@@ -23,6 +23,10 @@ function Navbar() {
                     {usuario.rol === 'admin' && <NavLink to="/admin">Admin</NavLink>}
                     <span className="separador-nav" />
                     <button onClick={handleLogout}>Cerrar sesión</button>
+                    <div id="google_translate_element" style={{display: 'none'}}></div>
+                    <button onClick={() => document.querySelector('.goog-te-gadget-simple').click()} className="boton-idioma">
+                        🌍
+                    </button>
                 </>
             ) : (
                 <>

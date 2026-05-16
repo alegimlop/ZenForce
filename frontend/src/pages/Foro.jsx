@@ -292,12 +292,12 @@ const darLike = async () => {
             <div className="cabecera-foro">
                 <h1>Foro</h1>
                 {usuario && (
-                    <div className="botones-cabecera-foro">
-                        <button className="boton-nuevo" onClick={() => setVista('crear')}>+ Nuevo post</button>
+                    <div className="botones-cabecera-foro">                        
                         <button className={`boton-filtro ${filtro === 'todos' ? 'activo' : ''}`} onClick={verTodos}>Todos</button>
                         <button className={`boton-filtro ${filtro === 'misPosts' ? 'activo' : ''}`} onClick={filtrarMisPosts}>Mis posts</button>
                         <button className={`boton-filtro ${filtro === 'misLikes' ? 'activo' : ''}`} onClick={filtrarMisLikes}>Mis likes</button>
                         <button className={`boton-filtro ${filtro === 'misComentarios' ? 'activo' : ''}`} onClick={filtrarMisComentarios}>Mis comentarios</button>
+                        <button className="boton-nuevo" onClick={() => setVista('crear')}>+ Nuevo post</button>
                     </div>
                 )}
             </div>

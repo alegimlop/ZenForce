@@ -63,6 +63,13 @@ nav button:hover {
     background-color: #f97316;
     color: #ffffff;
 }
+.boton-idioma {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0;
+}
 
 @media (max-width: 768px) {
     nav {
