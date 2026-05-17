@@ -47,16 +47,33 @@ const updateUsuario = (req, res) => {
 };
 
 const deleteUsuario = (req, res) => {
-    const { id } = req.params;
-    db.query(
-        'DELETE FROM usuarios WHERE id = ?',
-        [id],
-        (err) => {
-            if (err) return res.status(500).json({ error: 'Error al eliminar usuario' });
-            res.json({ mensaje: 'Usuario eliminado correctamente' });
-        }
-    );
-};
+    const { id } = req.params
+
+    db.query('DELETE FROM likes WHERE usuario_id = ?', [id], (err) => {
+        if (err) return res.status(500).json({ error: 'Error al eliminar likes' })
+
+        db.query('DELETE FROM foro_comentarios WHERE id_usuario = ?', [id], (err2) => {
+            if (err2) return res.status(500).json({ error: 'Error al eliminar comentarios' })
+
+            db.query('DELETE FROM foro_hilos WHERE id_usuario = ?', [id], (err3) => {
+                if (err3) return res.status(500).json({ error: 'Error al eliminar hilos' })
+
+                db.query('DELETE FROM usuario_membresia WHERE id_usuario = ?', [id], (err4) => {
+                    if (err4) return res.status(500).json({ error: 'Error al eliminar membresías' })
+
+                    db.query('DELETE FROM reservas WHERE id_usuario = ?', [id], (err5) => {
+                        if (err5) return res.status(500).json({ error: 'Error al eliminar reservas' })
+
+                        db.query('DELETE FROM usuarios WHERE id = ?', [id], (err6) => {
+                            if (err6) return res.status(500).json({ error: 'Error al eliminar usuario' })
+                            res.json({ mensaje: 'Usuario eliminado correctamente' })
+                        })
+                    })
+                })
+            })
+        })
+    })
+}
 
 // Stats para el dashboard
 const getStats = (req, res) => {
