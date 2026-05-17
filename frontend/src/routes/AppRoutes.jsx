@@ -26,7 +26,7 @@ function AppRoutes() {
                 <Route path="/foro" element={<Foro />} />
                 <Route path="/clases" element={<Clases />} />
                 <Route path="/qr" element={<RutaProtegida><QR /></RutaProtegida>} />
-                <Route path="/admin" element={<RutaProtegida><Admin /></RutaProtegida>} />
+                <Route path="/admin" element={<RutaProtegida soloAdmin><Admin /></RutaProtegida>} />
             </Routes>
         </BrowserRouter>
     )
