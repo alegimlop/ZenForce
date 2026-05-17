@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import './Admin.css'
-
-const API = 'http://localhost:3000/api'
+import API_URL from '../config'
+const API = API_URL
 
 function Admin() {
     const navigate = useNavigate()

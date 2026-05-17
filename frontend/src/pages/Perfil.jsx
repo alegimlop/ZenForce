@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import './Perfil.css'
+import API_URL from '../config'
 
 function Perfil() {
     const [perfil, setPerfil] = useState(null)
@@ -13,7 +14,7 @@ function Perfil() {
     useEffect(() => {
         const usuario = JSON.parse(localStorage.getItem('usuario'))
         if (usuario) {
-            axios.get(`http://localhost:3000/api/perfil/${usuario.id}`)
+            axios.get(`${API_URL}/perfil/${usuario.id}`)
                 .then(res => {
                     setPerfil(res.data)
                     setNombre(res.data.nombre)
@@ -26,7 +27,7 @@ function Perfil() {
         e.preventDefault()
         const usuario = JSON.parse(localStorage.getItem('usuario'))
         try {
-            await axios.put(`http://localhost:3000/api/perfil/${usuario.id}`, { nombre, email })
+            await axios.put(`${API_URL}/perfil/${usuario.id}`, { nombre, email })
             setMensaje('Perfil actualizado correctamente')
         } catch (err) {
             setMensaje('Error al actualizar perfil')
@@ -37,7 +38,7 @@ function Perfil() {
         const usuario = JSON.parse(localStorage.getItem('usuario'))
         if (confirm('Seguro que quieres eliminar tu cuenta?')) {
             try {
-                await axios.delete(`http://localhost:3000/api/perfil/${usuario.id}`)
+                await axios.delete(`${API_URL}/perfil/${usuario.id}`)
                 localStorage.clear()
                 alert('Cuenta eliminada')
                 window.location.href = '/registro'
@@ -51,7 +52,7 @@ function Perfil() {
         e.preventDefault()
         const usuario = JSON.parse(localStorage.getItem('usuario'))
         try {
-            await axios.put(`http://localhost:3000/api/perfil/password/${usuario.id}`, {
+            await axios.put(`${API_URL}/perfil/password/${usuario.id}`, {
                 passwordActual,
                 passwordNueva
             })

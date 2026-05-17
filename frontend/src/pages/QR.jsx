@@ -2,6 +2,7 @@ import { QRCodeSVG } from 'qrcode.react'
 import './QR.css'
 import axios from 'axios'
 import { useState, useEffect } from 'react'
+import API_URL from '../config'
 
 function QR() {
     const usuarioLocal = JSON.parse(localStorage.getItem('usuario'))
@@ -9,7 +10,7 @@ function QR() {
 
     useEffect(() => {
         if (usuarioLocal) {
-            axios.get(`http://localhost:3000/api/perfil/${usuarioLocal.id}`)
+            axios.get(`${API_URL}/perfil/${usuarioLocal.id}`)
                 .then(res => setPerfil(res.data))
         }
     }, [])

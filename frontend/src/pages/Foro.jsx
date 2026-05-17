@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import './Foro.css'
-
-const API = 'http://localhost:3000/api/foro'
+import API_URL from '../config'
+const API = `${API_URL}/foro`
 
 function Foro() {
     const usuario = JSON.parse(localStorage.getItem('usuario'))
