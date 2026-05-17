@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import './Perfil.css'
 import API_URL from '../config'
+import { useNavigate } from 'react-router-dom'
 
 function Perfil() {
     const [perfil, setPerfil] = useState(null)
@@ -10,6 +11,7 @@ function Perfil() {
     const [mensaje, setMensaje] = useState('')
     const [passwordActual, setPasswordActual] = useState('')
     const [passwordNueva, setPasswordNueva] = useState('')
+    const navigate = useNavigate()
 
     useEffect(() => {
         const usuario = JSON.parse(localStorage.getItem('usuario'))
@@ -41,7 +43,7 @@ function Perfil() {
                 await axios.delete(`${API_URL}/perfil/${usuario.id}`)
                 localStorage.clear()
                 alert('Cuenta eliminada')
-                window.location.href = '/registro'
+                window.location.href = '/'
             } catch (err) {
                 setMensaje('Error al eliminar cuenta')
             }
