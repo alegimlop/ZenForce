@@ -57,7 +57,7 @@ function Clases() {
     const formatFecha = (fecha) => {
         if (!fecha) return 'Sin fecha'
         return new Date(fecha).toLocaleDateString('es-ES', {
-            weekday: 'long', day: '2-digit', month: 'long', hour: '2-digit', minute: '2-digit'
+            weekday: 'long', day: '2-digit', month: 'long'
         })
     }
 
@@ -95,7 +95,7 @@ function Clases() {
                                 {clase.descripcion && <p className="descripcion-clase">{clase.descripcion}</p>}
                                 <div className="info-clase">
                                     {clase.instructor && <p><span className="etiqueta-info">Instructor</span> {clase.instructor}</p>}
-                                    {clase.horario && <p><span className="etiqueta-info">Horario</span> {clase.horario}</p>}
+                                    {clase.hora && <p><span className="etiqueta-info">Horario</span> {clase.hora.substring(0, 5)}</p>}
                                     {clase.fecha && <p><span className="etiqueta-info">Fecha</span> {formatFecha(clase.fecha)}</p>}
                                     <p><span className="etiqueta-info">Plazas</span> {clase.inscritos} / {clase.capacidad}</p>
                                 </div>
