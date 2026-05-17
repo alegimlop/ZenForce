@@ -23,8 +23,8 @@ function AppRoutes() {
                 <Route path="/sobre-nosotros" element={<SobreNosotros />} />
                 <Route path="/restablecer-password" element={<RestablecerPassword />} />
                 <Route path="/perfil" element={<RutaProtegida><Perfil /></RutaProtegida>} />
-                <Route path="/foro" element={<Foro />} />
-                <Route path="/clases" element={<Clases />} />
+                <Route path="/foro" element={<RutaProtegida><Foro /></RutaProtegida>} />
+                <Route path="/clases" element={<RutaProtegida><Clases /></RutaProtegida>} />
                 <Route path="/qr" element={<RutaProtegida><QR /></RutaProtegida>} />
                 <Route path="/admin" element={<RutaProtegida soloAdmin><Admin /></RutaProtegida>} />
             </Routes>

@@ -1,0 +1,165 @@
+.contenedor-inicio {
+    display: grid;
+    gap: 6vh;
+    padding: 6vh 8vw;
+    min-height: 100vh;
+    background-color: #f5f5f5;
+}
+
+.hero-inicio {
+    display: grid;
+    gap: 2vh;
+    padding: 6vh 0;
+    border-bottom: 3px solid #f97316;
+}
+
+.titulo-hero {
+    font-size: 7vh;
+    font-weight: 900;
+    color: #1a1a1a;
+    margin: 0;
+    font-style: italic;
+    letter-spacing: 0.3vw;
+}
+
+.descripcion-hero {
+    font-size: 1.9vh;
+    color: #555555;
+    line-height: 1.8;
+    margin: 0;
+    max-width: 65ch;
+}
+
+.seccion-inicio h2 {
+    font-size: 3.5vh;
+    font-weight: 900;
+    color: #1a1a1a;
+    margin: 0 0 1vh 0;
+    text-transform: uppercase;
+    font-style: italic;
+    letter-spacing: 0.2vw;
+}
+
+.subtitulo-seccion {
+    font-size: 1.8vh;
+    color: #777777;
+    margin: 0 0 3vh 0;
+}
+
+.cuadricula-funciones {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2vw;
+    margin-top: 2vh;
+}
+
+.tarjeta-funcion {
+    background-color: #1a1a1a;
+    border-radius: 1vh;
+    padding: 3vh 2.5vw;
+    border-left: 4px solid #f97316;
+    display: grid;
+    gap: 1.5vh;
+}
+
+.tarjeta-funcion h3 {
+    font-size: 2.2vh;
+    font-weight: 800;
+    color: #f97316;
+    margin: 0;
+    text-transform: uppercase;
+    font-style: italic;
+}
+
+.tarjeta-funcion p {
+    font-size: 1.7vh;
+    color: #cccccc;
+    line-height: 1.7;
+    margin: 0;
+}
+
+.tarjeta-funcion button {
+    background-color: #f97316;
+    color: #ffffff;
+    border: none;
+    padding: 1vh 1.5vw;
+    border-radius: 0.8vh;
+    font-size: 1.6vh;
+    font-weight: 600;
+    cursor: pointer;
+    justify-self: start;
+    transition: background-color 0.2s;
+}
+
+.tarjeta-funcion button:hover {
+    background-color: #fb923c;
+}
+
+.cuadricula-membresias {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2vw;
+    margin-top: 2vh;
+}
+
+.tarjeta-membresia {
+    background-color: #ffffff;
+    border-radius: 1vh;
+    padding: 3vh 2.5vw;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    border-bottom: 3px solid #f97316;
+    display: grid;
+    gap: 1vh;
+}
+
+.tarjeta-membresia h3 {
+    font-size: 2.2vh;
+    font-weight: 800;
+    color: #1a1a1a;
+    margin: 0;
+    text-transform: uppercase;
+    font-style: italic;
+}
+
+.precio-membresia {
+    font-size: 4vh;
+    font-weight: 900;
+    color: #f97316;
+    margin: 0;
+    font-style: italic;
+}
+
+.precio-membresia span {
+    font-size: 1.8vh;
+    color: #999999;
+    font-style: normal;
+    font-weight: 400;
+}
+
+.duracion-membresia {
+    font-size: 1.6vh;
+    color: #777777;
+    margin: 0;
+}
+
+.descripcion-membresia {
+    font-size: 1.7vh;
+    color: #555555;
+    line-height: 1.6;
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .contenedor-inicio {
+        padding: 4vh 5vw;
+    }
+
+    .titulo-hero {
+        font-size: 5vh;
+    }
+
+    .cuadricula-funciones,
+    .cuadricula-membresias {
+        grid-template-columns: 1fr;
+    }
+}
