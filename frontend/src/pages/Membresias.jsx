@@ -24,6 +24,37 @@ function Membresias() {
 
     const handlePago = async (e) => {
         e.preventDefault()
+
+        const numeroLimpio = form.numero.replace(/\s/g, '')
+        if (numeroLimpio.length !== 16 || isNaN(numeroLimpio)) {
+            alert('Número de tarjeta no válido')
+            return
+        }
+
+        const caducidadRegex = /^(0[1-9]|1[0-2])\/\d{2}$/
+        if (!caducidadRegex.test(form.caducidad)) {
+            alert('Formato de fecha incorrecto, usa MM/AA')
+            return
+        }
+
+        const [mes, anio] = form.caducidad.split('/')
+        const ahora = new Date()
+        const expiracion = new Date(2000 + parseInt(anio), parseInt(mes))
+        if (expiracion <= ahora) {
+            alert('La tarjeta ha caducado')
+            return
+        }
+
+        if (form.cvv.length !== 3 || isNaN(form.cvv)) {
+            alert('CVV no válido')
+            return
+        }
+
+        if (form.titular.trim().length < 3) {
+            alert('Introduce el nombre del titular')
+            return
+        }
+
         try {
             const perfilRes = await axios.get(`${API_URL}/perfil/${usuario.id}`)
             if (perfilRes.data.membresia) {
@@ -42,10 +73,10 @@ function Membresias() {
                 fecha_fin: fechaFin
             })
 
-            alert('Pago realizado con éxito. ¡Bienvenido a ZenForce!')
+            alert('¡Pago realizado! Ya eres socio de ZenForce.')
             setSeleccionada(null)
         } catch {
-            alert('Error al procesar el pago')
+            alert('Algo ha ido mal, inténtalo de nuevo.')
         }
     }
 

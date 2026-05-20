@@ -2,11 +2,13 @@ import { QRCodeSVG } from 'qrcode.react'
 import './QR.css'
 import axios from 'axios'
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import API_URL from '../config'
 
 function QR() {
     const usuarioLocal = JSON.parse(localStorage.getItem('usuario'))
     const [perfil, setPerfil] = useState(null)
+    const navigate = useNavigate()
 
     useEffect(() => {
         if (usuarioLocal) {
@@ -24,6 +26,14 @@ function QR() {
     if (!perfil) return (
         <div className="contenedor-pagina">
             <p className="aviso-sesion">Cargando...</p>
+        </div>
+    )
+
+    if (!perfil.membresia) return (
+        <div className="contenedor-pagina contenedor-qr">
+            <h1>Mi Carnet de Socio</h1>
+            <p>Para obtener tu carnet necesitas una suscripción activa.</p>
+            <button onClick={() => navigate('/membresias')}>Ver membresías</button>
         </div>
     )
 
