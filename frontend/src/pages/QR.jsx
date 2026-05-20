@@ -31,9 +31,12 @@ function QR() {
 
     if (!perfil.membresia) return (
         <div className="contenedor-pagina contenedor-qr">
-            <h1>Mi Carnet de Socio</h1>
-            <p>Para obtener tu carnet necesitas una suscripción activa.</p>
-            <button onClick={() => navigate('/membresias')}>Ver membresías</button>
+            <div className="tarjeta-sin-membresia">
+                <h1>Mi Carnet de Socio</h1>
+                <span className="icono-sin-membresia">🔒</span>
+                <p className="texto-sin-membresia">Para obtener tu carnet necesitas una suscripción activa.</p>
+                <button className="boton-ver-membresias" onClick={() => navigate('/membresias')}>Ver membresías</button>
+            </div>
         </div>
     )
 

@@ -286,18 +286,39 @@ function Admin() {
             {vista === 'dashboard' && stats && (
                 <div>
                     <h2>Vista General</h2>
-                    <p>Total usuarios: {stats.total_usuarios}</p>
-                    <p>Total admins: {stats.total_admins}</p>
-                    <p>Registros hoy: {stats.registros_hoy}</p>
-                    <p>Clases activas: {clases.length}</p>
-                    <p>Membresías disponibles: {membresias.length}</p>
+                    <div className="cuadricula-stats">
+                        <div className="tarjeta-stat">
+                            <span className="numero-stat">{stats.total_usuarios}</span>
+                            <span className="etiqueta-stat">Usuarios totales</span>
+                        </div>
+                        <div className="tarjeta-stat">
+                            <span className="numero-stat">{stats.total_admins}</span>
+                            <span className="etiqueta-stat">Administradores</span>
+                        </div>
+                        <div className="tarjeta-stat destacada">
+                            <span className="numero-stat">{stats.registros_hoy}</span>
+                            <span className="etiqueta-stat">Registros hoy</span>
+                        </div>
+                        <div className="tarjeta-stat">
+                            <span className="numero-stat">{clases.length}</span>
+                            <span className="etiqueta-stat">Clases activas</span>
+                        </div>
+                        <div className="tarjeta-stat">
+                            <span className="numero-stat">{membresias.length}</span>
+                            <span className="etiqueta-stat">Planes disponibles</span>
+                        </div>
+                        <div className="tarjeta-stat">
+                            <span className="numero-stat">{suscripciones.length}</span>
+                            <span className="etiqueta-stat">Suscripciones activas</span>
+                        </div>
+                    </div>
                 </div>
             )}
 
             {vista === 'usuarios' && (
                 <div>
                     <h2>Gestión de Usuarios</h2>
-                    <button onClick={() => setVista('crear')}>Crear Usuario</button>
+                    <button className="boton-accion-admin" onClick={() => setVista('crear')}>+ Crear Usuario</button>
                     <table>
                         <thead>
                             <tr>
@@ -375,7 +396,7 @@ function Admin() {
             {vista === 'clases' && (
                 <div>
                     <h2>Gestión de Clases</h2>
-                    <button onClick={() => setVista('crear-clase')}>Crear Clase</button>
+                    <button className="boton-accion-admin" onClick={() => setVista('crear-clase')}>+ Crear Clase</button>
                     <table>
                         <thead>
                             <tr>
@@ -475,7 +496,7 @@ function Admin() {
             {vista === 'membresias' && (
                 <div>
                     <h2>Gestión de Membresías</h2>
-                    <button onClick={() => setVista('crear-membresia')}>Crear Membresía</button>
+                    <button className="boton-accion-admin" onClick={() => setVista('crear-membresia')}>+ Crear Membresía</button>
                     <table>
                         <thead>
                             <tr>
@@ -547,7 +568,7 @@ function Admin() {
             {vista === 'suscripciones' && (
                 <div>
                     <h2>Suscripciones</h2>
-                    <button onClick={() => setVista('asignar-membresia')}>Asignar Membresía</button>
+                    <button className="boton-accion-admin" onClick={() => setVista('asignar-membresia')}>+ Asignar Membresía</button>
                     <table>
                         <thead>
                             <tr>
