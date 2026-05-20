@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
-import './Foro.css'
+import '../styles/Foro.css'
 import API_URL from '../config'
 const API = `${API_URL}/foro`
 

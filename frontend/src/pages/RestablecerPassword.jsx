@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
-import './Auth.css'
+import '../styles/Auth.css'
 
 function RestablecerPassword() {
     const [email, setEmail] = useState('')

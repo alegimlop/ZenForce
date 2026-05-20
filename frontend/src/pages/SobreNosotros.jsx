@@ -4,7 +4,7 @@ import imgEsfuerzo from '../assets/esfuerzo.png'
 import imgComunidad from '../assets/comunidad.png'
 import imgEquilibrio from '../assets/equilibrio.png'
 import imgExcelencia from '../assets/excelencia.png'
-import './SobreNosotros.css'
+import '../styles/SobreNosotros.css'
 
 const valores = [
     { titulo: 'Esfuerzo', texto: 'Cada repetición cuenta. El progreso llega con constancia y dedicación diaria.', imagen: imgEsfuerzo },

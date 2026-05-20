@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import API_URL from '../config'
+import '../styles/Membresias.css'
 
 function Membresias() {
     const usuario = JSON.parse(localStorage.getItem('usuario'))
@@ -81,37 +82,32 @@ function Membresias() {
     }
 
     return (
-        <div>
-            <h1>Membresías</h1>
-            <p>Elige el plan que mejor se adapte a ti y empieza a entrenar hoy.</p>
+        <div className="contenedor-pagina contenedor-membresias">
+            <div className="cabecera-membresias">
+                <h1>Membresías</h1>
+                <p className="subtitulo-membresias">Elige el plan que mejor se adapte a ti y empieza a entrenar hoy.</p>
+            </div>
 
-            {mensaje && <p>{mensaje}</p>}
+            {mensaje && <p className="mensaje-membresias">{mensaje}</p>}
 
-            <div>
+            <div className="cuadricula-membresias">
                 {membresias.map(m => (
-                    <div key={m.id}>
-                        <h2>{m.nombre}</h2>
-                        <p>{m.precio}€/mes</p>
-                        <p>{m.duracion_dias} días</p>
-                        {m.descripcion && <p>{m.descripcion}</p>}
-                        <button onClick={() => handleSeleccionar(m)}>Seleccionar</button>
+                    <div key={m.id} className="tarjeta-membresia">
+                        <h2 className="nombre-plan">{m.nombre}</h2>
+                        <p className="precio-plan">{m.precio}€<span>/mes</span></p>
+                        <p className="duracion-plan">{m.duracion_dias} días</p>
+                        {m.descripcion && <p className="descripcion-plan">{m.descripcion}</p>}
+                        <button className="boton-seleccionar" onClick={() => handleSeleccionar(m)}>Seleccionar</button>
                     </div>
                 ))}
             </div>
 
             {seleccionada && (
-                <div style={{
-                    position: 'fixed',
-                    inset: 0,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    zIndex: 1000
-                }}>
-                    <div>
-                        <h2>Pago — {seleccionada.nombre}</h2>
-                        <p>Total: <strong>{seleccionada.precio}€</strong></p>
-                        <form onSubmit={handlePago}>
+                <div className="fondo-modal">
+                    <div className="modal-pago">
+                        <h2 className="titulo-modal">Pago — {seleccionada.nombre}</h2>
+                        <p className="total-modal">Total: <strong>{seleccionada.precio}€</strong></p>
+                        <form className="formulario-pago" onSubmit={handlePago}>
                             <label>Titular de la tarjeta</label>
                             <input type="text" value={form.titular} onChange={e => setForm({ ...form, titular: e.target.value })} required />
                             <label>Número de tarjeta</label>
@@ -120,9 +116,9 @@ function Membresias() {
                             <input type="text" placeholder="MM/AA" maxLength={5} value={form.caducidad} onChange={e => setForm({ ...form, caducidad: e.target.value })} required />
                             <label>CVV</label>
                             <input type="text" maxLength={3} value={form.cvv} onChange={e => setForm({ ...form, cvv: e.target.value })} required />
-                            <div>
-                                <button type="submit">Pagar</button>
-                                <button type="button" onClick={() => setSeleccionada(null)}>Cancelar</button>
+                            <div className="botones-pago">
+                                <button type="submit" className="boton-pagar">Pagar</button>
+                                <button type="button" className="boton-cancelar-pago" onClick={() => setSeleccionada(null)}>Cancelar</button>
                             </div>
                         </form>
                     </div>

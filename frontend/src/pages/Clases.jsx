@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
-import './Clases.css'
+import '../styles/Clases.css'
 import API_URL from '../config'
 const API = `${API_URL}/clases`
 

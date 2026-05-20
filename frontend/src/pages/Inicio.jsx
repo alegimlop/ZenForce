@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import API_URL from '../config'
-import './Inicio.css'
+import '../styles/inicio.css'
 
 function Inicio() {
     const [membresias, setMembresias] = useState([])

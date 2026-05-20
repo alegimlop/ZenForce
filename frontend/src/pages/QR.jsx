@@ -1,5 +1,5 @@
 import { QRCodeSVG } from 'qrcode.react'
-import './QR.css'
+import '../styles/QR.css'
 import axios from 'axios'
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
