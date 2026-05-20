@@ -33,16 +33,32 @@ const updatePerfil = (req, res) => {
     )
 }
 const deletePerfil = (req, res) => {
-    const id = req.params.id;
+    const { id } = req.params
 
-    db.query(
-        'DELETE FROM usuarios WHERE id = ?',
-        [id],
-        (err) => {
-            if (err) return res.status(500).json({ error: 'Error al eliminar usuario' })
-            res.json({ mensaje: 'Usuario eliminado correctamente' })
-        }
-    )
+    db.query('DELETE FROM likes WHERE usuario_id = ?', [id], (err) => {
+        if (err) return res.status(500).json({ error: 'Error al eliminar cuenta' })
+
+        db.query('DELETE FROM comentarios WHERE usuario_id = ?', [id], (err2) => {
+            if (err2) return res.status(500).json({ error: 'Error al eliminar cuenta' })
+
+            db.query('DELETE FROM posts WHERE usuario_id = ?', [id], (err3) => {
+                if (err3) return res.status(500).json({ error: 'Error al eliminar cuenta' })
+
+                db.query('DELETE FROM usuario_membresia WHERE id_usuario = ?', [id], (err4) => {
+                    if (err4) return res.status(500).json({ error: 'Error al eliminar cuenta' })
+
+                    db.query('DELETE FROM inscripciones_clases WHERE usuario_id = ?', [id], (err5) => {
+                        if (err5) return res.status(500).json({ error: 'Error al eliminar cuenta' })
+
+                        db.query('DELETE FROM usuarios WHERE id = ?', [id], (err6) => {
+                            if (err6) return res.status(500).json({ error: 'Error al eliminar cuenta' })
+                            res.json({ mensaje: 'Cuenta eliminada correctamente' })
+                        })
+                    })
+                })
+            })
+        })
+    })
 }
 const cambiarPassword = async (req, res) => {
     const id = req.params.id;
@@ -94,4 +110,15 @@ const restablecerPassword = async (req, res) => {
         }
     )
 }
-module.exports = { getPerfil, updatePerfil, deletePerfil, cambiarPassword, restablecerPassword }
+const cancelarSuscripcion = (req, res) => {
+    const { id } = req.params
+    db.query(
+        'DELETE FROM usuario_membresia WHERE id_usuario = ?',
+        [id],
+        (err) => {
+            if (err) return res.status(500).json({ error: 'Error al cancelar suscripción' })
+            res.json({ mensaje: 'Suscripción cancelada correctamente' })
+        }
+    )
+}
+module.exports = { getPerfil, updatePerfil, deletePerfil, cambiarPassword, restablecerPassword, cancelarSuscripcion }

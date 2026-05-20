@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const { getPerfil, updatePerfil, deletePerfil, cambiarPassword, restablecerPassword } = require('../controllers/perfilController');
+const { getPerfil, updatePerfil, deletePerfil, cambiarPassword, restablecerPassword, cancelarSuscripcion } = require('../controllers/perfilController')
 
+router.put('/cancelar/:id', cancelarSuscripcion)
 router.put('/restablecer', restablecerPassword);
 router.put('/password/:id', cambiarPassword);
 router.delete('/:id', deletePerfil);

@@ -65,6 +65,18 @@ function Perfil() {
             setMensaje('La contraseña actual es incorrecta')
         }
     }
+    const handleCancelarSuscripcion = async () => {
+        const usuario = JSON.parse(localStorage.getItem('usuario'))
+        if (confirm('¿Seguro que quieres cancelar tu suscripción?')) {
+            try {
+                await axios.put(`${API_URL}/perfil/cancelar/${usuario.id}`)
+                setMensaje('Suscripción cancelada correctamente')
+                setPerfil({ ...perfil, membresia: null, fecha_fin: null })
+            } catch {
+                setMensaje('Error al cancelar suscripción')
+            }
+        }
+    }
 
     if (!perfil) return <p className="cargando">Cargando perfil...</p>
 
@@ -73,7 +85,10 @@ function Perfil() {
             <div className="cabecera-perfil">
                 <h1>Mi Perfil</h1>
                 <div className="info-membresia">
-                    <span className="etiqueta-membresia">{perfil.membresia || 'Sin membresía'}</span>
+                    <span className="etiqueta-membresia">{perfil.membresia ? `Suscripción: ${perfil.membresia}` : 'Sin suscripción'}</span>
+                    {perfil.membresia && (
+                        <button className="boton-eliminar" onClick={handleCancelarSuscripcion}>Cancelar suscripción</button>
+                    )}
                     <p>Miembro desde: {new Date(perfil.fecha_registro).toLocaleDateString()}</p>
                     {perfil.fecha_fin && <p>Membresía hasta: {new Date(perfil.fecha_fin).toLocaleDateString()}</p>}
                 </div>

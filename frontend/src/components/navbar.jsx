@@ -21,6 +21,7 @@ function Navbar() {
                 <>
                     <NavLink to="/clases">Clases</NavLink>
                     <NavLink to="/foro">Foro</NavLink>
+                    <NavLink to="/membresias">Membresías</NavLink>
                     <NavLink to="/qr">Mi QR</NavLink>
                     <NavLink to="/perfil">Mi Perfil</NavLink>
                     {usuario.rol === 'admin' && <NavLink to="/admin">Admin</NavLink>}

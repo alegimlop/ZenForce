@@ -46,7 +46,7 @@ function Inicio() {
             
 
             <div className="seccion-inicio">
-                <h2>Nuestras tarifas</h2>
+                <h2>Nuestras membresias</h2>
                 <p className="subtitulo-seccion">Elige el plan que mejor se adapte a ti.</p>
                 <div className="cuadricula-membresias">
                     {membresias.map(m => (

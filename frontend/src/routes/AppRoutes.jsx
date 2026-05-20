@@ -11,6 +11,7 @@ import Admin from '../pages/Admin'
 import QR from '../pages/QR'
 import Foro from '../pages/Foro'
 import Clases from '../pages/Clases'
+import Membresias from '../pages/Membresias'
 
 function AppRoutes() {
     return (
@@ -26,6 +27,7 @@ function AppRoutes() {
                 <Route path="/foro" element={<RutaProtegida><Foro /></RutaProtegida>} />
                 <Route path="/clases" element={<RutaProtegida><Clases /></RutaProtegida>} />
                 <Route path="/qr" element={<RutaProtegida><QR /></RutaProtegida>} />
+                <Route path="/membresias" element={<RutaProtegida><Membresias /></RutaProtegida>} />
                 <Route path="/admin" element={<RutaProtegida soloAdmin><Admin /></RutaProtegida>} />
             </Routes>
         </BrowserRouter>
