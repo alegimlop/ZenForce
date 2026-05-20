@@ -49,6 +49,14 @@
     padding: 6vh 8vw;
 }
 
+.banner-dragon {
+    width: calc(100% + 16vw);
+    margin-left: -8vw;
+    height: 60vh;
+    background-size: cover;
+    background-position: center center;
+}
+
 .seccion-fundadores h2,
 .seccion-valores h2,
 .seccion-horarios h2 {
@@ -192,6 +200,7 @@
     overflow: hidden;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     max-width: 55vw;
+    margin: 0 auto;
 }
 
 .fila-horario {

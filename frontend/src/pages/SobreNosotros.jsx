@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import heroBg from '../assets/banner.png'
+import bannerDragon from '../assets/valoresdragon.png'
 import imgEsfuerzo from '../assets/esfuerzo.png'
 import imgComunidad from '../assets/comunidad.png'
 import imgEquilibrio from '../assets/equilibrio.png'
@@ -66,8 +67,10 @@ function SobreNosotros() {
                     </div>
                 </div>
 
+                <div className="banner-dragon" style={{ backgroundImage: `url(${bannerDragon})` }} />
+
                 <div className="seccion-valores">
-                    <h2>NUESTROS <span className="resalte">VALORES</span></h2>
+                    <h2>Clicka para  <span className="resalte">DESCUBRIRLOS</span></h2>
                     <div className="cuadricula-valores">
                         {valores.map((valor, index) => (
                             <div

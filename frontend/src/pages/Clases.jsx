@@ -64,7 +64,7 @@ function Clases() {
     return (
         <div className="contenedor-pagina contenedor-clases">
             <div className="cabecera-clases">
-                <h1>Clases de Fitness</h1>
+                <h1>Clases ZenForce</h1>
                 <p>Apúntate a nuestras clases y empieza a entrenar</p>
             </div>
 
