@@ -3,8 +3,26 @@
     gap: 3vh;
     padding: 4vh 5vw;
     min-height: 100vh;
-    background-color: #f5f5f5;
     align-content: start;
+    background-image: url('../assets/contenedor.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    position: relative;
+}
+
+.contenedor-clases::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: rgba(245, 245, 245, 0.4);
+    z-index: 0;
+    pointer-events: none;
+}
+
+.contenedor-clases > * {
+    position: relative;
+    z-index: 1;
 }
 
 .cabecera-clases {
@@ -15,16 +33,18 @@
 .cabecera-clases h1 {
     font-size: 3.5vh;
     font-weight: 900;
-    color: #1a1a1a;
+    color: #ffffff;
     margin: 0;
     text-transform: uppercase;
     letter-spacing: 0.2vw;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 0, 0, 0.5);
 }
 
 .cabecera-clases p {
     font-size: 1.8vh;
-    color: #777777;
+    color: #ffffff;
     margin: 0;
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9);
 }
 
 .cuadricula-clases {

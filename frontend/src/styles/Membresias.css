@@ -15,21 +15,40 @@
 .cabecera-membresias {
     text-align: center;
     margin-bottom: 6vh;
+    background-image: url('../assets/nosotros.png');
+    background-size: cover;
+    background-position: center;
+    border-radius: 10px;
+    padding: 6vh 3vw;
+    position: relative;
+    overflow: hidden;
+}
+
+.cabecera-membresias::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 10px;
 }
 
 .cabecera-membresias h1 {
     font-size: 5vw;
     font-weight: 900;
     text-transform: uppercase;
-    color: var(--negro);
+    color: var(--blanco);
     letter-spacing: 0.4vw;
     margin-bottom: 2vh;
     line-height: 1.2;
+    position: relative;
+    z-index: 1;
 }
 
 .subtitulo-membresias {
     font-size: 1.6vw;
-    color: #555;
+    color: #cccccc;
+    position: relative;
+    z-index: 1;
 }
 
 .mensaje-membresias {
