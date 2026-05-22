@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import '../styles/Foro.css'
 import API_URL from '../config'
+import iconoCorreo from '../assets/correo.png'
 const API = `${API_URL}/foro`
 
 function Foro() {
@@ -345,7 +346,7 @@ const darLike = async () => {
                     ) : (
                         misComentarios.map(c => (
                             <div key={c.id} className="fila-hilo" onClick={() => abrirPost(c.post_id)}>
-                                <div className="icono-hilo" style={{ backgroundColor: getColorIcono(c.post_id) }}>✉</div>
+                                <div className="icono-hilo"><img src={iconoCorreo} alt="" className="img-icono-hilo" /></div>
                                 <div className="cuerpo-hilo">
                                     <h2>{c.post_titulo}</h2>
                                     <p className="meta-hilo">@{c.autor || usuario?.nombre} · {formatFechaRelativa(c.fecha_creacion)} · {c.contenido.substring(0, 60)}{c.contenido.length > 60 ? '...' : ''}</p>
@@ -368,7 +369,7 @@ const darLike = async () => {
                     </div>
                     {posts.map(post => (
                         <div key={post.id} className="fila-hilo" onClick={() => abrirPost(post.id)}>
-                            <div className="icono-hilo" style={{ backgroundColor: getColorIcono(post.id) }}>✉</div>
+                            <div className="icono-hilo"><img src={iconoCorreo} alt="" className="img-icono-hilo" /></div>
                             <div className="cuerpo-hilo">
                                 <h2>{post.titulo}</h2>
                                 <p className="meta-hilo">@{post.autor} · Actualizado {formatFechaRelativa(post.fecha_creacion)}</p>

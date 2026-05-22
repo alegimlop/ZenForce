@@ -206,7 +206,6 @@
     border-radius: 1vh;
     padding: 3vh 2.5vw;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-    border-bottom: 3px solid #f97316;
     display: grid;
     gap: 1vh;
 }

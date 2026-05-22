@@ -1,5 +1,6 @@
 import { QRCodeSVG } from 'qrcode.react'
 import '../styles/QR.css'
+import candado from '../assets/candado.png'
 import axios from 'axios'
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -32,10 +33,11 @@ function QR() {
     if (!perfil.membresia) return (
         <div className="contenedor-pagina contenedor-qr">
             <div className="tarjeta-sin-membresia">
-                <h1>Mi Carnet de Socio</h1>
-                <span className="icono-sin-membresia">🔒</span>
-                <p className="texto-sin-membresia">Para obtener tu carnet necesitas una suscripción activa.</p>
-                <button className="boton-ver-membresias" onClick={() => navigate('/membresias')}>Ver membresías</button>
+                <span className="etiqueta-carnet">Carnet de socio</span>
+                <h1>Sin membresía activa</h1>
+                <img src={candado} alt="Sin membresía" className="imagen-sin-membresia" />
+                <p className="texto-sin-membresia">Para obtener tu carnet digital necesitas tener una suscripción en vigor. Consulta los planes disponibles.</p>
+                <button className="boton-ver-membresias" onClick={() => navigate('/membresias')}>Ver membresías →</button>
             </div>
         </div>
     )

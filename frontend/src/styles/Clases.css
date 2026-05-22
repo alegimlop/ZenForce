@@ -55,7 +55,7 @@
     align-items: center;
     gap: 1vw;
     padding-bottom: 1.5vh;
-    border-bottom: 2px solid #f97316;
+    border-bottom: 1px solid #eeeeee;
 }
 
 .cabecera-tarjeta h2 {
