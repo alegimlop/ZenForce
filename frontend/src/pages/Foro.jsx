@@ -22,6 +22,7 @@ function Foro() {
     const [contenidoEditComentario, setContenidoEditComentario] = useState('')
     const [filtro, setFiltro] = useState('todos')
     const [misComentarios, setMisComentarios] = useState([])
+    const [comentarioEnviado, setComentarioEnviado] = useState(false)
     useEffect(() => {
         cargarPosts()
     }, [])
@@ -107,8 +108,15 @@ const darLike = async () => {
                 usuario_id: usuario.id
             })
             setComentario('')
+            setComentarioEnviado(true)
+            setTimeout(() => setComentarioEnviado(false), 2500)
             const res = await axios.get(`${API}/posts/${postDetalle.id}`)
             setPostDetalle(res.data)
+            setPosts(prev => prev.map(p =>
+                p.id === postDetalle.id
+                    ? { ...p, total_comentarios: (p.total_comentarios || 0) + 1 }
+                    : p
+            ))
         } catch {
             setMensaje('Error al añadir comentario')
         }
@@ -120,6 +128,11 @@ const darLike = async () => {
             await axios.delete(`${API}/comentarios/${comentarioId}`, { data: { usuario_id: usuario.id } })
             const res = await axios.get(`${API}/posts/${postDetalle.id}`)
             setPostDetalle(res.data)
+            setPosts(prev => prev.map(p =>
+                p.id === postDetalle.id
+                    ? { ...p, total_comentarios: Math.max(0, (p.total_comentarios || 1) - 1) }
+                    : p
+            ))
             if (filtro === 'misComentarios') {
                 await filtrarMisComentarios()
             }
@@ -146,6 +159,20 @@ const darLike = async () => {
     const formatFecha = (fecha) => new Date(fecha).toLocaleDateString('es-ES', {
         day: '2-digit', month: 'short', year: 'numeric'
     })
+
+    const formatFechaRelativa = (fecha) => {
+        const ahora = new Date()
+        const f = new Date(fecha)
+        const diffHoras = Math.floor((ahora - f) / (1000 * 60 * 60))
+        const diffDias = Math.floor((ahora - f) / (1000 * 60 * 60 * 24))
+        const hora = f.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })
+        if (diffHoras < 24) return `Hoy a las ${hora}`
+        if (diffDias === 1) return `Ayer a las ${hora}`
+        return `${f.toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' })} a las ${hora}`
+    }
+
+    const coloresIcono = ['#e74c3c', '#8e44ad', '#27ae60', '#2980b9', '#e67e22', '#c0392b']
+    const getColorIcono = (id) => coloresIcono[id % coloresIcono.length]
     const filtrarMisPosts = async () => {
         const res = await axios.get(`${API}/misposts/${usuario.id}`)
         setPosts(res.data)
@@ -171,7 +198,7 @@ const darLike = async () => {
         <div className="contenedor-pagina contenedor-foro">
             <div className="cabecera-foro">
                 <h1>Nuevo Post</h1>
-                <button className="boton-volver" onClick={() => setVista('lista')}>Volver</button>
+                <button className="boton-volver" onClick={() => setVista('lista')}>← Volver al foro</button>
             </div>
             {mensaje && <p className="mensaje-foro">{mensaje}</p>}
             <div className="tarjeta-foro">
@@ -198,10 +225,12 @@ const darLike = async () => {
 
     if (vista === 'detalle' && postDetalle) return (
         <div className="contenedor-pagina contenedor-foro">
-            <button className="boton-volver" onClick={() => setVista('lista')}>Volver</button>
+            <button className="boton-volver" onClick={() => setVista('lista')}>← Volver al foro</button>
             <div className="tarjeta-foro tarjeta-detalle">
-                <h2>{postDetalle.titulo}</h2>
-                <p className="meta-post">Por <strong>{postDetalle.autor}</strong> · {formatFecha(postDetalle.fecha_creacion)}</p>
+                <div className="cabecera-detalle">
+                    <h2>{postDetalle.titulo}</h2>
+                    <p className="meta-post">Por <strong>{postDetalle.autor}</strong> · {formatFecha(postDetalle.fecha_creacion)}</p>
+                </div>
                 <p className="contenido-post">{postDetalle.contenido}</p>
                 <div className="acciones-post">
                     <button className={`boton-like ${liked ? 'activo' : ''}`} onClick={darLike} disabled={!usuario}>
@@ -279,7 +308,10 @@ const darLike = async () => {
                                 rows={3}
                                 required
                             />
-                            <button type="submit" className="boton-publicar">Comentar</button>
+                            <div className="pie-comentario">
+                                <button type="submit" className="boton-publicar">Comentar</button>
+                                {comentarioEnviado && <span className="confirmacion-comentario">✓ Comentario publicado</span>}
+                            </div>
                         </form>
                     )}
                 </div>
@@ -305,31 +337,45 @@ const darLike = async () => {
 
             {filtro === 'misComentarios' ? (
                 <div className="lista-posts">
+                    <div className="cabecera-hilos">
+                        <span>Mis comentarios</span>
+                    </div>
                     {misComentarios.length === 0 ? (
-                        <div className="tarjeta-vacia">
-                            <p>No has comentado nada aún.</p>
-                        </div>
+                        <div className="tarjeta-vacia">No has comentado nada aún.</div>
                     ) : (
                         misComentarios.map(c => (
-                            <div key={c.id} className="tarjeta-post" onClick={() => abrirPost(c.post_id)}>
-                                <h2>{c.post_titulo}</h2>
-                                <p className="meta-post">{formatFecha(c.fecha_creacion)}</p>
-                                <p className="resumen-post">{c.contenido}</p>
+                            <div key={c.id} className="fila-hilo" onClick={() => abrirPost(c.post_id)}>
+                                <div className="icono-hilo" style={{ backgroundColor: getColorIcono(c.post_id) }}>✉</div>
+                                <div className="cuerpo-hilo">
+                                    <h2>{c.post_titulo}</h2>
+                                    <p className="meta-hilo">@{c.autor || usuario?.nombre} · {formatFechaRelativa(c.fecha_creacion)} · {c.contenido.substring(0, 60)}{c.contenido.length > 60 ? '...' : ''}</p>
+                                </div>
+                                <div className="stats-hilo">
+                                </div>
                             </div>
                         ))
                     )}
                 </div>
             ) : posts.length === 0 ? (
-                <div className="tarjeta-vacia">
-                    <p>No hay posts aún. Sé el primero en publicar.</p>
+                <div className="lista-posts">
+                    <div className="cabecera-hilos"><span>Hilos</span></div>
+                    <div className="tarjeta-vacia">No hay posts aún. Sé el primero en publicar.</div>
                 </div>
             ) : (
                 <div className="lista-posts">
+                    <div className="cabecera-hilos">
+                        <span>Hilos</span>
+                    </div>
                     {posts.map(post => (
-                        <div key={post.id} className="tarjeta-post" onClick={() => abrirPost(post.id)}>
-                            <h2>{post.titulo}</h2>
-                            <p className="meta-post">Por <strong>{post.autor}</strong> · {formatFecha(post.fecha_creacion)}</p>
-                            <p className="resumen-post">{post.contenido.substring(0, 120)}{post.contenido.length > 120 ? '...' : ''}</p>
+                        <div key={post.id} className="fila-hilo" onClick={() => abrirPost(post.id)}>
+                            <div className="icono-hilo" style={{ backgroundColor: getColorIcono(post.id) }}>✉</div>
+                            <div className="cuerpo-hilo">
+                                <h2>{post.titulo}</h2>
+                                <p className="meta-hilo">@{post.autor} · Actualizado {formatFechaRelativa(post.fecha_creacion)}</p>
+                            </div>
+                            <div className="stats-hilo">
+                                <span className="conteo-hilo">💬 {post.total_comentarios || 0}</span>
+                            </div>
                         </div>
                     ))}
                 </div>

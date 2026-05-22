@@ -3,7 +3,8 @@ const db = require('../db')
 const getPosts = (req, res) => {
     db.query(
         `SELECT p.id, p.titulo, p.contenido, p.fecha_creacion,
-                u.nombre AS autor
+                u.nombre AS autor,
+                (SELECT COUNT(*) FROM comentarios WHERE post_id = p.id) AS total_comentarios
          FROM posts p
          JOIN usuarios u ON p.usuario_id = u.id
          ORDER BY p.fecha_creacion DESC`,
