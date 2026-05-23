@@ -5,16 +5,16 @@ import API_URL from '../config'
 import { useNavigate } from 'react-router-dom'
 
 function Perfil() {
+    const usuario = JSON.parse(localStorage.getItem('usuario'))
+    const navigate = useNavigate()
     const [perfil, setPerfil] = useState(null)
     const [nombre, setNombre] = useState('')
     const [email, setEmail] = useState('')
     const [mensaje, setMensaje] = useState('')
     const [passwordActual, setPasswordActual] = useState('')
     const [passwordNueva, setPasswordNueva] = useState('')
-    const navigate = useNavigate()
 
     useEffect(() => {
-        const usuario = JSON.parse(localStorage.getItem('usuario'))
         if (usuario) {
             axios.get(`${API_URL}/perfil/${usuario.id}`)
                 .then(res => {
@@ -27,24 +27,22 @@ function Perfil() {
 
     const handleUpdate = async (e) => {
         e.preventDefault()
-        const usuario = JSON.parse(localStorage.getItem('usuario'))
         try {
             await axios.put(`${API_URL}/perfil/${usuario.id}`, { nombre, email })
             setMensaje('Perfil actualizado correctamente')
-        } catch (err) {
+        } catch {
             setMensaje('Error al actualizar perfil')
         }
     }
 
     const handleDelete = async () => {
-        const usuario = JSON.parse(localStorage.getItem('usuario'))
-        if (confirm('Seguro que quieres eliminar tu cuenta?')) {
+        if (confirm('¿Seguro que quieres eliminar tu cuenta?')) {
             try {
                 await axios.delete(`${API_URL}/perfil/${usuario.id}`)
                 localStorage.clear()
                 alert('Cuenta eliminada')
-                window.location.href = '/'
-            } catch (err) {
+                navigate('/')
+            } catch {
                 setMensaje('Error al eliminar cuenta')
             }
         }
@@ -52,7 +50,6 @@ function Perfil() {
 
     const handlePassword = async (e) => {
         e.preventDefault()
-        const usuario = JSON.parse(localStorage.getItem('usuario'))
         try {
             await axios.put(`${API_URL}/perfil/password/${usuario.id}`, {
                 passwordActual,
@@ -61,12 +58,12 @@ function Perfil() {
             setMensaje('Contraseña cambiada correctamente')
             setPasswordActual('')
             setPasswordNueva('')
-        } catch (err) {
+        } catch {
             setMensaje('La contraseña actual es incorrecta')
         }
     }
+
     const handleCancelarSuscripcion = async () => {
-        const usuario = JSON.parse(localStorage.getItem('usuario'))
         if (confirm('¿Seguro que quieres cancelar tu suscripción?')) {
             try {
                 await axios.put(`${API_URL}/perfil/cancelar/${usuario.id}`)
