@@ -1,112 +1,99 @@
 const db = require('../db')
 
-const getClases = (req, res) => {
-    db.query(
-        `SELECT c.*, COUNT(i.usuario_id) AS inscritos
-         FROM clases c
-         LEFT JOIN inscripciones_clases i ON c.id = i.clase_id
-         GROUP BY c.id
-         ORDER BY c.fecha ASC`,
-        (err, results) => {
-            if (err) return res.status(500).json({ error: 'Error al obtener clases' })
-            res.json(results)
-        }
-    )
+const getClases = async (req, res) => {
+    try {
+        const [results] = await db.query(`
+            SELECT c.*, COUNT(i.usuario_id) AS inscritos
+            FROM clases c
+            LEFT JOIN inscripciones_clases i ON c.id = i.clase_id
+            GROUP BY c.id
+            ORDER BY c.fecha ASC
+        `)
+        res.json(results)
+    } catch {
+        res.status(500).json({ error: 'Error en el servidor' })
+    }
 }
 
-const getMisClases = (req, res) => {
+const getMisClases = async (req, res) => {
     const { usuarioId } = req.params
-    db.query(
-        'SELECT clase_id AS id FROM inscripciones_clases WHERE usuario_id = ?',
-        [usuarioId],
-        (err, results) => {
-            if (err) return res.status(500).json({ error: 'Error al obtener tus clases' })
-            res.json(results)
-        }
-    )
+    try {
+        const [results] = await db.query('SELECT clase_id AS id FROM inscripciones_clases WHERE usuario_id = ?', [usuarioId])
+        res.json(results)
+    } catch {
+        res.status(500).json({ error: 'Error en el servidor' })
+    }
 }
 
-const inscribirse = (req, res) => {
+const inscribirse = async (req, res) => {
     const { claseId } = req.params
     const { usuario_id } = req.body
+    try {
+        const [results] = await db.query(`
+            SELECT c.capacidad, COUNT(i.usuario_id) AS inscritos
+            FROM clases c
+            LEFT JOIN inscripciones_clases i ON c.id = i.clase_id
+            WHERE c.id = ?
+            GROUP BY c.id
+        `, [claseId])
+        if (!results.length) return res.status(404).json({ error: 'Clase no encontrada' })
+        if (results[0].inscritos >= results[0].capacidad) return res.status(400).json({ error: 'La clase está completa' })
 
-    db.query(
-        `SELECT c.capacidad, COUNT(i.usuario_id) AS inscritos
-         FROM clases c
-         LEFT JOIN inscripciones_clases i ON c.id = i.clase_id
-         WHERE c.id = ?
-         GROUP BY c.id`,
-        [claseId],
-        (err, results) => {
-            if (err) return res.status(500).json({ error: 'Error al comprobar la clase' })
-            if (!results.length) return res.status(404).json({ error: 'Clase no encontrada' })
-
-            const { capacidad, inscritos } = results[0]
-            if (inscritos >= capacidad) return res.status(400).json({ error: 'La clase está completa' })
-
-            db.query(
-                'INSERT INTO inscripciones_clases (usuario_id, clase_id) VALUES (?, ?)',
-                [usuario_id, claseId],
-                (err) => {
-                    if (err) {
-                        if (err.code === 'ER_DUP_ENTRY')
-                            return res.status(400).json({ error: 'Ya estás inscrito en esta clase' })
-                        return res.status(500).json({ error: 'Error al inscribirse' })
-                    }
-                    res.status(201).json({ mensaje: 'Inscripción realizada correctamente' })
-                }
-            )
-        }
-    )
+        await db.query('INSERT INTO inscripciones_clases (usuario_id, clase_id) VALUES (?, ?)', [usuario_id, claseId])
+        res.status(201).json({ mensaje: 'Inscripción realizada correctamente' })
+    } catch (err) {
+        if (err.code === 'ER_DUP_ENTRY') return res.status(400).json({ error: 'Ya estás inscrito en esta clase' })
+        res.status(500).json({ error: 'Error en el servidor' })
+    }
 }
 
-const cancelarInscripcion = (req, res) => {
+const cancelarInscripcion = async (req, res) => {
     const { claseId } = req.params
     const { usuario_id } = req.body
-    db.query(
-        'DELETE FROM inscripciones_clases WHERE usuario_id = ? AND clase_id = ?',
-        [usuario_id, claseId],
-        (err) => {
-            if (err) return res.status(500).json({ error: 'Error al cancelar inscripción' })
-            res.json({ mensaje: 'Inscripción cancelada' })
-        }
-    )
+    try {
+        await db.query('DELETE FROM inscripciones_clases WHERE usuario_id = ? AND clase_id = ?', [usuario_id, claseId])
+        res.json({ mensaje: 'Inscripción cancelada' })
+    } catch {
+        res.status(500).json({ error: 'Error en el servidor' })
+    }
 }
 
-const crearClase = (req, res) => {
+const crearClase = async (req, res) => {
     const { nombre, descripcion, instructor, hora, fecha, capacidad, duracion } = req.body
-    db.query(
-        'INSERT INTO clases (nombre, descripcion, instructor, hora, fecha, capacidad, duracion) VALUES (?, ?, ?, ?, ?, ?, ?)',
-        [nombre, descripcion, instructor, hora, fecha, capacidad, duracion],
-        (err, result) => {
-            if (err) return res.status(500).json({ error: 'Error al crear la clase' })
-            res.status(201).json({ mensaje: 'Clase creada correctamente', id: result.insertId })
-        }
-    )
+    try {
+        const [result] = await db.query(
+            'INSERT INTO clases (nombre, descripcion, instructor, hora, fecha, capacidad, duracion) VALUES (?, ?, ?, ?, ?, ?, ?)',
+            [nombre, descripcion, instructor, hora, fecha, capacidad, duracion]
+        )
+        res.status(201).json({ mensaje: 'Clase creada correctamente', id: result.insertId })
+    } catch {
+        res.status(500).json({ error: 'Error en el servidor' })
+    }
 }
 
-const editarClase = (req, res) => {
+const editarClase = async (req, res) => {
     const { id } = req.params
     const { nombre, descripcion, instructor, hora, fecha, capacidad, duracion } = req.body
-
     const fechaFormateada = fecha ? fecha.split('T')[0] : null
-
-    db.query(
-        'UPDATE clases SET nombre=?, descripcion=?, instructor=?, hora=?, fecha=?, capacidad=?, duracion=? WHERE id=?',
-        [nombre, descripcion, instructor, hora, fechaFormateada, capacidad, duracion, id],
-        (err) => {
-            if (err) return res.status(500).json({ error: 'Error al editar la clase' })
-            res.json({ mensaje: 'Clase actualizada correctamente' })
-        }
-    )
+    try {
+        await db.query(
+            'UPDATE clases SET nombre=?, descripcion=?, instructor=?, hora=?, fecha=?, capacidad=?, duracion=? WHERE id=?',
+            [nombre, descripcion, instructor, hora, fechaFormateada, capacidad, duracion, id]
+        )
+        res.json({ mensaje: 'Clase actualizada correctamente' })
+    } catch {
+        res.status(500).json({ error: 'Error en el servidor' })
+    }
 }
 
-const eliminarClase = (req, res) => {
+const eliminarClase = async (req, res) => {
     const { id } = req.params
-    db.query('DELETE FROM clases WHERE id = ?', [id], (err) => {
-        if (err) return res.status(500).json({ error: 'Error al eliminar la clase' })
+    try {
+        await db.query('DELETE FROM clases WHERE id = ?', [id])
         res.json({ mensaje: 'Clase eliminada correctamente' })
-    })
+    } catch {
+        res.status(500).json({ error: 'Error en el servidor' })
+    }
 }
 
 module.exports = { getClases, getMisClases, inscribirse, cancelarInscripcion, crearClase, editarClase, eliminarClase }

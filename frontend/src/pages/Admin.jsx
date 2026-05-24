@@ -35,18 +35,24 @@ function Admin() {
     }, [])
 
     const cargarStats = async () => {
-        const res = await axios.get(`${API}/admin/stats`)
-        setStats(res.data)
+        try {
+            const res = await axios.get(`${API}/admin/stats`)
+            setStats(res.data)
+        } catch { setStats(null) }
     }
 
     const cargarUsuarios = async () => {
-        const res = await axios.get(`${API}/admin/usuarios`)
-        setUsuarios(res.data)
+        try {
+            const res = await axios.get(`${API}/admin/usuarios`)
+            setUsuarios(res.data)
+        } catch { setUsuarios([]) }
     }
 
     const cargarClases = async () => {
-        const res = await axios.get(`${API}/clases`)
-        setClases(res.data)
+        try {
+            const res = await axios.get(`${API}/clases`)
+            setClases(res.data)
+        } catch { setClases([]) }
     }
 
     const cargarMembresias = async () => {
@@ -96,6 +102,7 @@ function Admin() {
             await axios.delete(`${API}/admin/usuarios/${id}`)
             mostrarMensaje('Usuario eliminado correctamente')
             cargarUsuarios()
+            cargarStats()
         } catch {
             mostrarMensaje('Error al eliminar usuario')
         }
@@ -106,7 +113,7 @@ function Admin() {
         try {
             await axios.post(`${API}/clases`, formClase)
             mostrarMensaje('Clase creada correctamente')
-            setFormClase({ nombre: '', descripcion: '', instructor: '', horario: '', capacidad: 20, fecha: '' })
+            setFormClase({ nombre: '', descripcion: '', instructor: '', hora: '', capacidad: 20, fecha: '', duracion: '' })
             cargarClases()
             setVista('clases')
         } catch {
@@ -176,8 +183,10 @@ function Admin() {
         }
     }
     const cargarSuscripciones = async () => {
-        const res = await axios.get(`${API}/suscripciones/usuarios`)
-        setSuscripciones(res.data)
+        try {
+            const res = await axios.get(`${API}/suscripciones/usuarios`)
+            setSuscripciones(res.data)
+        } catch { setSuscripciones([]) }
     }
     const handleAsignarMembresia = async (e) => {
         e.preventDefault()
@@ -220,8 +229,10 @@ function Admin() {
 
     }
     const cargarPosts = async () => {
-        const res = await axios.get(`${API}/foro/admin/posts`)
-        setPosts(res.data)
+        try {
+            const res = await axios.get(`${API}/foro/admin/posts`)
+            setPosts(res.data)
+        } catch { setPosts([]) }
     }
     const handleEliminarPost = async (id) => {
         if (!confirm('¿Eliminar este post y sus comentarios?')) return

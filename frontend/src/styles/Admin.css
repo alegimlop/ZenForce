@@ -2,12 +2,6 @@
     display: grid;
     grid-template-columns: 18vw 1fr;
     min-height: 100vh;
-    animation: deslizar-entrada 0.3s ease;
-}
-
-@keyframes deslizar-entrada {
-    from { transform: translateX(5%); opacity: 0; }
-    to   { transform: translateX(0);  opacity: 1; }
 }
 
 .sidebar-admin {
@@ -19,20 +13,18 @@
 }
 
 .titulo-admin {
-    font-size: 2.5vh;
-    font-weight: 900;
+    font-size: 2.2vh;
+    font-weight: 800;
     color: #ffffff;
     text-align: center;
-    letter-spacing: 0.3vw;
-    font-style: italic;
     margin: 0 0 2vh 0;
     padding-bottom: 2vh;
-    border-bottom: 2px solid #2563eb;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .nav-admin {
     display: grid;
-    gap: 0.8vh;
+    gap: 0.5vh;
     background-color: transparent;
     height: auto;
     position: static;
@@ -42,19 +34,20 @@
 .boton-salir-admin {
     background-color: transparent;
     color: #93c5fd;
-    border: 1px solid #2563eb;
+    border: 1px solid rgba(255, 255, 255, 0.2);
     padding: 1.2vh 1.5vw;
-    border-radius: 0.8vh;
+    border-radius: 6px;
     font-size: 1.6vh;
     font-weight: 600;
     cursor: pointer;
     text-align: left;
-    transition: background-color 0.2s, color 0.2s;
+    transition: background-color 0.15s, color 0.15s;
     margin-bottom: 1vh;
+    font-family: inherit;
 }
 
 .boton-salir-admin:hover {
-    background-color: #2563eb;
+    background-color: rgba(255, 255, 255, 0.1);
     color: #ffffff;
 }
 
@@ -62,59 +55,57 @@
     background-color: transparent;
     color: #93c5fd;
     border: none;
-    padding: 1.5vh 1.5vw;
-    border-radius: 0.8vh;
-    font-size: 1.7vh;
-    font-weight: 600;
+    padding: 1.4vh 1.5vw;
+    border-radius: 6px;
+    font-size: 1.6vh;
+    font-weight: 500;
     cursor: pointer;
     text-align: left;
-    transition: background-color 0.2s, color 0.2s;
+    transition: background-color 0.15s, color 0.15s;
+    font-family: inherit;
 }
 
 .boton-nav-admin:hover {
-    background-color: #2563eb;
+    background-color: rgba(255, 255, 255, 0.1);
     color: #ffffff;
 }
 
 .boton-nav-admin.activo {
-    background-color: #2563eb;
+    background-color: rgba(255, 255, 255, 0.15);
     color: #ffffff;
 }
 
 .contenido-admin {
-    background-color: #f0f4ff;
+    background-color: #f5f5f5;
     padding: 3vh 3vw;
 }
 
 .contenido-admin h2 {
-    font-size: 2.5vh;
-    font-weight: 800;
-    color: #1e3a5f;
+    font-size: 2.2vh;
+    font-weight: 700;
+    color: #1a1a1a;
     margin: 0 0 2.5vh 0;
-    text-transform: uppercase;
-    letter-spacing: 0.1vw;
     padding-bottom: 1.5vh;
-    border-bottom: 2px solid #2563eb;
+    border-bottom: 1px solid #e5e5e5;
 }
 
 .mensaje-admin {
-    background-color: #dbeafe;
-    color: #1e40af;
+    background-color: #f0fdf4;
+    color: #166534;
     padding: 1.2vh 2vw;
-    border-radius: 0.8vh;
-    font-size: 1.7vh;
+    border-radius: 6px;
+    font-size: 1.6vh;
     font-weight: 600;
     margin-bottom: 2vh;
-    border-left: 3px solid #2563eb;
 }
 
 .contenido-admin table {
     width: 100%;
     border-collapse: collapse;
     background-color: #ffffff;
-    border-radius: 1vh;
+    border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
     font-size: 1.6vh;
 }
 
@@ -127,15 +118,15 @@
     padding: 1.5vh 1.5vw;
     text-align: left;
     font-weight: 600;
-    font-size: 1.5vh;
+    font-size: 1.4vh;
     text-transform: uppercase;
     letter-spacing: 0.05vw;
 }
 
 .contenido-admin td {
     padding: 1.2vh 1.5vw;
-    border-bottom: 1px solid #e2e8f0;
-    color: #334155;
+    border-bottom: 1px solid #f0f0f0;
+    color: #444444;
 }
 
 .contenido-admin tbody tr:last-child td {
@@ -143,25 +134,23 @@
 }
 
 .contenido-admin tbody tr:hover {
-    background-color: #eff6ff;
+    background-color: #fafafa;
 }
 
 .contenido-admin form {
     background-color: #ffffff;
     padding: 3vh 2.5vw;
-    border-radius: 1vh;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
     display: grid;
     gap: 1.5vh;
     max-width: 50vw;
 }
 
 .contenido-admin label {
-    font-size: 1.5vh;
-    font-weight: 700;
-    color: #1e3a5f;
-    text-transform: uppercase;
-    letter-spacing: 0.05vw;
+    font-size: 1.4vh;
+    font-weight: 600;
+    color: #555555;
     margin-bottom: -0.8vh;
 }
 
@@ -170,13 +159,13 @@
 .contenido-admin textarea {
     width: 100%;
     padding: 1.2vh 1vw;
-    border: 1px solid #cbd5e1;
-    border-radius: 0.6vh;
-    font-size: 1.7vh;
-    color: #1e293b;
-    background-color: #f8fafc;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 1.6vh;
+    color: #1a1a1a;
+    background-color: #fafafa;
     outline: none;
-    transition: border-color 0.2s;
+    transition: border-color 0.15s;
     box-sizing: border-box;
     font-family: inherit;
 }
@@ -184,18 +173,19 @@
 .contenido-admin input:focus,
 .contenido-admin select:focus,
 .contenido-admin textarea:focus {
-    border-color: #2563eb;
+    border-color: #1e3a5f;
     background-color: #ffffff;
 }
 
 .contenido-admin button {
     padding: 1vh 1.5vw;
-    border-radius: 0.6vh;
+    border-radius: 6px;
     font-size: 1.6vh;
     font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.2s, color 0.2s;
+    transition: background-color 0.15s, color 0.15s;
     border: none;
+    font-family: inherit;
 }
 
 .contenido-admin form div {
@@ -204,63 +194,67 @@
 }
 
 .contenido-admin form button[type="submit"] {
-    background-color: #2563eb;
+    background-color: #1e3a5f;
     color: #ffffff;
 }
 
 .contenido-admin form button[type="submit"]:hover {
-    background-color: #1d4ed8;
+    background-color: #162d4a;
 }
 
 .contenido-admin form button[type="button"] {
     background-color: transparent;
-    color: #64748b;
-    border: 1px solid #cbd5e1;
+    color: #888888;
+    border: 1px solid #e0e0e0;
 }
 
 .contenido-admin form button[type="button"]:hover {
-    background-color: #f1f5f9;
+    background-color: #f5f5f5;
+    color: #1a1a1a;
 }
 
 .contenido-admin td button {
     background-color: transparent;
-    border: 1px solid #2563eb;
-    color: #2563eb;
+    border: 1px solid #e0e0e0;
+    color: #555555;
     padding: 0.6vh 1vw;
     font-size: 1.4vh;
     margin-right: 0.5vw;
+    border-radius: 5px;
 }
 
 .contenido-admin td button:hover {
-    background-color: #2563eb;
+    background-color: #1e3a5f;
+    border-color: #1e3a5f;
     color: #ffffff;
 }
 
 .contenido-admin td button:last-child {
-    border-color: #cc0000;
+    border-color: #e0e0e0;
     color: #cc0000;
 }
 
 .contenido-admin td button:last-child:hover {
     background-color: #cc0000;
+    border-color: #cc0000;
     color: #ffffff;
 }
 
 .contenido-admin > button {
-    background-color: #2563eb;
+    background-color: #1e3a5f;
     color: #ffffff;
     margin-bottom: 2vh;
     padding: 1.2vh 2vw;
-    font-size: 1.7vh;
+    font-size: 1.6vh;
 }
 
 .contenido-admin > button:hover {
-    background-color: #1d4ed8;
+    background-color: #162d4a;
 }
 
 .contenido-admin p {
     font-size: 1.8vh;
-    color: #334155;
+    color: #444444;
     margin: 0.5vh 0;
 }
 
@@ -273,26 +267,26 @@
 
 .tarjeta-stat {
     background-color: #ffffff;
-    border-radius: 1vh;
+    border-radius: 8px;
     padding: 3vh 2vw;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 1vh;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-    border-top: 3px solid #2563eb;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+    border: 1px solid #ebebeb;
     text-align: center;
 }
 
-
 .tarjeta-stat.destacada {
-    border-top-color: #16a34a;
+    border-color: #d1fae5;
+    background-color: #f0fdf4;
 }
 
 .numero-stat {
     font-size: 5vh;
     font-weight: 900;
-    color: #1e3a5f;
+    color: #1a1a1a;
     line-height: 1;
 }
 
@@ -302,9 +296,9 @@
 
 .etiqueta-stat {
     font-size: 1.4vh;
-    color: #64748b;
+    color: #999999;
     text-transform: uppercase;
-    letter-spacing: 0.08vw;
+    letter-spacing: 0.06vw;
     font-weight: 600;
 }
 
@@ -313,13 +307,13 @@
     color: #ffffff !important;
     border: none !important;
     padding: 1.2vh 2vw !important;
-    border-radius: 0.6vh !important;
+    border-radius: 6px !important;
     font-size: 1.6vh !important;
-    font-weight: 700 !important;
+    font-weight: 600 !important;
     cursor: pointer !important;
     margin-bottom: 2vh !important;
-    letter-spacing: 0.05vw;
-    transition: background-color 0.2s !important;
+    transition: background-color 0.15s !important;
+    font-family: inherit !important;
 }
 
 .boton-accion-admin:hover {

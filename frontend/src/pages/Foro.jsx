@@ -5,6 +5,9 @@ import API_URL from '../config'
 import iconoCorreo from '../assets/correo.png'
 const API = `${API_URL}/foro`
 
+const coloresIcono = ['#e74c3c', '#8e44ad', '#27ae60', '#2980b9', '#e67e22', '#c0392b']
+const getColorIcono = (id) => coloresIcono[id % coloresIcono.length]
+
 function Foro() {
     const usuario = JSON.parse(localStorage.getItem('usuario'))
     const [posts, setPosts] = useState([])

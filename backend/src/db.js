@@ -1,4 +1,4 @@
-const mysql = require('mysql2')
+const mysql = require('mysql2/promise')
 require('dotenv').config()
 
 const pool = mysql.createPool({
@@ -11,13 +11,8 @@ const pool = mysql.createPool({
     connectionLimit: 10
 })
 
-pool.getConnection((err, connection) => {
-    if (err) {
-        console.error('Error conectando a la base de datos:', err)
-        return
-    }
-    console.log('Conectado a la base de datos')
-    connection.release()
-})
+pool.getConnection()
+    .then(conn => { console.log('Conectado a la base de datos'); conn.release() })
+    .catch(err => console.error('Error conectando a la base de datos:', err))
 
 module.exports = pool
