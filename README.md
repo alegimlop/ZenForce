@@ -57,12 +57,13 @@ npm install
 ```
 
 Crea un archivo `.env` en la carpeta `backend` con el siguiente contenido:
-DB_HOST=tu_host
-DB_USER=tu_usuario
-DB_PASSWORD=tu_contraseña
-DB_NAME=tu_base_de_datos
-DB_PORT=tu_puerto
+DB_HOST=kodama.proxy.rlwy.net
+DB_USER=root
+DB_PASSWORD=spJoMMXlkDeiNMlrVvolqMZcWEcISliP
+DB_NAME=railway
+DB_PORT=46089
 PORT=3000
+JWT_SECRET=zenforce_secret_key
 
 ### 3. Configurar el frontend
 

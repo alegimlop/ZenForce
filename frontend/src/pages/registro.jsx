@@ -1,22 +1,21 @@
 import { useState } from 'react'
-import { registroService } from '../services/auth'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
+import axios from 'axios'
 import '../styles/Auth.css'
+import API_URL from '../config'
 
-function Registro() {
-    const [nombre, setNombre] = useState('')
+function RestablecerPassword() {
     const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    const [error, setError] = useState('')
-    const navigate = useNavigate()
+    const [passwordNueva, setPasswordNueva] = useState('')
+    const [mensaje, setMensaje] = useState('')
 
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-            await registroService(nombre, email, password)
-            navigate('/login')
-        } catch (err) {
-            setError('Error al registrar usuario')
+            await axios.put(`${API_URL}/perfil/restablecer`, { email, passwordNueva })
+            setMensaje('Contraseña restablecida correctamente')
+        } catch {
+            setMensaje('Email no encontrado')
         }
     }
 
@@ -24,15 +23,8 @@ function Registro() {
         <div className="contenedor-auth">
             <div className="tarjeta-auth">
                 <h1 className="titulo-auth">ZENFORCE</h1>
-                <h2 className="subtitulo-auth">Crear cuenta</h2>
-                {error && <p className="error-auth">{error}</p>}
+                <h2 className="subtitulo-auth">Restablecer contraseña</h2>
                 <form className="formulario-auth" onSubmit={handleSubmit}>
-                    <input
-                        type="text"
-                        placeholder="Nombre"
-                        value={nombre}
-                        onChange={(e) => setNombre(e.target.value)}
-                    />
                     <input
                         type="email"
                         placeholder="Email"
@@ -41,18 +33,19 @@ function Registro() {
                     />
                     <input
                         type="password"
-                        placeholder="Contraseña"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="Nueva contraseña"
+                        value={passwordNueva}
+                        onChange={(e) => setPasswordNueva(e.target.value)}
                     />
-                    <button type="submit" className="boton-auth">Registrarse</button>
+                    <button type="submit" className="boton-auth">Restablecer</button>
                 </form>
+                {mensaje && <p className={mensaje.includes('correctamente') ? 'mensaje-ok-auth' : 'error-auth'}>{mensaje}</p>}
                 <div className="enlaces-auth">
-                    <p>¿Ya tienes cuenta? <Link to="/login">Inicia sesión</Link></p>
+                    <p><Link to="/login">Volver al login</Link></p>
                 </div>
             </div>
         </div>
     )
 }
 
-export default Registro
+export default RestablecerPassword

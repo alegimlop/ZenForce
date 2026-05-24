@@ -7,7 +7,7 @@ function Membresias() {
     const usuario = JSON.parse(localStorage.getItem('usuario'))
     const [membresias, setMembresias] = useState([])
     const [seleccionada, setSeleccionada] = useState(null)
-    const [mensaje, setMensaje] = useState('')
+
     const [form, setForm] = useState({
         titular: '', numero: '', caducidad: '', cvv: ''
     })
@@ -88,7 +88,6 @@ function Membresias() {
                 <p className="subtitulo-membresias">Elige el plan que mejor se adapte a ti y empieza a entrenar hoy.</p>
             </div>
 
-            {mensaje && <p className="mensaje-membresias">{mensaje}</p>}
 
             <div className="cuadricula-membresias">
                 {membresias.map(m => (

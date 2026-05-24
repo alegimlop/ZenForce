@@ -172,8 +172,7 @@ const darLike = async () => {
         return `${f.toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' })} a las ${hora}`
     }
 
-    const coloresIcono = ['#e74c3c', '#8e44ad', '#27ae60', '#2980b9', '#e67e22', '#c0392b']
-    const getColorIcono = (id) => coloresIcono[id % coloresIcono.length]
+
     const filtrarMisPosts = async () => {
         const res = await axios.get(`${API}/misposts/${usuario.id}`)
         setPosts(res.data)
